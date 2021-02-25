@@ -1,0 +1,11 @@
+image: node:10
+
+
+build:
+  stage: build
+  script:
+    - yarn install
+    - yarn build
+cache:
+  paths:
+    - node_modules/
