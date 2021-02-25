@@ -4,6 +4,7 @@ image: node:10
 build:
   stage: build
   script:
+    - cd frontend/
     - yarn install
     - yarn build
 cache:
