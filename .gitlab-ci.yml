@@ -4,7 +4,7 @@ image: node:10
 build:
   stage: build
   script:
-    - npm ci
+    - npm install
     - npm i -loglevel=error
 cache:
   paths:
