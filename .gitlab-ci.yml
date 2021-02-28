@@ -4,8 +4,8 @@ image: node:10
 build:
   stage: build
   script:
-    - yarn install
-    - yarn build
+    - npm install
+    - npm i -loglevel=error
 cache:
   paths:
     - node_modules/
