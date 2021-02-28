@@ -1,7 +1,14 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {Container, Card, CardActions, CardContent, Typography, Button, Menu, MenuItem} from "@material-ui/core";
+import {Container, Card, CardActions, CardContent, Typography, Button, Menu, MenuItem, FormControl, Select, InputLabel, CardHeader, FormHelperText} from "@material-ui/core";
 import Header from "../Header/Header";
+import AssignmentIcon from '@material-ui/icons/Assignment';
+
+
+
+
+
+
 
 const useStyles = makeStyles({
     root: {
@@ -20,60 +27,69 @@ const useStyles = makeStyles({
     },
 });
 
+const useStylesMUI =  makeStyles((theme) =>({
+    header:{
+        ...theme.typography.h2,
+        backgroundColor: theme.palette.secondary.light,
+        color: "white",
+        textAlign: "center"
+    },
+    avatar:{
+        float: "left"
+    }
+
+}))
+
 export default function CreateSurvey(){
     const classes = useStyles();
-    const bull = <span className={classes.bullet}>•</span>;
+    const classesMUI = useStylesMUI();
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [typeQuestion, setTypeQuestion] = React.useState('')
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+    const typeQuestionHandleChange = (event) =>{
+        setTypeQuestion(event.target.value )
+    }
 
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
 
+    const handleSubmit = event => {
+        alert(typeQuestion);
+    }
+    const age = 16;
     return(
        <React.Fragment>
            <Header></Header>
            <Container>
                <Container maxWidth="sm" style={{marginTop: '15px' }}>
                    <Card className={classes.root}>
+                       <CardHeader
+                       classes={{root: classesMUI.header}}
+                       avatar={<AssignmentIcon fontSize="large" className={classesMUI.avatar}/>}
+                       titleTypographyProps={{variant:'h4'}}
+                       title="Survey Creator"
+                       />
                        <CardContent>
-                           <Typography variant="h5" component="h2" >
-                               Create your Survey!
-                           </Typography>
                            <Typography className={classes.pos} color="textSecondary">
-                               Select your type of Survey:
+                               Create your own personalised Survey!
                            </Typography>
 
+                           <FormControl fullWidth={true}>
+                               <InputLabel id="selector-questiontype-label">Survey Type</InputLabel>
+                               <Select
+                                   fullWidth={true}
+                                   labelId="selector-questiontype-label"
+                                   id="selector-questiontype"
+                                   value={typeQuestion}
+                                   onChange={typeQuestionHandleChange}
+                               >
+                                   <MenuItem value={"SC"}>Single Choice</MenuItem>
+                                   <MenuItem value={"MC"}>Multiple Choice</MenuItem>
+                               </Select>
+                               <FormHelperText>Choose your Survey Type!</FormHelperText>
+                           </FormControl>
 
-                           <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-                               Open Menu
-                           </Button>
-                           <Menu
-                               id="simple-menu"
-                               anchorEl={anchorEl}
-                               keepMounted
-                               open={Boolean(anchorEl)}
-                               onClose={handleClose}>
-                               <MenuItem onClick={handleClose}>SingleChoice</MenuItem>
-                               <MenuItem onClick={handleClose}>Multiple Choice</MenuItem>
-                           </Menu>
-
-
-
-
-
-                           <Typography variant="body2" component="p">
-                               well meaning and kindly.
-                               <br />
-                               {'"a benevolent smile"'}
-                           </Typography>
                        </CardContent>
                        <CardActions>
-                           <Button size="small">Learn More</Button>
+                           <Button onClick={handleSubmit}>Submit</Button>
                        </CardActions>
                    </Card>
                </Container>
@@ -81,3 +97,4 @@ export default function CreateSurvey(){
        </React.Fragment>
     )
 }
+
