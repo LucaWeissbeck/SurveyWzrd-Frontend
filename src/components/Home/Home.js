@@ -10,7 +10,6 @@ export class Home extends React.Component{
     render(){
         return(
             <React.Fragment>
-                <Header></Header>
                 <h1>This is the homepage</h1>
             </React.Fragment>
         )

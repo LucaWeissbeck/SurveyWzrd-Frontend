@@ -5,7 +5,7 @@ export class Overview extends React.Component{
     render(){
         return(
             <React.Fragment>
-                <Header></Header>
+                <Header header={0}/>
                 <h1>Overview Page</h1>
             </React.Fragment>
         )

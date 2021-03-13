@@ -75,7 +75,7 @@ export default function CreateSurvey(){
     const age = 16;
     return(
        <React.Fragment>
-           <Header></Header>
+           <Header header={1}/>
            <Container>
                <Container maxWidth="sm" style={{marginTop: '15px' }}>
                    <Card className={classes.root}>

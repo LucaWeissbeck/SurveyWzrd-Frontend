@@ -7,9 +7,9 @@ import {ThemeProvider, createMuiTheme} from "@material-ui/core/styles";
 
 const theme = createMuiTheme({
     palette:{
-        // type: 'dark',  <-- Enables Dark Mode
+        //type: 'dark',
         primary:{
-            main: '#264664',
+            main: '#254563',
             light: '#839fc2',
             dark: '#547192' //main is now dark and dark is main
         },
@@ -17,7 +17,7 @@ const theme = createMuiTheme({
             main: '#e9c261',
             light: '#fff591',
             dark: '#b49232'
-        },
+        }
 
     }
 })

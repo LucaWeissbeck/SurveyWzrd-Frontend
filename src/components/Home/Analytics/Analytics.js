@@ -5,7 +5,7 @@ export class Analytics extends React.Component{
     render(){
         return(
             <React.Fragment>
-                <Header></Header>
+                <Header header={2}/>
                 <h1>Analytics Page</h1>
             </React.Fragment>
         )
