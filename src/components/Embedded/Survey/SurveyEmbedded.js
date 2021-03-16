@@ -7,9 +7,10 @@ import {
     Radio,
     CardHeader,
     Card,
-    CardContent, CardActions, Typography, Button
+    CardContent, CardActions, Typography, Button, FormLabel, FormGroup, Checkbox
 } from "@material-ui/core";
 import { Alert }from '@material-ui/lab';
+import * as surveyService from "../../../services/survey/survey-service";
 import Header from "../../Home/Header/Header";
 
 
@@ -17,44 +18,123 @@ import Header from "../../Home/Header/Header";
 export class SurveyEmbedded extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
-            ipAddress: null,
-            continent: null,
-            country: null,
-            city: null,
+            //Survey API data
+            surveyName: null,
+            surveyDescription: '',
+            surveyID: null,
+            surveyMultiSelect: false,
+            surveyQuestion: '',
+            //Checkboxes Answers
+            answerOptions: [],
+            //Radiobutton Answer
+            rbValue: null,
+            //Checkbox Status
+            checkboxesStatus: null
         };
     }
 
-
+    //API calls in CDM
     async componentDidMount(){
-        const response = await fetch('https://ipapi.co/json/');
-        const data = await response.json();
-        this.setState({
-            ipAddress: data.ip,
-            continent: data.continent_code,
-            country: data.country_name,
-            city: data.city,
-            voted: false
+        //Get specific survey
+        surveyService.getSurveysByID(16)
+            .then((res) => {
+                this.setState({
+                    surveyName: res.data.name,
+                    surveyDescription: res.data.description,
+                    surveyID: res.data.id,
+                    surveyMultiSelect: res.data.multiSelect,
+                    surveyQuestion: res.data.question
+                })
+            })
+            .catch(err => console.log(err))
 
-        })
-        console.log(data);
-        }
+        //Get specific answeroptions
+        surveyService.getAnswerOptionsByID(16)
+            .then((res) => {
+                for(let i = 0; i < res.data.length; i ++){
+                    this.setState(prevState => ({
+                        answerOptions: [...prevState.answerOptions, res.data[i]]
+                    }))
+                }
+                let insertObject = {}
+                for(let i = 0; i < this.state.answerOptions; i++){
+                    insertObject[this.state.answerOptions[i].value] = false;
+                }
+                this.setState({checkboxesStatus: insertObject})
+            })
+            .catch(err => console.log(err));
 
-    buttonOnClick = () =>{
+    }
+    //Component Change Handlers
+    submitButtonOnClick = () =>{
         if(localStorage.getItem('ID')){
             this.setState({voted: true});
         }
         else{
             localStorage.setItem('ID', '299');
-            this.props.switch();
+            if (this.state.surveyMultiSelect){
+
+                //Implement Post request for MultipleChoice
+
+            }
+            else {
+                //Getting ID for chosen answer from AnswerOption array
+                let answerOptionID = 0;
+                for(let i=0; i < this.state.answerOptions.length; i++){
+                    if (this.state.answerOptions[i].value === this.state.rbValue){
+                        answerOptionID = this.state.answerOptions[i].id;
+                    }
+                }
+                let payload = {
+                    answerOptionID: answerOptionID,
+                    participantID: 1, //Hard Coded for now
+                    timestamp: ""
+                }
+                surveyService.postSurveyAnswer(16, payload)
+                    .then((res) => console.log(res))
+                    .catch(err => console.log(err));
+                this.props.switch();
+            }
         }
     };
+
+    handleRadioButtonChange = (event)  => {
+        this.setState({rbValue: event.target.value})
+
+    }
+
+    handleCheckboxChange = (event) => {
+        this.setState({...this.state.checkboxesStatus, [event.target.name]: event.target.checked});
+    }
+
+    //Creating HTML parts (Conditional rendering)
+    getAnswerOptionsSingleChoiceHTML = () => {
+        return(
+            this.state.answerOptions.map(answerOption => (
+                <FormControlLabel value={answerOption.value} control={<Radio/>} label={answerOption.value}/>
+            ))
+        )
+    }
+
+    getAnswerOptionsMultipleChoiceHTML = () => {
+        return(
+            this.state.answerOptions.map(answerOption => (
+                <FormControlLabel
+                    control={<Checkbox checked={this.state.checkboxesStatus[answerOption.value]} onChange={this.handleCheckboxChange} name={answerOption.value}/>}
+                    label={answerOption.value}
+                />
+            ))
+        )
+    }
+
 
     render() {
         return (
             <React.Fragment>
                 <Container>
-                    <Container maxWidth="m" style={{marginTop: '15px' }}>
+                    <Container style={{marginTop: '15px' }}>
                         <Card>
                             <CardHeader
                                 titleTypographyProps={{variant:'h5' }}
@@ -68,20 +148,29 @@ export class SurveyEmbedded extends React.Component {
                                 <CardActions>
                                     <FormControl component="fieldset">
                                         <Typography variant="h5" component="h2">
-                                           What ice-cream flavour do you prefer?
+                                            {this.state.surveyName}
                                         </Typography>
                                         <Typography style={{marginBottom: 12}} color="textSecondary">
                                             Please choose one of the following below:
                                         </Typography>
-                                            <RadioGroup aria-label="gender" name="gender1" value={"female"} >
-                                                <FormControlLabel value="1" control={<Radio />} label="Vanilla" />
-                                                <FormControlLabel value="2" control={<Radio />} label="Chocolate" />
-                                                <FormControlLabel value="3" control={<Radio />} label="Strawberry" />
+                                        {!this.state.surveyMultiSelect &&
+                                            <RadioGroup aria-label="gender" name="gender1" value={this.state.rbValue}
+                                                        onChange={this.handleRadioButtonChange}>
+                                                {this.getAnswerOptionsSingleChoiceHTML()}
                                             </RadioGroup>
+                                        }
+                                        {this.state.surveyMultiSelect &&
+                                            <FormControl component="fieldset">
+                                                <FormLabel component="legend">Please choose one or more answers.</FormLabel>
+                                                <FormGroup>
+                                                    {this.getAnswerOptionsMultipleChoiceHTML()}
+                                                </FormGroup>
+                                            </FormControl>
+                                        }
                                     </FormControl>
                                 </CardActions>
                                 <CardActions>
-                                    <Button  variant="contained" style={{backgroundColor: "#c4b1c9", color: "white"}} onClick={this.buttonOnClick} >
+                                    <Button  variant="contained" style={{backgroundColor: "#c4b1c9", color: "white"}} onClick={this.submitButtonOnClick}>
                                         SEND
                                     </Button>
                                 </CardActions>

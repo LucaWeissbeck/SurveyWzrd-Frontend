@@ -22,6 +22,7 @@ import {
 } from '@devexpress/dx-react-chart-material-ui';
 import { withStyles } from '@material-ui/core/styles';
 import {Stack, Animation, EventTracker, HoverState} from '@devexpress/dx-react-chart';
+import * as surveyService from "../../../services/survey/survey-service";
 
 
 //from DevExpress Demo
@@ -69,6 +70,7 @@ export class AnalyticsEmbedded extends React.Component {
         super(props);
 
         this.state = {
+            //Graph
             currentTooltip: '',
             data: [
                 {month: 'Jan', Strawberry: 10, Chocolate: 20, Vanilla: 15},
@@ -81,11 +83,28 @@ export class AnalyticsEmbedded extends React.Component {
                 {month: 'Oct', Strawberry: 67, Chocolate: 20, Vanilla: 15},
                 {month: 'Nov', Strawberry: 42,Chocolate: 34, Vanilla: 1},
                 {month: 'Dec', Strawberry: 91, Chocolate: 87, Vanilla: 34}
-
-            ]
+            ],
+            //API
+            surveyCompanyName: "",
+            surveyQuestion: "",
+            surveyName: "",
+            surveyDescription: ""
         };
     }
 
+    async componentDidMount() {
+        //Get specific survey
+        surveyService.getSurveysByID(16)
+            .then((res) => {
+                this.setState({
+                    surveyName: res.data.name,
+                    surveyDescription: res.data.description,
+                    surveyQuestion: res.data.question,
+                    surveyCompanyName: res.data.companyName
+                })
+            })
+            .catch(err => console.log(err))
+    }
 
     testing = (target) =>{
         try{
@@ -137,7 +156,7 @@ export class AnalyticsEmbedded extends React.Component {
                                     <img src={"./assets/survey_wzrd_logo_ideas.svg"} style={{width: "180px"}}/>
                                 }
                                 action={
-                                    <Button variant="contained" color="secondary" style={{pointerEvents: "none"}}>Ice Cream Company®</Button>
+                                    <Button variant="contained" color="secondary" style={{pointerEvents: "none"}}>{this.state.surveyCompanyName + "®"}</Button>
                                 }
                                 style={{backgroundColor: "#254563", color: 'white', height: "35px", textAlign: "right"}}>
                             </CardHeader>
@@ -177,7 +196,7 @@ export class AnalyticsEmbedded extends React.Component {
                                                 />
                                                 <Animation />
                                                 <Legend position="bottom" rootComponent={Root} labelComponent={Label} />
-                                                <Title text="What Ice Cream Flavour do you prefer?" />
+                                                <Title text={this.state.surveyQuestion} />
                                                 <EventTracker />
 
                                                 <Tooltip onTargetItemChange={this.testing} contentComponent={this.TooltipContent}/>
