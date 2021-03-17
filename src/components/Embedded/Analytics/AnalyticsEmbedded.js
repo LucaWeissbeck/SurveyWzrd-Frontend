@@ -23,6 +23,7 @@ import {
     Tooltip
 } from '@devexpress/dx-react-chart-material-ui';
 import { withStyles } from '@material-ui/core/styles';
+import { Plugin } from "@devexpress/dx-react-core";
 import {Stack, Animation, EventTracker, HoverState} from '@devexpress/dx-react-chart';
 import * as surveyService from "../../../services/survey/survey-service";
 import moment from 'moment';
@@ -75,11 +76,12 @@ export class AnalyticsEmbedded extends React.Component {
         super(props);
 
         this.state = {
+            reload: false,
             monthlyView: false,
             //Graph
             currentTooltip: '',
-            data: [
-                {month: 'Jan', Strawberry: 10, Chocolate: 20, Vanilla: 15},
+            data: [],
+                /*{month: 'Jan', Strawberry: 10, Chocolate: 20, Vanilla: 15},
                 {month: 'Feb', Strawberry: 20, Chocolate: 10, Vanilla: 5},
                 {month: 'Mar', Strawberry: 4, Chocolate: 18, Vanilla: 46},
                 {month: 'Apr', Strawberry: 10, Chocolate: 20, Vanilla: 15},
@@ -88,14 +90,15 @@ export class AnalyticsEmbedded extends React.Component {
                 {month: 'Sep', Strawberry: 5, Chocolate: 53, Vanilla: 35},
                 {month: 'Oct', Strawberry: 67, Chocolate: 20, Vanilla: 15},
                 {month: 'Nov', Strawberry: 42,Chocolate: 34, Vanilla: 1},
-                {month: 'Dec', Strawberry: 91, Chocolate: 87, Vanilla: 34}
-            ],
+                {month: 'Dec', Strawberry: 91, Chocolate: 87, Vanilla: 34}*/
+
             //API Survey General
             surveyCompanyName: "",
             surveyQuestion: "",
             surveyName: "",
             surveyDescription: "",
             answerOptions: [],
+            answerOptionsMinimized: [],
 
             //API Survey Feedback (Answers)
             surveyFeedbackArrayComplete: [],
@@ -129,9 +132,10 @@ export class AnalyticsEmbedded extends React.Component {
                     this.setState(prevState => ({
                         surveyFeedbackArrayMinimized: [...prevState.surveyFeedbackArrayMinimized, copyObject]
                     }));
-                    this.fillData();
                 }
-
+            })
+            .then(() => {
+                this.fillData()
             })
             .catch(err => console.log(err))
 
@@ -144,8 +148,6 @@ export class AnalyticsEmbedded extends React.Component {
                 }
             })
             .catch(err => console.log(err));
-
-
     }
 
     //Handling Component Change
@@ -162,9 +164,29 @@ export class AnalyticsEmbedded extends React.Component {
     }
 
     //Get HTML
-    getContentComponent = () =>{
+    getContentComponent = () => {
         return this.state.currentTooltip;
     }
+
+    getBarsGraph = () => {
+        let colours = [ "#c4b1c9", "#f7e3fc", "#8aaccc","#e6bb56", "#264664", "#839fc2"];
+        return(
+            <Plugin name="Bars">
+                {this.state.answerOptions.map(answer => (
+                    <div>
+                        <BarSeries
+                            name = {answer.value}
+                            valueField ={answer.value}
+                            argumentField = "week"
+                            color ={colours.pop()}
+                            barWidth = "0.4"
+                        />
+                    </div>
+                ))}
+            </Plugin>
+        );
+    }
+
 
     //Helper functions
     groupByTime = (results, format) => {
@@ -181,32 +203,60 @@ export class AnalyticsEmbedded extends React.Component {
 
     //Fill Data
     fillData = () => {
-        if (!this.state.monthlyView){
+        if (!this.state.monthlyView) {
             const weekArray = this.groupByTime(this.state.surveyFeedbackArrayMinimized, "week")
             let countArray = []
             let answerOptions = []
-            let id = this.state.answerOptions
-            for(let j = 0; j < this.state.answerOptions.length; j++){
+            for (let j = 0; j < this.state.answerOptions.length; j++) {
                 answerOptions.push(this.state.answerOptions[j].value)
             }
-            for (const date in weekArray){
-                let tempArray = []
-                for(let i = 0; i < answerOptions.length; i++){
-                    const valueName = answerOptions[i];
-                    const count = weekArray[date].filter((obj) => obj.valueName === valueName).length;
-                    tempArray.push(count)
-                }
-                countArray.push({week: date,
-                                 choices: tempArray,})
+            for (let s = 0; s < answerOptions; s++){
+                this.setState(prevState => ({
+                    answerOptionsMinimized: [...prevState.answerOptionsMinimized, answerOptions[s]]
+                }))
             }
-            console.log(countArray)
-
-
-            //New
-
-
+            for (const date in weekArray) {
+                let occurrencesInObject = []
+                for (let i = 0; i < answerOptions.length; i++) {
+                    const valueName = answerOptions[i];
+                    //Counting occurences of Values in Object
+                    const count = weekArray[date].filter((obj) => obj.valueName === valueName).length;
+                    occurrencesInObject.push(count)
+                }
+                //Object for final use
+                countArray.push({
+                    week: date,
+                    choices: occurrencesInObject,
+                })
+            }
+            //Converting Timestmap in countArray
+            let arrayOfObjects = [];
+            for (let i = 0; i < countArray.length; i++) {
+                let resultObject = {};
+                let convertedDate = this.convertDate(countArray[i].week);
+                resultObject["week"] = convertedDate;
+                for (let j = 0; j < countArray[i].choices.length; j++) {
+                    resultObject[answerOptions[j]] = countArray[i].choices[j];
+                }
+                arrayOfObjects.push(resultObject);
+            }
+            //Pushing every item(Object with Timestamp and AnswerOptions with corresponding count)
+            for (let k = 0; k < arrayOfObjects.length; k++) {
+                this.setState(prevState => ({
+                    data: [...prevState.data, arrayOfObjects[k]]
+                }));
+            }
         }
     }
+
+    //Convert date
+    convertDate = (str) =>{
+        var date = new Date(str),
+            mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+            day = ("0" + date.getDate()).slice(-2);
+        return [day, mnth, date.getFullYear()].join("-");
+    }
+
 
 
     TooltipContent = (props) => {
@@ -217,7 +267,7 @@ export class AnalyticsEmbedded extends React.Component {
                     <Tooltip.Content
                         {...restProps}
                         style={tooltipContentTitleStyle}
-                        text={(this.state.data[targetItem.point].month)}
+                        text={(this.state.data[targetItem.point].week)}
                     />
                 </div>
                 <div>
@@ -234,6 +284,8 @@ export class AnalyticsEmbedded extends React.Component {
 
     render(){
         const {data: chartData} = this.state;
+        console.log("ONE LOG")
+        console.log(chartData);
         return(
             <React.Fragment>
                 <Container>
@@ -271,27 +323,7 @@ export class AnalyticsEmbedded extends React.Component {
                                             <Chart data={chartData}>
                                                 <ArgumentAxis />
                                                 <ValueAxis max={2700} />
-                                                <BarSeries
-                                                    name = "Strawberry"
-                                                    valueField = "Strawberry"
-                                                    argumentField = "month"
-                                                    color = "#8aaccc"
-                                                    barWidth = "0.4"
-                                                />
-                                                <BarSeries
-                                                    name = "Chocolate"
-                                                    valueField = "Chocolate"
-                                                    argumentField = "month"
-                                                    color = "#4a6687"
-                                                    barWidth = "0.4"
-                                                />
-                                                <BarSeries
-                                                    name = "Vanilla"
-                                                    valueField = "Vanilla"
-                                                    argumentField = "month"
-                                                    color = "#394760"
-                                                    barWidth = "0.4"
-                                                />
+                                                {this.getBarsGraph()}
                                                 <Animation />
                                                 <Legend position="bottom" rootComponent={Root} labelComponent={Label} />
                                                 <Title text={this.state.surveyQuestion} />

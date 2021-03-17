@@ -6,7 +6,8 @@ export class Embedded extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            submitted: false
+            submitted: false,
+            reloadNeeded: false
         }
     }
 
@@ -14,6 +15,10 @@ export class Embedded extends React.Component{
     switch = () =>{
         let temp = this.state.submitted ? false : true;
         this.setState({submitted: temp});
+    }
+
+    reloadNeed = () =>{
+        this.setState({reloadNeeded: true})
     }
 
     render(){

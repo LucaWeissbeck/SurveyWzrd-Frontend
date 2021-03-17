@@ -94,8 +94,8 @@ export class SurveyEmbedded extends React.Component {
                 }
                 surveyService.postSurveyAnswer(16, payload)
                     .then((res) => console.log(res))
+                    .then(this.props.switch)
                     .catch(err => console.log(err));
-                this.props.switch();
             }
         }
     };
