@@ -15,7 +15,11 @@ export const getAnswerOptionsByID = (id) => {
 
 export const postSurveyAnswer = (id, payload) => {
     const url = `http://localhost:8080/surveyfeedback/public/${id}`;
-    return axios.post(url, payload)
+    return axios.post(url, payload);
 }
 
+export const getSurveyAnswersAnalysis = (id) => {
+    const url = `http://localhost:8080/analysis/public/minimizedrawdata/${id}`;
+    return axios.get(url);
+}
 
