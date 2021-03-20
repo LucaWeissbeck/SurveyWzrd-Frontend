@@ -27,6 +27,7 @@ import { Plugin } from "@devexpress/dx-react-core";
 import {Stack, Animation, EventTracker, HoverState} from '@devexpress/dx-react-chart';
 import * as surveyService from "../../../services/survey/survey-service";
 import moment from 'moment';
+import * as url from "url";
 var _ = require('lodash');
 
 
@@ -74,6 +75,7 @@ export class AnalyticsEmbedded extends React.Component {
     constructor(props) {
         moment().format();
         super(props);
+        let urlSurveyID = this.props.surveyPath.slice(8);
 
         this.state = {
             reload: false,
@@ -91,7 +93,7 @@ export class AnalyticsEmbedded extends React.Component {
                 {month: 'Oct', Strawberry: 67, Chocolate: 20, Vanilla: 15},
                 {month: 'Nov', Strawberry: 42,Chocolate: 34, Vanilla: 1},
                 {month: 'Dec', Strawberry: 91, Chocolate: 87, Vanilla: 34}*/
-
+            urlSurveyID: urlSurveyID,
             //API Survey General
             surveyCompanyName: "",
             surveyQuestion: "",
@@ -109,7 +111,7 @@ export class AnalyticsEmbedded extends React.Component {
 
     // API Calls in CDM
     async componentDidMount() {
-        surveyService.getSurveysByID(16)
+        surveyService.getSurveysByID(this.state.urlSurveyID)
             .then((res) => {
                 this.setState({
                     surveyName: res.data.name,
@@ -120,7 +122,7 @@ export class AnalyticsEmbedded extends React.Component {
             })
             .catch(err => console.log(err))
 
-        surveyService.getSurveyAnswersAnalysis(16)
+        surveyService.getSurveyAnswersAnalysis(this.state.urlSurveyID)
             .then((res) => {
                 this.setState({
                     surveyFeedbackArrayComplete: res.data
@@ -213,12 +215,8 @@ export class AnalyticsEmbedded extends React.Component {
                 answerOptionsMinimized: []
             })
         }
-        console.log("stateofMonthlyView", this.state.monthlyView);
         let timespan = this.state.monthlyView ? "month" : "week";
-        console.log("fillData called", timespan)
-        console.log("surveyFeedbackarrayminimizes", this.state.surveyFeedbackArrayMinimized)
         const timespanArray = this.groupByTime(this.state.surveyFeedbackArrayMinimized, timespan)
-        console.log("TimeSpanArray", timespanArray)
         let countArray = []
         let answerOptions = []
         for (let j = 0; j < this.state.answerOptions.length; j++) {
@@ -253,13 +251,10 @@ export class AnalyticsEmbedded extends React.Component {
             }
             arrayOfObjects.push(resultObject);
         }
-        console.log("array",arrayOfObjects)
         //Pushing every item(Object with Timestamp and AnswerOptions with corresponding count)
         arrayOfObjects.sort(function(a,b){
             return new Date(a[timespan]) - new Date(b[timespan])
         })
-        console.log("arraysorted",arrayOfObjects)
-
         this.setState({
             data: arrayOfObjects
         })
@@ -291,8 +286,6 @@ export class AnalyticsEmbedded extends React.Component {
 
     render(){
         const {data: chartData} = this.state;
-        console.log("ONE LOG");
-        console.log(chartData);
         return(
             <React.Fragment>
                 <Container>

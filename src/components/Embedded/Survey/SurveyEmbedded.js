@@ -81,7 +81,6 @@ export class SurveyEmbedded extends React.Component {
                 identifierID = localStorage.getItem("identifierID");
             }
             if (this.state.surveyMultiSelect) {
-                console.log("in multiselect");
                 let userLang = navigator.language;
                 localStorage.setItem(this.state.urlSurveyID, "voted");
                 let checkboxAnswersIDs = [];
@@ -93,9 +92,6 @@ export class SurveyEmbedded extends React.Component {
                             }
                         }
                     }
-                    console.log("answerOptionsIDs", checkboxAnswersIDs)
-                    console.log("bwlanguage", userLang)
-                    console.log("identifier", identifierID)
                     let payload = {
                         answerOptionIDs: checkboxAnswersIDs,
                         timestamp: "",
@@ -231,7 +227,6 @@ export class SurveyEmbedded extends React.Component {
                             }
                             <div style={{backgroundColor: "#254563", height: "10px"}}/>
                         </Card>
-                        {console.log(this.state.answerOptions)}
                     </Container>
                 </Container>
             </React.Fragment>
