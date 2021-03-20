@@ -135,9 +135,9 @@ export class AnalyticsEmbedded extends React.Component {
                 }
             })
             .then(() => {
-                this.fillData()
+                this.state.monthlyView ? this.fillData("month") : this.fillData("week");
             })
-            .catch(err => console.log(err))
+            .catch(err => console.log(err));
 
         surveyService.getAnswerOptionsByID(16)
             .then((res) => {
@@ -157,10 +157,13 @@ export class AnalyticsEmbedded extends React.Component {
             this.setState({currentTooltip: (target.series + " " + portionQuantity)})
         } catch(error){}
     }
-    onTimeSwitch = (event) => {
+    onTimeSwitch = () => {
+        let toBeMonthlyView = !this.state.monthlyView;
         this.setState({
-            monthlyView: event.target.checked
-        });
+            monthlyView: toBeMonthlyView
+        },this.fillData
+        )
+
     }
 
     //Get HTML
@@ -177,7 +180,7 @@ export class AnalyticsEmbedded extends React.Component {
                         <BarSeries
                             name = {answer.value}
                             valueField ={answer.value}
-                            argumentField = "week"
+                            argumentField ={this.state.monthlyView ? "month" : "week"}
                             color ={colours.pop()}
                             barWidth = "0.4"
                         />
@@ -203,63 +206,67 @@ export class AnalyticsEmbedded extends React.Component {
 
     //Fill Data
     fillData = () => {
-        if (!this.state.monthlyView) {
-            const weekArray = this.groupByTime(this.state.surveyFeedbackArrayMinimized, "week")
-            let countArray = []
-            let answerOptions = []
-            for (let j = 0; j < this.state.answerOptions.length; j++) {
-                answerOptions.push(this.state.answerOptions[j].value)
-            }
-            for (let s = 0; s < answerOptions; s++){
-                this.setState(prevState => ({
-                    answerOptionsMinimized: [...prevState.answerOptionsMinimized, answerOptions[s]]
-                }))
-            }
-            for (const date in weekArray) {
-                let occurrencesInObject = []
-                for (let i = 0; i < answerOptions.length; i++) {
-                    const valueName = answerOptions[i];
-                    //Counting occurences of Values in Object
-                    const count = weekArray[date].filter((obj) => obj.valueName === valueName).length;
-                    occurrencesInObject.push(count)
-                }
-                //Object for final use
-                countArray.push({
-                    week: date,
-                    choices: occurrencesInObject,
-                })
-            }
-            //Converting Timestmap in countArray
-            let arrayOfObjects = [];
-            for (let i = 0; i < countArray.length; i++) {
-                let resultObject = {};
-                let convertedDate = this.convertDate(countArray[i].week);
-                resultObject["week"] = convertedDate;
-                for (let j = 0; j < countArray[i].choices.length; j++) {
-                    resultObject[answerOptions[j]] = countArray[i].choices[j];
-                }
-                arrayOfObjects.push(resultObject);
-            }
-            //Pushing every item(Object with Timestamp and AnswerOptions with corresponding count)
-            for (let k = 0; k < arrayOfObjects.length; k++) {
-                this.setState(prevState => ({
-                    data: [...prevState.data, arrayOfObjects[k]]
-                }));
-            }
+        //Clear Array if content inside
+        if (this.state.data.length || this.state.answerOptionsMinimized.length > 0) {
+            this.setState({
+                data: [],
+                answerOptionsMinimized: []
+            })
         }
+        console.log("stateofMonthlyView", this.state.monthlyView);
+        let timespan = this.state.monthlyView ? "month" : "week";
+        console.log("fillData called", timespan)
+        console.log("surveyFeedbackarrayminimizes", this.state.surveyFeedbackArrayMinimized)
+        const timespanArray = this.groupByTime(this.state.surveyFeedbackArrayMinimized, timespan)
+        console.log("TimeSpanArray", timespanArray)
+        let countArray = []
+        let answerOptions = []
+        for (let j = 0; j < this.state.answerOptions.length; j++) {
+            answerOptions.push(this.state.answerOptions[j].value)
+        }
+        this.setState({
+            answerOptionsMinimized: answerOptions
+        })
+
+        for (const date in timespanArray) {
+            let occurrencesInObject = []
+            for (let i = 0; i < answerOptions.length; i++) {
+                const valueName = answerOptions[i];
+                //Counting occurences of Values in Object
+                const count = timespanArray[date].filter((obj) => obj.valueName === valueName).length;
+                occurrencesInObject.push(count)
+            }
+            //Object for final use
+            let tempObj = {};
+            tempObj[timespan] = date;
+            tempObj["choices"] = occurrencesInObject;
+            countArray.push(tempObj);
+        }
+        //Converting Timestmap in countArray
+        let arrayOfObjects = [];
+        for (let i = 0; i < countArray.length; i++) {
+            let resultObject = {};
+            let convertedDate = countArray[i][timespan].substring(0, countArray[i][timespan].length - 17);
+            resultObject[timespan] = convertedDate;
+            for (let j = 0; j < countArray[i].choices.length; j++) {
+                resultObject[answerOptions[j]] = countArray[i].choices[j];
+            }
+            arrayOfObjects.push(resultObject);
+        }
+        console.log("array",arrayOfObjects)
+        //Pushing every item(Object with Timestamp and AnswerOptions with corresponding count)
+        arrayOfObjects.sort(function(a,b){
+            return new Date(a[timespan]) - new Date(b[timespan])
+        })
+        console.log("arraysorted",arrayOfObjects)
+
+        this.setState({
+            data: arrayOfObjects
+        })
     }
-
-    //Convert date
-    convertDate = (str) =>{
-        var date = new Date(str),
-            mnth = ("0" + (date.getMonth() + 1)).slice(-2),
-            day = ("0" + date.getDate()).slice(-2);
-        return [day, mnth, date.getFullYear()].join("-");
-    }
-
-
 
     TooltipContent = (props) => {
+        let timespan = this.state.monthlyView ? "month" : "week";
         const { targetItem, text, ...restProps } = props;
         return (
             <div>
@@ -267,7 +274,7 @@ export class AnalyticsEmbedded extends React.Component {
                     <Tooltip.Content
                         {...restProps}
                         style={tooltipContentTitleStyle}
-                        text={(this.state.data[targetItem.point].week)}
+                        text={(this.state.data[targetItem.point][timespan])}
                     />
                 </div>
                 <div>
@@ -284,7 +291,7 @@ export class AnalyticsEmbedded extends React.Component {
 
     render(){
         const {data: chartData} = this.state;
-        console.log("ONE LOG")
+        console.log("ONE LOG");
         console.log(chartData);
         return(
             <React.Fragment>
@@ -328,7 +335,6 @@ export class AnalyticsEmbedded extends React.Component {
                                                 <Legend position="bottom" rootComponent={Root} labelComponent={Label} />
                                                 <Title text={this.state.surveyQuestion} />
                                                 <EventTracker />
-
                                                 <Tooltip onTargetItemChange={this.handleTooltipChange} contentComponent={this.TooltipContent}/>
                                                 <Stack
                                                     stacks={[

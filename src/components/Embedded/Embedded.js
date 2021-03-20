@@ -7,7 +7,6 @@ export class Embedded extends React.Component{
         super(props);
         this.state = {
             submitted: false,
-            reloadNeeded: false
         }
     }
 
@@ -25,7 +24,7 @@ export class Embedded extends React.Component{
         return(
 
             <React.Fragment>
-                {this.state.submitted ? <AnalyticsEmbedded switch={this.switch}/> : <SurveyEmbedded switch={this.switch}/>}
+                {this.state.submitted ? <AnalyticsEmbedded switch={this.switch} surveyPath={this.props.location.pathname}/> : <SurveyEmbedded switch={this.switch} surveyPath={this.props.location.pathname}/>}
             </React.Fragment>
             )
         }

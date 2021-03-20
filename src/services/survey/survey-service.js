@@ -13,8 +13,14 @@ export const getAnswerOptionsByID = (id) => {
     return axios.get(url);
 }
 
-export const postSurveyAnswer = (id, payload) => {
-    const url = `http://localhost:8080/surveyfeedback/public/${id}`;
+
+export const postSurveyAnswerSingle = (id, payload) => {
+    const url = `http://localhost:8080/surveyfeedback/public/single/${id}`;
+    return axios.post(url, payload);
+}
+
+export const postSurveyAnswerMutliple = (id, payload) => {
+    const url = `http://localhost:8080/surveyfeedback/public/multiple/${id}`;
     return axios.post(url, payload);
 }
 
