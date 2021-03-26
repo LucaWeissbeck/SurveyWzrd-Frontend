@@ -25,7 +25,7 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 import { Plugin } from "@devexpress/dx-react-core";
 import {Stack, Animation, EventTracker, HoverState} from '@devexpress/dx-react-chart';
-import * as surveyService from "../../../services/survey/survey-service";
+import * as surveyService from "../../../services/survey/embeddedSurvey-service";
 import moment from 'moment';
 import * as url from "url";
 var _ = require('lodash');

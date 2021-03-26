@@ -10,7 +10,7 @@ import {
     CardContent, CardActions, Typography, Button, FormLabel, FormGroup, Checkbox
 } from "@material-ui/core";
 import { Alert }from '@material-ui/lab';
-import * as surveyService from "../../../services/survey/survey-service";
+import * as surveyService from "../../../services/survey/embeddedSurvey-service";
 import Header from "../../Home/Header/Header";
 
 
@@ -22,6 +22,7 @@ export class SurveyEmbedded extends React.Component {
         this.state = {
             urlSurveyID: urlSurveyID,
             //Survey API data
+            companyName: "",
             surveyName: null,
             surveyDescription: '',
             surveyID: null,
@@ -44,11 +45,13 @@ export class SurveyEmbedded extends React.Component {
         surveyService.getSurveysByID(this.state.urlSurveyID)
             .then((res) => {
                 this.setState({
+                    companyName: res.data.companyName,
                     surveyName: res.data.name,
                     surveyDescription: res.data.description,
                     surveyID: res.data.id,
                     surveyMultiSelect: res.data.multiSelect,
                     surveyQuestion: res.data.question
+
                 })
             })
             .catch(err => console.log(err))
@@ -186,19 +189,19 @@ export class SurveyEmbedded extends React.Component {
                             <CardHeader
                                 titleTypographyProps={{variant:'h5' }}
                                 avatar={
-                                    <img src={"./assets/survey_wzrd_logo_ideas.svg"} style={{width: "180px"}}/>
+                                    <img src={"./assets/survey_wzrd_logo_ideas.svg"}/>
                                 }
-                                title="By: CompanyName"
+                                action={
+                                    <Button variant="contained" color="secondary" style={{pointerEvents: "none"}}>{this.state.companyName + "®"}</Button>
+                                }
                                 style={{backgroundColor: "#254563", color: 'white', height: "35px", textAlign: "right"}}>
+                                <img src={"./assets/logo_without_text.png"}/>
                             </CardHeader>
                             <CardContent>
                                 <CardActions>
                                     <FormControl component="fieldset">
                                         <Typography variant="h5" component="h2">
                                             {this.state.surveyName}
-                                        </Typography>
-                                        <Typography style={{marginBottom: 12}} color="textSecondary">
-                                            Please choose one of the following below:
                                         </Typography>
                                         {!this.state.surveyMultiSelect &&
                                             <RadioGroup aria-label="gender" name="gender1" value={this.state.rbValue}
@@ -208,7 +211,7 @@ export class SurveyEmbedded extends React.Component {
                                         }
                                         {this.state.surveyMultiSelect &&
                                             <FormControl component="fieldset">
-                                                <FormLabel component="legend">Please choose one or more answers.</FormLabel>
+                                                <FormLabel component="legend" style={{marginBottom: "10px"}}>Please choose one or more answers.</FormLabel>
                                                 <FormGroup>
                                                     {this.getAnswerOptionsMultipleChoiceHTML()}
                                                 </FormGroup>
