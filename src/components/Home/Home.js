@@ -2,8 +2,22 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import MenuIcon from '@material-ui/icons/Menu';
-import {Grid, Paper, AppBar, Toolbar, IconButton, Card, CardActions, CardContent, Container, Button, Typography} from "@material-ui/core";
+import {
+    Grid,
+    Paper,
+    AppBar,
+    Toolbar,
+    IconButton,
+    Card,
+    CardActions,
+    CardContent,
+    Container,
+    Button,
+    Typography,
+    Tab
+} from "@material-ui/core";
 import {Helmet} from "react-helmet";
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles({
     root: {
@@ -72,7 +86,7 @@ export default function Home() {
                                 <Typography variant="h6" className={classes2.title}>
 
                                 </Typography>
-                                <Button color="secondary">Start now</Button>
+                                <Button color="secondary" component={Link} to="/overview">Start now</Button>
                                 <AccountBoxIcon color="secondary"/>
                             </Toolbar>
                         </AppBar>
@@ -98,7 +112,9 @@ export default function Home() {
                                         </Typography>
                                     </CardContent>
                                     <CardActions className={classes.mainCard}>
-                                        <Button className={classes.mainCard2} variant="contained">START NOW</Button>
+                                        <Button className={classes.mainCard2} variant="contained" component={Link} to="/overview">
+                                            START NOW
+                                        </Button>
                                     </CardActions>
                                 </Card>
                             </Grid>
