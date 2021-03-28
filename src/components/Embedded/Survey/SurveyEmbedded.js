@@ -7,7 +7,7 @@ import {
     Radio,
     CardHeader,
     Card,
-    CardContent, CardActions, Typography, Button, FormLabel, FormGroup, Checkbox
+    CardContent, CardActions, Typography, Button, FormLabel, FormGroup, Checkbox, CircularProgress
 } from "@material-ui/core";
 import { Alert }from '@material-ui/lab';
 import * as surveyService from "../../../services/survey/embeddedSurvey-service";
@@ -45,6 +45,7 @@ export class SurveyEmbedded extends React.Component {
         surveyService.getSurveysByID(this.state.urlSurveyID)
             .then((res) => {
                 this.setState({
+                    loading: false,
                     companyName: res.data.companyName,
                     surveyName: res.data.name,
                     surveyDescription: res.data.description,
@@ -79,62 +80,67 @@ export class SurveyEmbedded extends React.Component {
             this.setState({voted: true});
         }
         else {
+            console.log("now")
             let identifierID = "";
             if (localStorage.getItem("identifierID") !== null) {
                 identifierID = localStorage.getItem("identifierID");
             }
+
+            this.setState({loading: true});
+            let userLang = navigator.language;
+            localStorage.setItem(this.state.urlSurveyID, "voted");
+            let checkboxAnswersIDs = [];
             if (this.state.surveyMultiSelect) {
-                let userLang = navigator.language;
-                localStorage.setItem(this.state.urlSurveyID, "voted");
-                let checkboxAnswersIDs = [];
-                if (this.state.surveyMultiSelect) {
-                    for (let i = 0; i < this.state.checkboxAnswers.length; i++) {
-                        for (let j = 0; j < this.state.answerOptions.length; j++) {
-                            if (this.state.answerOptions[j].value === this.state.checkboxAnswers[i]) {
-                                checkboxAnswersIDs.push(this.state.answerOptions[j].id);
-                            }
+                for (let i = 0; i < this.state.checkboxAnswers.length; i++) {
+                    for (let j = 0; j < this.state.answerOptions.length; j++) {
+                        if (this.state.answerOptions[j].value === this.state.checkboxAnswers[i]) {
+                            checkboxAnswersIDs.push(this.state.answerOptions[j].id);
                         }
                     }
-                    let payload = {
-                        answerOptionIDs: checkboxAnswersIDs,
-                        timestamp: "",
-                        browserLanguage: userLang,
-                        identifierID: identifierID
-                    }
-                    surveyService.postSurveyAnswerMutliple(this.state.urlSurveyID, payload)
-                        .then((res) => {
-                            console.log(res);
-                            if (localStorage.getItem("identifierID") === null) {
-                                localStorage.setItem("identifierID", res.data.identifierID)
-                            }
-                        })
-                        .then(this.props.switch)
-                        .catch(err => console.log(err));
-                } else if (!this.state.surveyMultiSelect) {
-                    //Getting ID for chosen answer from AnswerOption array
-                    let answerOptionID = 0;
-                    for (let i = 0; i < this.state.answerOptions.length; i++) {
-                        if (this.state.answerOptions[i].value === this.state.rbValue) {
-                            answerOptionID = this.state.answerOptions[i].id;
-                        }
-                    }
-                    let payload = {
-                        answerOptionID: answerOptionID,
-                        timestamp: "",
-                        browserLanguage: userLang,
-                        identifierID: identifierID
-                    }
-                    surveyService.postSurveyAnswerSingle(this.state.urlSurveyID, payload)
-                        .then((res) => {
-                            console.log(res);
-                            if (localStorage.getItem("identifierID") === null) {
-                                localStorage.setItem("identifierID", res.data.identifierID)
-                            }
-                        })
-                        .then(this.props.switch)
-                        .catch(err => console.log(err));
                 }
+                let payload = {
+                    answerOptionIDs: checkboxAnswersIDs,
+                    timestamp: "",
+                    browserLanguage: userLang,
+                    identifierID: identifierID
+                }
+                surveyService.postSurveyAnswerMutliple(this.state.urlSurveyID, payload)
+                    .then((res) => {
+                        console.log(res);
+                        if (localStorage.getItem("identifierID") === null) {
+                            localStorage.setItem("identifierID", res.data.identifierID)
+                        }
+                    })
+                    .then(this.props.switch)
+                    .catch(err => console.log(err));
             }
+            else if (!this.state.surveyMultiSelect) {
+                console.log("printed")
+                //Getting ID for chosen answer from AnswerOption array
+                this.setState({loading: true});
+                let answerOptionID = 0;
+                for (let i = 0; i < this.state.answerOptions.length; i++) {
+                    if (this.state.answerOptions[i].value === this.state.rbValue) {
+                        answerOptionID = this.state.answerOptions[i].id;
+                    }
+                }
+                let payload = {
+                    answerOptionID: answerOptionID,
+                    timestamp: "",
+                    browserLanguage: userLang,
+                    identifierID: identifierID
+                }
+                surveyService.postSurveyAnswerSingle(this.state.urlSurveyID, payload)
+                    .then((res) => {
+                        console.log(res);
+                        if (localStorage.getItem("identifierID") === null) {
+                            localStorage.setItem("identifierID", res.data.identifierID)
+                        }
+                    })
+                    .then(this.props.switch)
+                    .catch(err => console.log(err));
+            }
+
         }
     };
 
@@ -189,13 +195,12 @@ export class SurveyEmbedded extends React.Component {
                             <CardHeader
                                 titleTypographyProps={{variant:'h5' }}
                                 avatar={
-                                    <img src={"./assets/survey_wzrd_logo_ideas.svg"}/>
+                                    <img src="/assets/logo_with_text.png" style={{width: "180px", height:"160px", marginBottom: "-5px"}}/>
                                 }
                                 action={
                                     <Button variant="contained" color="secondary" style={{pointerEvents: "none"}}>{this.state.companyName + "®"}</Button>
                                 }
                                 style={{backgroundColor: "#254563", color: 'white', height: "35px", textAlign: "right"}}>
-                                <img src={"./assets/logo_without_text.png"}/>
                             </CardHeader>
                             <CardContent>
                                 <CardActions>
@@ -220,9 +225,10 @@ export class SurveyEmbedded extends React.Component {
                                     </FormControl>
                                 </CardActions>
                                 <CardActions>
-                                    <Button  variant="contained" style={{backgroundColor: "#c4b1c9", color: "white"}} onClick={this.submitButtonOnClick}>
+                                    <Button  variant="contained" style={{backgroundColor: "#c4b1c9", color: "white"}} onClick={this.submitButtonOnClick} disabled={this.state.surveyMultiSelect ? this.state.checkboxAnswers.length === 0 : this.state.rbValue === null}>
                                         SEND
                                     </Button>
+                                    {this.state.loading && <CircularProgress size={26} style={{marginLeft: "-49px"}}/> }
                                 </CardActions>
                             </CardContent>
                             {this.state.voted === true &&

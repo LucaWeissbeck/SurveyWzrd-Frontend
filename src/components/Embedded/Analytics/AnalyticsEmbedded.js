@@ -294,7 +294,7 @@ export class AnalyticsEmbedded extends React.Component {
                             <CardHeader
                                 titleTypographyProps={{variant:'h5' }}
                                 avatar={
-                                    <img src={"./assets/survey_wzrd_logo_ideas.svg"} style={{width: "180px"}}/>
+                                    <img src="/assets/logo_with_text.png" style={{width: "180px", height:"160px", marginBottom: "-5px"}}/>
                                 }
                                 action={
                                     <Button variant="contained" color="secondary" style={{pointerEvents: "none"}}>{this.state.surveyCompanyName + "®"}</Button>
