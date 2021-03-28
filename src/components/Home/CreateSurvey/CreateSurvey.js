@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {Container, Card, CardActions, CardContent, Grid, Box, Button, FormControlLabel, Switch, TextField} from "@material-ui/core";
+import {Container, Card, CardActions, CardContent, Grid, Box, Button, Paper, Input, FormControlLabel, Switch, TextField} from "@material-ui/core";
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import Header from "../Header/Header";
 import {Helmet} from "react-helmet";
@@ -14,6 +14,7 @@ import AccountBoxIcon from "@material-ui/icons/AccountBox";
 const useStyles = makeStyles({
     root: {
         minWidth: 275,
+        flexGrow: 1,
     },
     mainCard2: {
         color: '#FFFFFF',
@@ -69,10 +70,11 @@ export default function CreateSurvey(){
                    <Box width="70%">
                        <Card className={classes.root}>
                            <CardContent>
-                               <TextField
-                                   id="standard-basic"
-                                   label="Insert Title..."
-                                   InputProps={{ disableUnderline: true }}
+                               <Input
+                                   placeholder="Insert Title..."
+                                   disableUnderline={true}
+                                   inputProps={{style: {fontSize: 30, color: '#254563'}}} // font size of input text
+                                   InputLabelProps={{style: {fontSize: 30, color: '#254563'}}} // font size of input label
                                />
                                <form className={classes.root} noValidate autoComplete="off">
                                    <div>
@@ -99,35 +101,55 @@ export default function CreateSurvey(){
                                </form>
                                <Box p={1}/>
                                <form className={classesMUI.textField} noValidate autoComplete="off">
-                                   <div>
-                                       <TextField
-                                           id="standard-basic"
-                                           label="Answer 1"
-                                           fullWidth
-                                       />
-                                   </div>
-                               </form>
-                               <form className={classesMUI.textField} noValidate autoComplete="off">
-                                   <div>
-                                       <TextField
-                                           id="standard-basic"
-                                           label="Answer 2"
-                                           fullWidth
-                                       />
-                                   </div>
-                               </form>
-                               <form className={classesMUI.textField} noValidate autoComplete="off">
-                                   <div>
-                                       <Grid container spacing={1} alignItems="flex-end">
-                                           <Grid item>
-                                               <AddBoxIcon/>
-                                           </Grid>
-                                           <Grid item>
+                                   <div className={classes.root}>
+                                       <Grid container spacing={0}>
+                                           <Grid item sm={1}/>
+
+                                           <Grid item sm={11}>
                                                <TextField
-                                                   id="input-with-icon-grid"
-                                                   label="Additional Answer"
+                                                   id="standard-basic"
+                                                   label="Answer 1"
                                                    fullWidth
                                                />
+                                           </Grid>
+                                       </Grid>
+                                   </div>
+                               </form>
+                               <form className={classesMUI.textField} noValidate autoComplete="off">
+                                   <div className={classes.root}>
+                                       <Grid container spacing={0}>
+                                           <Grid item sm={1}/>
+
+                                           <Grid item sm={11}>
+                                               <TextField
+                                                   id="standard-basic"
+                                                   label="Answer 2"
+                                                   fullWidth
+                                               />
+                                           </Grid>
+                                       </Grid>
+                                   </div>
+                               </form>
+                               <form className={classesMUI.textField} noValidate autoComplete="off">
+                                   <div className={classes.root}>
+                                       <Grid container spacing={0}>
+                                           <Grid item sm={1}/>
+
+                                           <Grid item sm={11}>
+                                               <Grid container spacing={1} alignItems="flex-end">
+                                                   <Grid item>
+                                                       <AddBoxIcon/>
+                                                   </Grid>
+                                                   <Grid item>
+                                                       <TextField
+                                                           disabled
+                                                           id="input-with-icon-grid"
+                                                           label="Additional Answer"
+                                                           fullWidth
+                                                           InputProps={{ disableUnderline: true }}
+                                                       />
+                                                   </Grid>
+                                               </Grid>
                                            </Grid>
                                        </Grid>
                                    </div>
@@ -138,7 +160,7 @@ export default function CreateSurvey(){
                                />
                            </CardContent>
                            <CardActions>
-                               <Button className={classes.mainCard2} variant="contained" component={Link} to="/overview">
+                               <Button className={classes.mainCard2} variant="contained" component={Link} to="/">
                                    CREATE
                                </Button>
                            </CardActions>
