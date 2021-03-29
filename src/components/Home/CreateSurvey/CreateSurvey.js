@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {Container, Card, CardActions, CardContent, Grid, Box, Button, Paper, Input, FormControlLabel, Switch, TextField} from "@material-ui/core";
+import {Container, Card, CardActions, CardContent, Grid, Box, Button, Paper, Tooltip, Input, FormControlLabel, Switch, TextField} from "@material-ui/core";
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import Header from "../Header/Header";
 import {Helmet} from "react-helmet";
@@ -48,8 +48,7 @@ export default function CreateSurvey(){
     const classesMUI = useStylesMUI();
 
     const [state, setState] = React.useState({
-        checkedA: true,
-        checkedB: true,
+        checkedA: false,
     });
 
     const handleChange = (event) => {
@@ -136,26 +135,34 @@ export default function CreateSurvey(){
                                            <Grid item sm={1}/>
 
                                            <Grid item sm={11}>
-                                               <Grid container spacing={1} alignItems="flex-end">
-                                                   <Grid item>
-                                                       <AddBoxIcon/>
+                                               <div>
+                                                   <Grid container spacing={1} alignItems="flex-end">
+                                                       <Grid item>
+                                                           <Tooltip title="Add additional answer">
+                                                               <Button component={Link} to="/createsurvey">
+                                                                   <AddBoxIcon/>
+                                                               </Button>
+                                                           </Tooltip>
+
+                                                       </Grid>
+                                                       <Grid item>
+                                                           <TextField
+                                                               disabled
+                                                               id="input-with-icon-grid"
+                                                               label="Additional Answer"
+                                                               fullWidth
+                                                               InputProps={{ disableUnderline: true }}
+                                                           />
+                                                       </Grid>
                                                    </Grid>
-                                                   <Grid item>
-                                                       <TextField
-                                                           disabled
-                                                           id="input-with-icon-grid"
-                                                           label="Additional Answer"
-                                                           fullWidth
-                                                           InputProps={{ disableUnderline: true }}
-                                                       />
-                                                   </Grid>
-                                               </Grid>
+                                               </div>
+
                                            </Grid>
                                        </Grid>
                                    </div>
                                </form>
                                <FormControlLabel
-                                   control={<Switch checked={state.checkedA} onChange={handleChange} name="checkedA" />}
+                                   control={<Switch checked={state.checkedA} onChange={handleChange} name="checkedA" color="primary" />}
                                    label="Allow Several Answers"
                                />
                            </CardContent>

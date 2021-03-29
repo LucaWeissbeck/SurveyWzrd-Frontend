@@ -64,7 +64,7 @@ export default function Header(props) {
 */
         <React.Fragment>
             <AppBar position="static">
-                <img src={"./assets/logo_without_text.svg"} style={{maxWidth: "150px", maxHeight: "40px", display: "inline", marginBottom: "-60px", marginLeft: "20px", marginTop: "20px"}}/>
+                <img src={"./assets/logo_without_text.svg"} style={{maxWidth: "150px", maxHeight: "40px", display: "inline", marginBottom: "-60px", marginLeft: "20px", marginTop: "20px"}} />
                 <Tabs value={tabValue} centered={true}>
                     <Tab label="Overview" classes={{ root: classes.tab }} icon={<HomeIcon fontSize="large"/>} component={Link} to="/overview"/>
                     <Tab label="Create Survey" classes={{ root: classes.tab }} icon={<NoteAddIcon fontSize="large"/>} component={Link} to="/createsurvey"/>
