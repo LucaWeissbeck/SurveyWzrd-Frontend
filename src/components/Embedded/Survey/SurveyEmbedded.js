@@ -74,6 +74,9 @@ export class SurveyEmbedded extends React.Component {
             .catch(err => console.log(err));
 
     }
+
+
+
     //Component Change Handlers
     submitButtonOnClick = () =>{
         if(localStorage.getItem(this.state.urlSurveyID)){
