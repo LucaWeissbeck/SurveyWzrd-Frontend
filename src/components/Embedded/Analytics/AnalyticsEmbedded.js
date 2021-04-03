@@ -109,6 +109,10 @@ export class AnalyticsEmbedded extends React.Component {
         };
     }
 
+    fixGraph = () =>{
+        this.forceUpdate();
+    }
+
     // API Calls in CDM
     async componentDidMount() {
         surveyService.getSurveysByID(this.state.urlSurveyID)
@@ -258,6 +262,7 @@ export class AnalyticsEmbedded extends React.Component {
         this.setState({
             data: arrayOfObjects
         })
+        this.forceUpdate();
     }
 
     TooltipContent = (props) => {

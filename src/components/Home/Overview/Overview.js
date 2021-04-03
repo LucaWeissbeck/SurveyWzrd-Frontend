@@ -39,7 +39,7 @@ export class Overview extends React.Component{
     render(){
         return(
             <React.Fragment>
-                <Header />
+                <Header header={0}/>
                 <Helmet>
                     <style>{'body { background-color: #d4d7dd; }'}</style>
                 </Helmet>
