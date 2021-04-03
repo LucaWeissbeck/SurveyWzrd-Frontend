@@ -7,8 +7,8 @@ build:
   image: node
   script: 
     - echo "Start building App"
-    - yarn install
-    - yarn build
+    - npm install
+    - CI=false npm run build
     - echo "Build successfully!"
   artifacts:
     expire_in: 1 hour
