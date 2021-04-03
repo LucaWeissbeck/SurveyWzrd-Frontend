@@ -185,9 +185,9 @@ export class AnalyticsEmbedded extends React.Component {
                     <div>
                         <BarSeries
                             name = {answer.value}
-                            valueField ={answer.value}
-                            argumentField ={this.state.monthlyView ? "month" : "week"}
-                            color ={colours.pop()}
+                            valueField = {answer.value}
+                            argumentField = {this.state.monthlyView ? "month" : "week"}
+                            color = {colours.pop()}
                             barWidth = "0.4"
                         />
                     </div>

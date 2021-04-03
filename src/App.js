@@ -1,3 +1,5 @@
+import 'devextreme/dist/css/dx.common.css';
+import 'devextreme/dist/css/dx.light.css';
 
 import React from 'react';
 import {Embedded} from "./components/Embedded/Embedded";
@@ -7,6 +9,7 @@ import { Overview } from "./components/Home/Overview/Overview";
 import { Login } from "./components/Login/Login";
 import CreateSurvey from "./components/Home/CreateSurvey/CreateSurvey";
 import Home from "./components/Home/Home";
+
 
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 

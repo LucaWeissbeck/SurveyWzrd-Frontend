@@ -12,67 +12,147 @@ import {
     Button,
     ButtonGroup,
     CardContent,
-    Typography
+    Typography, FormControl
 } from "@material-ui/core";
 import ShareIcon from '@material-ui/icons/Share';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import {Helmet} from "react-helmet";
 
+import { Animation } from '@devexpress/dx-react-chart';
+import PieChart, {
+    Series,
+    Label,
+    Size,
+    Connector,
+    SmallValuesGrouping,
+    Legend
+} from 'devextreme-react/pie-chart';
+import {getAllSurveys} from "../../../services/overview/overview-service";
+
 export class Overview extends React.Component{
     constructor(props) {
         super(props);
-
         this.state = {
             allSurveys: [],
+            data: []
         }
+
+
+
+    surveyService.getAllSurveys()
+        .then((res) => {
+            this.setState({allSurveys: res.data})
+        })
+        .then(() =>{
+            for (let i=0; i < this.state.allSurveys.length; i++){
+                this.getData(this.state.allSurveys[i].id)
+            }
+            this.forceUpdate()
+        })
+        .catch(err => console.log(err));
+
     }
 
-    componentDidMount() {
-        surveyService.getAllSurveys()
-            .then((res) =>{
-                this.setState({allSurveys: res.data})
-            })
-            .catch(err => console.log(err));
-    }
+
+
+     getData = async(id) => {
+         await surveyService.getSurveyAnswerCount(id)
+             .then((res) => {
+                 let surveyAnswerCounts = res.data;
+                 return surveyAnswerCounts
+             })
+             .then((surveyAnswerCounts) => {
+                 console.log("test", surveyAnswerCounts)
+                 let dataArray = [];
+                 surveyAnswerCounts.map((entry) => {
+                     let insertObject = {x: null, y: null};
+                     insertObject.x = entry.answerOption.value;
+                     insertObject.y = entry.count;
+                     //insertObject[entry.answerOption.value] = entry.count
+                     dataArray.push(insertObject);
+
+                 })
+                dataArray.push(id)
+                 this.setState(prevState => ({
+                     data: [...prevState.data, dataArray]
+                 }));
+             })
+             .catch(err => console.log(err));
+
+     }
+
+     displayData = (id) =>{
+         const response = this.state.data.find(element => element.includes(id)) ? this.state.data.find(element => element.includes(id)) : [];
+         console.log("response", response)
+         return response;
+     }
+
+
+
+
 
 
     render(){
         return(
+
             <React.Fragment>
                 <Header header={0}/>
                 <Helmet>
                     <style>{'body { background-color: #d4d7dd; }'}</style>
                 </Helmet>
-                {console.log(this.state.allSurveys)}
+                {console.log("allSurveys",this.state.allSurveys)}
+                {console.log("data",this.state.data)}
                 <Container>
                     <Grid container spacing={6} style={{marginTop: "10px"}}>
-                        {this.state.allSurveys.map((survey) => (
+                        {this.state.data.length === this.state.allSurveys.length && this.state.allSurveys.map((survey, index) => (
                             <Grid item xs = {4}>
-                                <Card raised={true} style={{height: "100%", display: "flex", flexDirection:"column", flexShrink: 0}}>
-                                    <CardHeader
-                                        title={survey.name}
-                                        action={
+                                <FormControl fullWidth={true}>
+                                    <Card raised={true} style={{height: "100%", display: "flex", flexDirection:"column", flexShrink: 0}}>
+                                        <CardHeader
+                                            title={survey.name}
+                                            action={
+                                                <IconButton>
+                                                    <ShareIcon />
+                                                </IconButton>
+                                            }
+                                        />
+
+                                        <CardMedia>
+                                            <PieChart
+                                                dataSource={this.displayData(survey.id)}
+                                                palette="Bright"
+                                                type="doughnut"
+                                                style={{marginLeft: "20px"}}
+                                            >
+                                                <Series valueField="y" argumentField="x">
+                                                    <SmallValuesGrouping mode="topN" topCount={3} />
+                                                    <Label visible={true} format="fixedPoint">
+                                                        <Connector visible={true} width={1} />
+                                                    </Label>
+                                                </Series>
+                                                <Legend horizontalAlignment="right" verticalAlignment="bottom" />
+                                                <Size width={300} height={150}/>
+                                            </PieChart>
+                                        </CardMedia>
+                                        <CardContent style={{display: "flex", flex: 1}}>
+                                            <Typography variant="body2" color="textSecondary" component="p">
+                                                {survey.description}
+                                            </Typography>
+                                        </CardContent>
+                                        <CardActions>
+                                            <Button color="primary">Auswerten</Button>
+                                            <Button color="primary">Bearbeiten</Button>
+                                            <Button color="primary">Vorschau</Button>
                                             <IconButton>
-                                                <ShareIcon />
+                                                <DeleteOutlineIcon/>
                                             </IconButton>
-                                        }
-                                    />
-                                    <CardMedia/>
-                                    <CardContent style={{display: "flex", flex: 1}}>
-                                        <Typography variant="body2" color="textSecondary" component="p">
-                                            {survey.description}
-                                        </Typography>
-                                    </CardContent>
-                                    <CardActions>
-                                        <Button color="primary">Auswerten</Button>
-                                        <Button color="primary">Bearbeiten</Button>
-                                        <Button color="primary">Vorschau</Button>
-                                        <IconButton>
-                                            <DeleteOutlineIcon/>
-                                        </IconButton>
-                                    </CardActions>
-                                </Card>
+                                        </CardActions>
+                                    </Card>
+                                </FormControl>
+
                             </Grid>
+
+
                         ))}
                     </Grid>
                 </Container>

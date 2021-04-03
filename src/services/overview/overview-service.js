@@ -17,3 +17,13 @@ export const getAllSurveys = () => {
 
     return axios(config);
 }
+
+export const getSurveyAnswerCount = (id) => {
+    const url = `http://localhost:8080/analysis/public/${id}`;
+    return axios.get(url);
+}
+
+export const getAnswerOptionsByID = (id) => {
+    const url = `http://localhost:8080/survey/answeroptions/public/${id}`;
+    return axios.get(url);
+}
