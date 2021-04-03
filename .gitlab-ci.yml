@@ -1,6 +1,6 @@
 stages:
   - build
-#  - test
+  - test
 
 build:
   stage: build
@@ -16,6 +16,6 @@ test:
   image: node
   script:
     - echo "Testing App"
-    - npm install
-    - CI=true npm test
-    - echo "Test successfully!"
+   # - npm install
+   # - CI=true npm test
+    - echo "Test successfully DUMMY YET!"
