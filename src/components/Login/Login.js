@@ -1,55 +1,17 @@
 import React from 'react';
-import * as surveyService from "../../services/overview/overview-service";
-import Header from "../Home/Header/Header";
 import {Helmet} from "react-helmet";
 import {
-    AppBar,
     Button,
     Card,
-    CardActions,
     CardContent,
     CardHeader,
-    CardMedia, Checkbox,
+     Checkbox,
     Container, FormControlLabel,
     Grid,
-    IconButton, Paper, Tab, Tabs, TextField,
-    Typography
+    TextField,
 } from "@material-ui/core";
-import ShareIcon from "@material-ui/icons/Share";
-import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import {Face, Fingerprint} from "@material-ui/icons";
-import HomeIcon from "@material-ui/icons/Home";
-import {Link} from "react-router-dom";
-import NoteAddIcon from "@material-ui/icons/NoteAdd";
-import AssessmentIcon from "@material-ui/icons/Assessment";
-import HelpIcon from "@material-ui/icons/Help";
-import {makeStyles} from "@material-ui/core/styles";
 import {postLogin} from "../../services/user/login-service";
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-        border: "none",
-        boxShadow : "none",
-        backgroundColor: '#D9DCE1'
-    },
-    headerOptions: {
-        justifyContent: "space-evenly",
-        display: "flex",
-        flex: 1,
-        fontSize: "1vw",
-        font: "Roboto"
-    },
-    tab:{
-        width: "200px"
-    },
-    navBar:{
-        height: "90px"
-    },
-    menuButton:{
-        marginRight: theme.spacing(2)
-    }
-}));
 
 export class Login extends React.Component{
     constructor(props) {
@@ -93,18 +55,6 @@ export class Login extends React.Component{
     }
 
     render(){
-        //const { values, handleChangeForm } = props;
-        const styles = theme => ({
-            margin: {
-                margin: theme.spacing.unit * 2,
-            },
-            padding: {
-                padding: theme.spacing.unit
-            }
-        });
-
-        //const ss = useStyles();
-
         return (
             <React.Fragment >
                 <Helmet>
@@ -116,7 +66,7 @@ export class Login extends React.Component{
                             <CardHeader
                                 titleTypographyProps={{variant:'h5' }}
                                 avatar={
-                                    <img src="/assets/logo_with_text.png" style={{width: "180px", height:"160px", marginBottom: "-5px"}}/>
+                                    <img src="/assets/logo_with_text.png" style={{width: "180px", height:"160px", marginBottom: "-5px"}} alt="Logo"/>
                                 }
                                 style={{backgroundColor: "#254563", color: 'white', height: "35px", textAlign: "right"}}>
                             </CardHeader>
