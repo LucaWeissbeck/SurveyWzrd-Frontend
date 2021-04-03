@@ -24,7 +24,7 @@ import NoteAddIcon from "@material-ui/icons/NoteAdd";
 import AssessmentIcon from "@material-ui/icons/Assessment";
 import HelpIcon from "@material-ui/icons/Help";
 import {makeStyles} from "@material-ui/core/styles";
-import {postLogin} from "../../services/user/user-service";
+import {postLogin} from "../../services/user/login-service";
 
 const useStyles = makeStyles((theme) => ({
     root: {
