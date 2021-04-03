@@ -11,7 +11,6 @@ import {
 } from "@material-ui/core";
 import { Alert }from '@material-ui/lab';
 import * as surveyService from "../../../services/survey/embeddedSurvey-service";
-import Header from "../../Home/Header/Header";
 
 
 
@@ -189,7 +188,7 @@ export class SurveyEmbedded extends React.Component {
     }
 
 
-    render() {
+    render() { 
         return (
             <React.Fragment>
                 <Container>
