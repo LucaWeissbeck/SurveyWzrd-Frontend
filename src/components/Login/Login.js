@@ -48,6 +48,7 @@ export class Login extends React.Component{
             .then((res) =>{
                 console.log(res.data.authKey)
                 localStorage.setItem("authKey", res.data.authKey)
+                this.props.history.push('/overview/')
             })
             .catch(err => console.log(err));
 
