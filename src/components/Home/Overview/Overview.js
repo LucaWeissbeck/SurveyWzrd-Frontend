@@ -39,8 +39,6 @@ export class Overview extends React.Component{
             modalOpen: false,
             modalButtonID: null
         }
-
-
     }
 
 
@@ -65,7 +63,6 @@ export class Overview extends React.Component{
                  return surveyAnswerCounts
              })
              .then((surveyAnswerCounts) => {
-                 console.log("test", surveyAnswerCounts)
                  let dataArray = [];
                  surveyAnswerCounts.map((entry) => {
                      let insertObject = {x: null, y: null};
@@ -85,7 +82,6 @@ export class Overview extends React.Component{
 
      displayData = (id) => {
          const response = this.state.data.find(element => element.includes(id)) ? this.state.data.find(element => element.includes(id)) : [];
-         console.log("response", response)
          return response;
      }
 
@@ -150,7 +146,6 @@ export class Overview extends React.Component{
                                             </Typography>
                                         </CardContent>
                                         <CardActions>
-                                            {console.log(survey.id)}
                                             <Button color="primary" onClick={this.handleModalOpen} id={survey.id}>Auswerten</Button>
                                             <Button color="primary">Bearbeiten</Button>
                                             <Button color="primary">Vorschau</Button>
@@ -167,6 +162,7 @@ export class Overview extends React.Component{
 
 
                 {/*Full Windows with Detailed analysis*/}
+                {console.log("MainComp",this.state.data)}
                 <ModalComponent open={this.state.modalOpen} onClose={this.handleModalClose} surveyID={this.state.modalButtonID} data={this.state.data}/>
 
 
