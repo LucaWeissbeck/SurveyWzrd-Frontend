@@ -12,7 +12,7 @@ import {
     Button,
     ButtonGroup,
     CardContent,
-    Typography, FormControl
+    Typography, FormControl, Modal, Fade, Backdrop, Dialog, DialogTitle, DialogContent, Paper
 } from "@material-ui/core";
 import ShareIcon from '@material-ui/icons/Share';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
@@ -34,28 +34,30 @@ export class Overview extends React.Component{
         super(props);
         this.state = {
             allSurveys: [],
-            data: []
+            data: [],
+            modalOpen: false,
+            modalButtonID: null
         }
 
-
-
-    surveyService.getAllSurveys()
-        .then((res) => {
-            this.setState({allSurveys: res.data})
-        })
-        .then(() =>{
-            for (let i=0; i < this.state.allSurveys.length; i++){
-                this.getData(this.state.allSurveys[i].id)
-            }
-            this.forceUpdate()
-        })
-        .catch(err => console.log(err));
 
     }
 
 
+    componentDidMount() {
+        surveyService.getAllSurveys()
+            .then((res) => {
+                this.setState({allSurveys: res.data})
+            })
+            .then(() =>{
+                for (let i=0; i < this.state.allSurveys.length; i++){
+                    this.getData(this.state.allSurveys[i].id)
+                }
+                this.forceUpdate()
+            })
+            .catch(err => console.log(err));
+    }
 
-     getData = async(id) => {
+    getData = async(id) => {
          await surveyService.getSurveyAnswerCount(id)
              .then((res) => {
                  let surveyAnswerCounts = res.data;
@@ -68,7 +70,6 @@ export class Overview extends React.Component{
                      let insertObject = {x: null, y: null};
                      insertObject.x = entry.answerOption.value;
                      insertObject.y = entry.count;
-                     //insertObject[entry.answerOption.value] = entry.count
                      dataArray.push(insertObject);
 
                  })
@@ -81,18 +82,29 @@ export class Overview extends React.Component{
 
      }
 
-     displayData = (id) =>{
+     displayData = (id) => {
          const response = this.state.data.find(element => element.includes(id)) ? this.state.data.find(element => element.includes(id)) : [];
          console.log("response", response)
          return response;
      }
 
+     handleModalOpen = (event) => {
+        this.setState({modalOpen: true, modalButtonID: event.target.parentNode.id})
+         console.log("ButtonID", event.target.parentNode.id)
+     }
 
-
-
+     handleModalClose =() => {
+        this.setState({modalOpen: false})
+     }
 
 
     render(){
+        //Styled
+        const paper ={
+            position: "absolute",
+            width: 400,
+
+        }
         return(
 
             <React.Fragment>
@@ -100,14 +112,12 @@ export class Overview extends React.Component{
                 <Helmet>
                     <style>{'body { background-color: #d4d7dd; }'}</style>
                 </Helmet>
-                {console.log("allSurveys",this.state.allSurveys)}
-                {console.log("data",this.state.data)}
                 <Container>
                     <Grid container spacing={6} style={{marginTop: "10px"}}>
-                        {this.state.data.length === this.state.allSurveys.length && this.state.allSurveys.map((survey, index) => (
+                        {this.state.allSurveys.map((survey) => (
                             <Grid item xs = {4}>
                                 <FormControl fullWidth={true}>
-                                    <Card raised={true} style={{height: "100%", display: "flex", flexDirection:"column", flexShrink: 0}}>
+                                    <Card raised={true} style={{height: "100%", display: "flex", flexDirection:"column", flexShrink: 0}} id={survey.id}>
                                         <CardHeader
                                             title={survey.name}
                                             action={
@@ -140,7 +150,8 @@ export class Overview extends React.Component{
                                             </Typography>
                                         </CardContent>
                                         <CardActions>
-                                            <Button color="primary">Auswerten</Button>
+                                            {console.log(survey.id)}
+                                            <Button color="primary" onClick={this.handleModalOpen} id={survey.id}>Auswerten</Button>
                                             <Button color="primary">Bearbeiten</Button>
                                             <Button color="primary">Vorschau</Button>
                                             <IconButton>
@@ -148,6 +159,7 @@ export class Overview extends React.Component{
                                             </IconButton>
                                         </CardActions>
                                     </Card>
+
                                 </FormControl>
 
                             </Grid>
@@ -156,6 +168,39 @@ export class Overview extends React.Component{
                         ))}
                     </Grid>
                 </Container>
+
+
+                {/*Full Windows with Detailed analysis*/}
+                <Dialog
+                    style={{backgroundColor: "transparent", boxShadow:"none"}}
+                    fullWidth={true}
+                    maxWidth="xl"
+                    open={this.state.modalOpen}
+                    onClose={this.handleModalClose}
+                >
+                    <DialogTitle>Auswertung</DialogTitle>
+                    <DialogContent>
+                        <Grid container spacing={6}>
+                            <Grid item xs={4}>
+                                <Paper square={true}>{this.state.modalButtonID}</Paper>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Paper>Testing</Paper>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Paper>Testing</Paper>
+                            </Grid>
+                            <Grid item xs={8}>
+                                <Paper>Testing</Paper>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Paper>Testing</Paper>
+                            </Grid>
+
+                        </Grid>
+                    </DialogContent>
+                </Dialog>
+
 
             </React.Fragment>
         )
