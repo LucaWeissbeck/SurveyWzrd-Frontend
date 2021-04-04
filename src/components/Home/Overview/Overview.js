@@ -17,6 +17,7 @@ import {
 import ShareIcon from '@material-ui/icons/Share';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import {Helmet} from "react-helmet";
+import { ModalComponent } from "./ModalComponent"
 
 import { Animation } from '@devexpress/dx-react-chart';
 import PieChart, {
@@ -90,7 +91,6 @@ export class Overview extends React.Component{
 
      handleModalOpen = (event) => {
         this.setState({modalOpen: true, modalButtonID: event.target.parentNode.id})
-         console.log("ButtonID", event.target.parentNode.id)
      }
 
      handleModalClose =() => {
@@ -159,47 +159,15 @@ export class Overview extends React.Component{
                                             </IconButton>
                                         </CardActions>
                                     </Card>
-
                                 </FormControl>
-
                             </Grid>
-
-
                         ))}
                     </Grid>
                 </Container>
 
 
                 {/*Full Windows with Detailed analysis*/}
-                <Dialog
-                    style={{backgroundColor: "transparent", boxShadow:"none"}}
-                    fullWidth={true}
-                    maxWidth="xl"
-                    open={this.state.modalOpen}
-                    onClose={this.handleModalClose}
-                >
-                    <DialogTitle>Auswertung</DialogTitle>
-                    <DialogContent>
-                        <Grid container spacing={6}>
-                            <Grid item xs={4}>
-                                <Paper square={true}>{this.state.modalButtonID}</Paper>
-                            </Grid>
-                            <Grid item xs={4}>
-                                <Paper>Testing</Paper>
-                            </Grid>
-                            <Grid item xs={4}>
-                                <Paper>Testing</Paper>
-                            </Grid>
-                            <Grid item xs={8}>
-                                <Paper>Testing</Paper>
-                            </Grid>
-                            <Grid item xs={4}>
-                                <Paper>Testing</Paper>
-                            </Grid>
-
-                        </Grid>
-                    </DialogContent>
-                </Dialog>
+                <ModalComponent open={this.state.modalOpen} onClose={this.handleModalClose} surveyID={this.state.modalButtonID} data={this.state.data}/>
 
 
             </React.Fragment>
