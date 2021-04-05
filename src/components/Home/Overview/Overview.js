@@ -90,9 +90,7 @@ export class Overview extends React.Component{
      }
 
      handleModalOpen = (event) => {
-        this.setState({modalButtonID: event.target.parentNode.id});
-
-        this.setState({modalOpen: true})
+        this.setState({modalButtonID: event.target.parentNode.id, modalOpen: true});
      }
 
      handleModalClose =() => {
@@ -101,12 +99,6 @@ export class Overview extends React.Component{
 
 
     render(){
-        //Styled
-        const paper ={
-            position: "absolute",
-            width: 400,
-
-        }
         return(
 
             <React.Fragment>

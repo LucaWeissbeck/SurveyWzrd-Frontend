@@ -18,40 +18,51 @@ export class ModalComponent extends React.Component{
         this.state={
             data: [],
             surveyID: null
-        }
+        };
     }
     componentDidMount() {
         this.setState({
             data: this.props.data,
             surveyID: this.props.surveyID
-        })
+        });
     }
 
+    calculateParticipantCount = () => {
+        let count = 0;
+        let id = parseInt(this.state.surveyID);
+        let relevantData = this.state.data.find(element => element.includes(id));
+        if(typeof relevantData === "undefined"){}
+        else {
+            for (let i = 0; i < relevantData.length; i++) {
+                if (typeof relevantData[i] === "object") {
+                    count = count + relevantData[i].y;
+                }
+            }
+            return count;
+        }
+    }
 
     displayData = () => {
         let id = parseInt(this.state.surveyID);
-        console.log("This is the data in state", this.state.data);
-        console.log("This is the data received in props", this.props.data);
-        console.log("This is the ID Fro DisplayData", id)
         const response = this.state.data.find(element => element.includes(id));
-        console.log("This is the response from display Data", response);
         return response;
     }
 
     render(){
         //CSS Styles
-        const paperHeading = {
-            textAlign: "center",
-            paddingTop: "20px",
+        const paperHeadingSurvey = {
             fontWeight: "bold",
+            textAlign: "center"
 
         }
-        const surveyResultsDiv = {
-            width: "100%",
-            height: "auto"
+        const teilnehmerZahl= {
+            textAlign: "center",
+            fontWeight: "bold"
         }
         return(
             <React.Fragment>
+                {console.log(this.state.data)}
+                {console.log(this.calculateParticipantCount())}
                 {console.log("This is the data from props RENDER", this.props.data)}
                 <Dialog
                     style={{backgroundColor: "transparent", boxShadow:"none"}}
@@ -64,14 +75,14 @@ export class ModalComponent extends React.Component{
                         <Typography variant="h3" style={{textAlign: "center", fontWeight: "bold"}}>Auswertung</Typography>
                     </DialogTitle>
                     <DialogContent>
-                        <Grid container spacing={6}>
+                        <Grid container spacing={6} direction="row" alignItems="stretch">
                             <Grid item xs={4}>
-                                <Paper square={true} >
-                                        <Typography color="primary" variant="h4" style={paperHeading}>Ergebnis</Typography>
-                                        <Box display="flex" justifyContent="center" m={1} p={1} overflow="hidden">
+                                <Paper square={true} style={{height: "100%"}}>
+                                    <Box display="flex" justifyContent="center" m={1} p={1} overflow="hidden">
+                                        <Box pt={1}>
+                                            <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Ergebnis</Typography>
                                             <Box p={1}>
                                                 <PieChart
-                                                    style={surveyResultsDiv}
                                                     type="doughnut"
                                                     palette="Bright"
                                                     dataSource={this.displayData()}
@@ -91,10 +102,20 @@ export class ModalComponent extends React.Component{
                                                 </PieChart>
                                             </Box>
                                         </Box>
+                                    </Box>
                                 </Paper>
                             </Grid>
                             <Grid item xs={4}>
-                                <Paper square={true}>Testing</Paper>
+                                <Paper square={true} style={{height: "100%"}}>
+                                    <Box display="flex" justifyContent="center" m={1} p={1} overflow="hidden" >
+                                        <Box pt={1}>
+                                            <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Teilnehmeranzahl</Typography>
+                                            <Box pt={15}>
+                                                <Typography color="primary" variant="h1" style={teilnehmerZahl}>{this.calculateParticipantCount()}</Typography>
+                                            </Box>
+                                        </Box>
+                                    </Box>
+                                </Paper>
                             </Grid>
                             <Grid item xs={4}>
                                 <Paper>Testing</Paper>
