@@ -22,12 +22,26 @@ export class ModalComponent extends React.Component{
         this.setState({data: this.props.data})
     }
 
-    displayData = (id) => {
-        id = parseInt(id)
-        const response = this.state.data.find(element => element.includes(id)) ? this.state.data.find(element => element.includes(id)) : [];
-        return response
+    //Makes sure that props are always up to date: Important as props rely on API call (may include latency)
+    componentWillReceiveProps(nextProps) {
+        if(this.props != nextProps){
+            this.setState({
+                data: nextProps.data
+            })
+        }
     }
 
+    displayData = (id) => {
+        if(this.state.data.length != 0){
+            id = parseInt(id);
+            const response = this.state.data.find(element => element.includes(id)) ? this.state.data.find(element => element.includes(id)) : [];
+            console.log("Method for data response", response);
+            return response;}
+        else{
+            console.log("Timeout")
+            setTimeout(this.forceUpdate, 1000)
+        }
+    }
 
     render(){
         //CSS Styles
@@ -43,7 +57,6 @@ export class ModalComponent extends React.Component{
         }
         return(
             <React.Fragment>
-                {console.log(this.state.data)}
                 <Dialog
                     style={{backgroundColor: "transparent", boxShadow:"none"}}
                     fullWidth={true}

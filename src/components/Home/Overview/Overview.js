@@ -56,8 +56,8 @@ export class Overview extends React.Component{
             .catch(err => console.log(err));
     }
 
-    getData = async(id) => {
-         await surveyService.getSurveyAnswerCount(id)
+    getData = (id) => {
+         surveyService.getSurveyAnswerCount(id)
              .then((res) => {
                  let surveyAnswerCounts = res.data;
                  return surveyAnswerCounts
