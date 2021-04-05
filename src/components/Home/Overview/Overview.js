@@ -43,6 +43,10 @@ export class Overview extends React.Component{
 
 
     componentDidMount() {
+        this.fillState();
+    }
+
+    fillState = () =>{
         surveyService.getAllSurveys()
             .then((res) => {
                 this.setState({allSurveys: res.data})
@@ -86,7 +90,9 @@ export class Overview extends React.Component{
      }
 
      handleModalOpen = (event) => {
-        this.setState({modalOpen: true, modalButtonID: event.target.parentNode.id})
+        this.setState({modalButtonID: event.target.parentNode.id});
+
+        this.setState({modalOpen: true})
      }
 
      handleModalClose =() => {
@@ -163,7 +169,8 @@ export class Overview extends React.Component{
 
                 {/*Full Windows with Detailed analysis*/}
                 {console.log("MainComp",this.state.data)}
-                <ModalComponent open={this.state.modalOpen} onClose={this.handleModalClose} surveyID={this.state.modalButtonID} data={this.state.data}/>
+                {this.state.modalOpen === true &&
+                <ModalComponent open={this.state.modalOpen} onClose={this.handleModalClose} surveyID={this.state.modalButtonID} data={this.state.data}/>}
 
 
             </React.Fragment>

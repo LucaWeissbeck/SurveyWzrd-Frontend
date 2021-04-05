@@ -9,38 +9,33 @@ import PieChart, {
     Connector,
     Export, Size
 } from 'devextreme-react/pie-chart';
+import equal from 'fast-deep-equal'
 
 
 export class ModalComponent extends React.Component{
     constructor(props) {
         super(props);
         this.state={
-            data: []
+            data: [],
+            surveyID: null
         }
     }
     componentDidMount() {
-        this.setState({data: this.props.data})
+        this.setState({
+            data: this.props.data,
+            surveyID: this.props.surveyID
+        })
     }
 
-    //Makes sure that props are always up to date: Important as props rely on API call (may include latency)
-    componentWillReceiveProps(nextProps) {
-        if(this.props != nextProps){
-            this.setState({
-                data: nextProps.data
-            })
-        }
-    }
 
-    displayData = (id) => {
-        if(this.state.data.length != 0){
-            id = parseInt(id);
-            const response = this.state.data.find(element => element.includes(id)) ? this.state.data.find(element => element.includes(id)) : [];
-            console.log("Method for data response", response);
-            return response;}
-        else{
-            console.log("Timeout")
-            setTimeout(this.forceUpdate, 1000)
-        }
+    displayData = () => {
+        let id = parseInt(this.state.surveyID);
+        console.log("This is the data in state", this.state.data);
+        console.log("This is the data received in props", this.props.data);
+        console.log("This is the ID Fro DisplayData", id)
+        const response = this.state.data.find(element => element.includes(id));
+        console.log("This is the response from display Data", response);
+        return response;
     }
 
     render(){
@@ -57,6 +52,7 @@ export class ModalComponent extends React.Component{
         }
         return(
             <React.Fragment>
+                {console.log("This is the data from props RENDER", this.props.data)}
                 <Dialog
                     style={{backgroundColor: "transparent", boxShadow:"none"}}
                     fullWidth={true}
@@ -78,7 +74,7 @@ export class ModalComponent extends React.Component{
                                                     style={surveyResultsDiv}
                                                     type="doughnut"
                                                     palette="Bright"
-                                                    dataSource={this.displayData(this.props.surveyID)}
+                                                    dataSource={this.displayData()}
                                                     innerRadius={0.7}
                                                 >
                                                     <Legend
