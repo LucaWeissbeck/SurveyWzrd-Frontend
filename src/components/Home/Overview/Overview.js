@@ -37,7 +37,8 @@ export class Overview extends React.Component{
             allSurveys: [],
             data: [],
             modalOpen: false,
-            modalButtonID: null
+            modalButtonID: null,
+            surveyName: ""
         }
     }
 
@@ -90,7 +91,10 @@ export class Overview extends React.Component{
      }
 
      handleModalOpen = (event) => {
-        this.setState({modalButtonID: event.target.parentNode.id, modalOpen: true});
+        this.setState({
+            modalButtonID: event.target.parentNode.id,
+            modalOpen: true
+        });
      }
 
      handleModalClose =() => {
@@ -160,11 +164,8 @@ export class Overview extends React.Component{
 
 
                 {/*Full Windows with Detailed analysis*/}
-                {console.log("MainComp",this.state.data)}
                 {this.state.modalOpen === true &&
                 <ModalComponent open={this.state.modalOpen} onClose={this.handleModalClose} surveyID={this.state.modalButtonID} data={this.state.data}/>}
-
-
             </React.Fragment>
         )
     }
