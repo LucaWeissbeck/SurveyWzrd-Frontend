@@ -5,7 +5,7 @@ import { Analytics } from "./components/Home/Analytics/Analytics";
 import { HowTo } from "./components/Home/HowTo/HowTo";
 import { Overview } from "./components/Home/Overview/Overview";
 import { Login } from "./components/Login/Login";
-import CreateSurvey from "./components/Home/CreateSurvey/CreateSurvey";
+import {CreateSurvey} from "./components/Home/CreateSurvey/CreateSurvey";
 import Home from "./components/Home/Home";
 
 

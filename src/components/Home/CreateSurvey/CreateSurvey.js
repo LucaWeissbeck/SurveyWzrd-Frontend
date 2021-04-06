@@ -11,51 +11,30 @@ import AccountBoxIcon from "@material-ui/icons/AccountBox";
 
 
 
-const useStyles = makeStyles({
-    root: {
-        minWidth: 275,
-        flexGrow: 1,
-    },
-    mainCard2: {
-        color: '#FFFFFF',
-        backgroundColor: '#c4b1c9',
-    },
-    title: {
-        fontSize: 14,
-    },
-    pos: {
-        marginBottom: 12,
-    },
-});
 
-const useStylesMUI =  makeStyles((theme) =>({
-    root: {
-        '& .MuiTextField-root': {
-            margin: theme.spacing(1),
-            width: '25ch',
-        },
-        textField: {
-            marginLeft: theme.spacing(5),
-            marginRight: theme.spacing(1),
-            width: '25ch',
-        },
 
-    },
-}));
+export class CreateSurvey extends React.Component{
 
-export default function CreateSurvey(){
-    const classes = useStyles();
-    const classesMUI = useStylesMUI();
+    constructor(props) {
+        super(props);
 
-    const [state, setState] = React.useState({
-        checkedA: false,
-    });
+        this.state = {
+            checkedA: false,
+        };
+    }
 
-    const handleChange = (event) => {
-        setState({ ...state, [event.target.name]: event.target.checked });
+
+    handleChange = (event) => {
+        this.setState({ checkedA: event.target.checked });
     };
 
-    return(
+
+
+    render() {
+
+
+
+        return(
        <React.Fragment>
            <Header header={1}/>
            <Helmet>
@@ -67,15 +46,16 @@ export default function CreateSurvey(){
 
                <Grid container justify = "center">
                    <Box width="70%">
-                       <Card className={classes.root}>
+                       <Card>
                            <CardContent>
                                <Input
                                    placeholder="Insert Title..."
+                                   fullWidth
                                    disableUnderline={true}
                                    inputProps={{style: {fontSize: 30, color: '#254563'}}} // font size of input text
                                    InputLabelProps={{style: {fontSize: 30, color: '#254563'}}} // font size of input label
                                />
-                               <form className={classes.root} noValidate autoComplete="off">
+                               <form noValidate autoComplete="off">
                                    <div>
                                        <TextField
                                            id="filled-textarea"
@@ -89,7 +69,7 @@ export default function CreateSurvey(){
                                        />
                                    </div>
                                </form>
-                               <form className={classes.root} noValidate autoComplete="off">
+                               <form noValidate autoComplete="off">
                                    <div>
                                        <TextField
                                            id="standard-basic"
@@ -99,8 +79,8 @@ export default function CreateSurvey(){
                                    </div>
                                </form>
                                <Box p={1}/>
-                               <form className={classesMUI.textField} noValidate autoComplete="off">
-                                   <div className={classes.root}>
+                               <form noValidate autoComplete="off">
+                                   <div>
                                        <Grid container spacing={0}>
                                            <Grid item sm={1}/>
 
@@ -114,8 +94,8 @@ export default function CreateSurvey(){
                                        </Grid>
                                    </div>
                                </form>
-                               <form className={classesMUI.textField} noValidate autoComplete="off">
-                                   <div className={classes.root}>
+                               <form noValidate autoComplete="off">
+                                   <div>
                                        <Grid container spacing={0}>
                                            <Grid item sm={1}/>
 
@@ -129,8 +109,8 @@ export default function CreateSurvey(){
                                        </Grid>
                                    </div>
                                </form>
-                               <form className={classesMUI.textField} noValidate autoComplete="off">
-                                   <div className={classes.root}>
+                               <form noValidate autoComplete="off">
+                                   <div>
                                        <Grid container spacing={0}>
                                            <Grid item sm={1}/>
 
@@ -162,12 +142,12 @@ export default function CreateSurvey(){
                                    </div>
                                </form>
                                <FormControlLabel
-                                   control={<Switch checked={state.checkedA} onChange={handleChange} name="checkedA" color="primary" />}
+                                   control={<Switch checked={this.state.checkedA} onChange={this.handleChange} name="checkedA" color="primary" />}
                                    label="Allow Several Answers"
                                />
                            </CardContent>
                            <CardActions>
-                               <Button className={classes.mainCard2} variant="contained" component={Link} to="/">
+                               <Button variant="contained" component={Link} to="/">
                                    CREATE
                                </Button>
                            </CardActions>
@@ -177,5 +157,6 @@ export default function CreateSurvey(){
            </Container>
        </React.Fragment>
     )
+}
 }
 

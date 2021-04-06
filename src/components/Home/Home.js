@@ -112,7 +112,7 @@ export default function Home() {
                                         </Typography>
                                     </CardContent>
                                     <CardActions className={classes.mainCard}>
-                                        <Button className={classes.mainCard2} variant="contained" component={Link} to="/overview">
+                                        <Button className={classes.mainCard2} variant="contained" component={Link} to="/login">
                                             START NOW
                                         </Button>
                                     </CardActions>
