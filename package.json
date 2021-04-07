@@ -3,6 +3,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
     "@devexpress/dx-react-chart": "^2.7.5",
     "@devexpress/dx-react-chart-material-ui": "^2.7.5",

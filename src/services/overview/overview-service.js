@@ -9,7 +9,7 @@ const apiKeyHeader = {
 export const getAllSurveys = () => {
     let config = {
         method: 'get',
-        url: 'http://localhost:8080/survey/getForAdmin',
+        url: 'http://localhost:8080/api/survey/getForAdmin',
         headers: {
             'x-api-key': 'Test'
         }
@@ -19,12 +19,12 @@ export const getAllSurveys = () => {
 }
 
 export const getSurveyAnswerCount = (id) => {
-    const url = `http://localhost:8080/analysis/public/${id}`;
+    const url = `http://localhost:8080/api/analysis/public/${id}`;
     return axios.get(url);
 }
 
 export const getAnswerOptionsByID = (id) => {
-    const url = `http://localhost:8080/survey/answeroptions/public/${id}`;
+    const url = `http://localhost:8080/api/survey/answeroptions/public/${id}`;
     return axios.get(url);
 }
 

@@ -8,7 +8,7 @@ export const postLogin = (email,password) => {
 
     let config = {
         method: 'post',
-        url: 'http://localhost:8080/administrator/public/login',
+        url: 'http://localhost:8080/api/administrator/public/login',
         headers: {
             'Content-Type': 'application/json'
         },
