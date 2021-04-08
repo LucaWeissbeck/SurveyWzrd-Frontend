@@ -19,60 +19,10 @@ import {
 import {Helmet} from "react-helmet";
 import { Link } from 'react-router-dom';
 
-const useStyles = makeStyles({
-    root: {
-        minWidth: 100,
-        border: "none",
-        boxShadow : "none",
-        backgroundColor: '#254563'
-    },
-    mainCard: {
-        backgroundColor: '#254563',
-    },
-    mainCard2: {
-        color: '#FFFFFF',
-        backgroundColor: '#c4b1c9',
-    },
-    title: {
-        fontSize: 14,
-    },
-    pos: {
-        marginBottom: 12,
-    },
-});
 
-const useStyles2 = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-        border: "none",
-        boxShadow : "none",
-    },
-    menuButton: {
-        marginRight: theme.spacing(2),
-    },
-    title: {
-        flexGrow: 1,
-    },
-}));
+export class Home extends React.Component{
 
-const useStyles3 = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-    },
-    paper: {
-        padding: theme.spacing(2),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-    },
-}));
-
-export default function Home() {
-    const classes = useStyles();
-
-    const classes2 = useStyles2();
-
-    const classes3 = useStyles3();
-
+    render() {
     return(
             <React.Fragment>
                 <Helmet>
@@ -80,30 +30,33 @@ export default function Home() {
                 </Helmet>
 
                 <Container>
-                    <div className={classes2.root}>
-                        <AppBar className={classes2.root} position="static">
+                    <div>
+                        <AppBar style={{boxShadow: "none"}}>
                             <Toolbar>
-                                <Typography variant="h6" className={classes2.title}>
+                                <Grid container spacing={0}>
+                                    <Grid item xs={11}>
+                                    </Grid>
+                                    <Grid item xs={1}>
+                                        <Button color="secondary" component={Link} to="/overview">
+                                            <AccountBoxIcon color="secondary" />
+                                        </Button>
+                                    </Grid>
+                                </Grid>
 
-                                </Typography>
-                                <Button color="secondary" component={Link} to="/overview">Start now</Button>
-                                <AccountBoxIcon color="secondary"/>
                             </Toolbar>
                         </AppBar>
                     </div>
                 </Container>
 
                 <Container>
-                    <div className={classes3.root}>
-                        <Grid container spacing={1} direction="row"
-                              justify="center"
-                              alignItems="center">
+                    <div>
+                        <Grid container spacing={1} direction="row" justify="center" alignItems="center" style={{minHeight: "100vh"}}>
                             <Grid item xs={6}>
                                 <img src={"./assets/logo_without_text.svg"} style={{width: "500px"}}/>
                             </Grid>
                             <Grid item xs={6}>
-                                <Card className={classes.root}>
-                                    <CardContent className={classes.mainCard}>
+                                <Card style={{backgroundColor: '#254563', border: "none", boxShadow: "none" }}>
+                                    <CardContent>
                                         <Typography variant="h3" component="h2" color="secondary">
                                             DISCOVER THE <br/> SURVEY WIZARDS <br/> SURVEY TOOL
                                         </Typography>
@@ -111,8 +64,8 @@ export default function Home() {
                                             create surveys easily to embed them on your website
                                         </Typography>
                                     </CardContent>
-                                    <CardActions className={classes.mainCard}>
-                                        <Button className={classes.mainCard2} variant="contained" component={Link} to="/login">
+                                    <CardActions>
+                                        <Button variant="contained" style={{fontWeight: "bold", textTransform: "none", backgroundColor: "#B4A0B9", color: "white" }} component={Link} to="/login">
                                             START NOW
                                         </Button>
                                     </CardActions>
@@ -124,4 +77,5 @@ export default function Home() {
 
             </React.Fragment>
         )
+}
 }

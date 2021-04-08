@@ -5,8 +5,8 @@ import { Analytics } from "./components/Home/Analytics/Analytics";
 import { HowTo } from "./components/Home/HowTo/HowTo";
 import { Overview } from "./components/Home/Overview/Overview";
 import { Login } from "./components/Login/Login";
-import {CreateSurvey} from "./components/Home/CreateSurvey/CreateSurvey";
-import Home from "./components/Home/Home";
+import { CreateSurvey } from "./components/Home/CreateSurvey/CreateSurvey";
+import { Home } from "./components/Home/Home";
 
 
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
