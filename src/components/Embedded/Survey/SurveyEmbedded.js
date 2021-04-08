@@ -7,10 +7,26 @@ import {
     Radio,
     CardHeader,
     Card,
-    CardContent, CardActions, Typography, Button, FormLabel, FormGroup, Checkbox, CircularProgress
+    CardContent,
+    CardActions,
+    Typography,
+    Button,
+    FormLabel,
+    FormGroup,
+    Checkbox,
+    CircularProgress,
+    Box,
+    Paper,
+    Grid,
+    Step, StepButton, StepContent, Stepper, IconButton
 } from "@material-ui/core";
 import { Alert }from '@material-ui/lab';
 import * as surveyService from "../../../services/survey/embeddedSurvey-service";
+import CheckIcon from "@material-ui/icons/Check";
+import ClearIcon from "@material-ui/icons/Clear";
+import DescriptionIcon from "@material-ui/icons/Description";
+import SubjectIcon from "@material-ui/icons/Subject";
+import BusinessIcon from '@material-ui/icons/Business';
 
 
 
@@ -34,7 +50,9 @@ export class SurveyEmbedded extends React.Component {
             //Radiobutton Answer
             rbValue: null,
             //Checkbox Status
-            checkboxesStatus: null
+            checkboxesStatus: null,
+            //Stepper
+            activeStep: 0
         };
     }
 
@@ -148,7 +166,6 @@ export class SurveyEmbedded extends React.Component {
 
     handleRadioButtonChange = (event)  => {
         this.setState({rbValue: event.target.value});
-
     }
 
     handleCheckboxChange = (event) => {
@@ -167,6 +184,13 @@ export class SurveyEmbedded extends React.Component {
         }
     }
 
+    handleSurveyDescriptionButton = () => {
+        alert(this.state.surveyDescription)
+    }
+
+    handleSurveyCompanyButton = () => {
+        alert(this.state.companyName)
+    }
     //Creating HTML parts (Conditional rendering)
     getAnswerOptionsSingleChoiceHTML = () => {
         return(
@@ -188,7 +212,7 @@ export class SurveyEmbedded extends React.Component {
     }
 
 
-    render() { 
+    render() {
         return (
             <React.Fragment>
                 <Container>
@@ -197,41 +221,82 @@ export class SurveyEmbedded extends React.Component {
                             <CardHeader
                                 titleTypographyProps={{variant:'h5' }}
                                 avatar={
-                                    <img src="/assets/logo_with_text.png" style={{width: "180px", height:"160px", marginBottom: "-5px"}}/>
+                                    <Box p={1}>
+                                        <Typography variant="h4" style={{fontWeight: "bold"}}>
+                                            {this.state.surveyQuestion}
+                                        </Typography>
+                                    </Box>
                                 }
                                 action={
-                                    <Button variant="contained" color="secondary" style={{pointerEvents: "none"}}>{this.state.companyName + "®"}</Button>
+                                    <Box display="flex" justifyContent="center" marginTop="-53px" overflow="hidden" >
+                                        <Box>
+                                            <img src="/assets/logo_with_text.png" style={{width: "180px", height:"160px"}}/>
+                                        </Box>
+                                    </Box>
                                 }
                                 style={{backgroundColor: "#254563", color: 'white', height: "35px", textAlign: "right"}}>
                             </CardHeader>
-                            <CardContent>
-                                <CardActions>
-                                    <FormControl component="fieldset">
-                                        <Typography variant="h5" component="h2">
-                                            {this.state.surveyName}
-                                        </Typography>
-                                        {!this.state.surveyMultiSelect &&
-                                            <RadioGroup aria-label="gender" name="gender1" value={this.state.rbValue}
-                                                        onChange={this.handleRadioButtonChange}>
-                                                {this.getAnswerOptionsSingleChoiceHTML()}
-                                            </RadioGroup>
-                                        }
-                                        {this.state.surveyMultiSelect &&
-                                            <FormControl component="fieldset">
-                                                <FormLabel component="legend" style={{marginBottom: "10px"}}>Please choose one or more answers.</FormLabel>
-                                                <FormGroup>
-                                                    {this.getAnswerOptionsMultipleChoiceHTML()}
-                                                </FormGroup>
-                                            </FormControl>
-                                        }
-                                    </FormControl>
-                                </CardActions>
-                                <CardActions>
-                                    <Button  variant="contained" style={{backgroundColor: "#c4b1c9", color: "white"}} onClick={this.submitButtonOnClick} disabled={this.state.surveyMultiSelect ? this.state.checkboxAnswers.length === 0 : this.state.rbValue === null}>
-                                        SEND
-                                    </Button>
-                                    {this.state.loading && <CircularProgress size={26} style={{marginLeft: "-49px"}}/> }
-                                </CardActions>
+                            <CardContent style={{backgroundColor: "#f3f3f3"}}>
+                                <Grid container item spacing={7} direction="row" alignItems="stretch">
+                                    <Grid item xs={8}>
+                                        <Paper square={true} style={{height: "260px"}}>
+                                            <Box p={2} m={1}>
+                                                <FormControl component="fieldset">
+                                                    <Typography variant="h6" component="h2" style={{fontWeight: "bold"}}>
+                                                        {this.state.surveyName}
+                                                    </Typography>
+                                                    {!this.state.surveyMultiSelect &&
+                                                        <RadioGroup aria-label="gender" name="gender1" value={this.state.rbValue}
+                                                                    onChange={this.handleRadioButtonChange}>
+                                                            {this.getAnswerOptionsSingleChoiceHTML()}
+                                                        </RadioGroup>
+                                                    }
+                                                    {this.state.surveyMultiSelect &&
+                                                        <FormControl component="fieldset">
+                                                            <FormLabel component="legend" style={{marginBottom: "10px"}}>Please choose one or more answers.</FormLabel>
+                                                            <FormGroup>
+                                                                {this.getAnswerOptionsMultipleChoiceHTML()}
+                                                            </FormGroup>
+                                                        </FormControl>
+                                                    }
+                                                </FormControl>
+                                                <div style={{float: "bottom", position: "absolute"}}>
+                                                    <Button size="large" variant="contained" style={{backgroundColor: "#c4b1c9", color: "white"}} onClick={this.submitButtonOnClick} disabled={this.state.surveyMultiSelect ? this.state.checkboxAnswers.length === 0 : this.state.rbValue === null}>
+                                                        SEND
+                                                    </Button>
+                                                </div>
+                                                {this.state.loading && <CircularProgress size={26} style={{marginLeft: "-49px"}}/>}
+                                            </Box>
+                                        </Paper>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <Box pr={2}>
+                                            <Paper square={true} style={{height: "120px"}}>
+                                                <Box p={2} m={1}>
+                                                    <Typography variant="h5" style={{fontWeight: "bold", textAlign: "center", marginTop: "5px"}}>Multiple Choice</Typography>
+                                                    <Box style={{textAlign: "center"}} pt={1}>
+                                                        {this.state.surveyMultiSelect ? <CheckIcon fontSize="large" style={{fill: "green"}}/> : <ClearIcon fontSize="large" style={{fill: "red"}}/>}
+                                                    </Box>
+                                                </Box>
+                                            </Paper>
+                                            <Box pt={1}>
+                                                <Paper square={true} style={{height: "120px"}}>
+                                                    <Box p={2} m={1}>
+                                                        <Typography variant="h5" style={{fontWeight: "bold", textAlign: "center", marginTop: "5px"}}>Information</Typography>
+                                                        <Box pt={2}>
+                                                           <IconButton style={{marginLeft: "60px"}}  onClick={this.handleSurveyDescriptionButton}>
+                                                                <DescriptionIcon color="secondary" style={{fontSize: "35px", marginTop: "-20px"}}/>
+                                                           </IconButton>
+                                                            <IconButton style={{float: "right", marginRight: "60px",  marginTop: "-20px"}} onClick={this.handleSurveyCompanyButton}>
+                                                                <BusinessIcon color="secondary" style={{fontSize: "35px"}}/>
+                                                            </IconButton>
+                                                        </Box>
+                                                    </Box>
+                                                </Paper>
+                                            </Box>
+                                        </Box>
+                                    </Grid>
+                                </Grid>
                             </CardContent>
                             {this.state.voted === true &&
                                 <Alert severity="warning">You cannot vote twice!</Alert>

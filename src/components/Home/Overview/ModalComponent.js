@@ -169,9 +169,9 @@ export class ModalComponent extends React.Component{
                     </DialogTitle>
                     <Divider/>
                     <DialogContent>
-                        <Grid container spacing={6} direction="row" alignItems="stretch">
+                        <Grid container spacing={7} direction="row" alignItems="stretch">
                             <Grid item xs={4}>
-                                <Paper square={true} style={{height: "100%"}}>
+                                <Paper square={true} style={{height: "100%", backgroundColor: "#f3f3f3"}} elevation={3}>
                                     <Box display="flex" justifyContent="center" m={1} p={1} overflow="hidden">
                                         <Box pt={2}>
                                             <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Ergebnis</Typography>
@@ -200,7 +200,7 @@ export class ModalComponent extends React.Component{
                                 </Paper>
                             </Grid>
                             <Grid item xs={4}>
-                                <Paper square={true} style={{height: "100%"}}>
+                                <Paper square={true} style={{height: "100%", backgroundColor: "#f3f3f3"}} elevation={3}>
                                     <Box display="flex" justifyContent="center" m={1} p={1} overflow="hidden" >
                                         <Box pt={2}>
                                             <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Teilnehmeranzahl</Typography>
@@ -213,7 +213,7 @@ export class ModalComponent extends React.Component{
                             </Grid>
                             {/*SurveyInformation*/}
                             <Grid item xs={4}>
-                                <Paper square={true} style={{height: "100%"}}>
+                                <Paper square={true} style={{height: "100%", backgroundColor: "#f3f3f3"}} elevation={3}>
                                     <Box m={1} p={1} overflow="hidden" >
                                         <Box pt={2}>
                                             <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Information</Typography>
@@ -227,7 +227,7 @@ export class ModalComponent extends React.Component{
                                                     </Box>
                                                 </Paper>
                                                 <Box pt={8}>
-                                                    <Stepper activeStep={this.state.activeStep} orientation="vertical" nonLinear style={{width: "100%"}}>
+                                                    <Stepper activeStep={this.state.activeStep} orientation="vertical" nonLinear style={{backgroundColor: "#f3f3f3"}}>
                                                         {steps.map((label, index) => (
                                                             <Step key={label}>
                                                                 <StepButton onClick={this.handleStep(index)} icon={this.getStepIcon(index)}>
