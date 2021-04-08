@@ -52,7 +52,7 @@ export class Home extends React.Component{
                     <div>
                         <Grid container spacing={1} direction="row" justify="center" alignItems="center" style={{minHeight: "100vh"}}>
                             <Grid item xs={6}>
-                                <img src={"./assets/logo_without_text.svg"} style={{width: "500px"}}/>
+                                <img src={"./assets/logo_without_text.svg"} style={{maxWidth: "500px"}}/>
                             </Grid>
                             <Grid item xs={6}>
                                 <Card style={{backgroundColor: '#254563', border: "none", boxShadow: "none" }}>

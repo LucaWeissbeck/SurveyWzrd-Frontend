@@ -1,16 +1,10 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import {Container, Card, CardActions, CardContent, Grid, Box, Button, Paper, Tooltip, Input, FormControlLabel, Switch, TextField} from "@material-ui/core";
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import Header from "../Header/Header";
 import {Helmet} from "react-helmet";
-import AssignmentIcon from '@material-ui/icons/Assignment';
 import {Link} from "react-router-dom";
-import AccountBoxIcon from "@material-ui/icons/AccountBox";
-
-
-
-
+import * as surveyService from '../../../services/survey/createSurvey-service'
 
 
 export class CreateSurvey extends React.Component{
@@ -20,6 +14,11 @@ export class CreateSurvey extends React.Component{
 
         this.state = {
             checkedA: false,
+            companyName: "",
+            description: "",
+            multiSelect: true,
+            name: "",
+            question: ""
         };
     }
 
@@ -28,11 +27,36 @@ export class CreateSurvey extends React.Component{
         this.setState({ checkedA: event.target.checked });
     };
 
+    handleSubmit = (event) => {
+        let payload = {
+                "companyName": this.state.companyName,
+                "description": this.state.description,
+                "multiSelect": this.state.checkedA,
+                "name": this.state.name ,
+                "question": this.state.question
+        }
+        surveyService.postSurveyQuestionSingle(payload)
+            .then((res)=>console.log(res))
+            .catch((err)=>console.log(err))
+    };
 
+    surveyTitleOnChange = (event) => {
+        this.setState({ name: event.target.value })
+    }
+
+    questionOnChange = (event) => {
+        this.setState({ question: event.target.value })
+    }
+
+    descriptionOnChange = (event) => {
+        this.setState({ description: event.target.value })
+    }
+
+    companyNameOnChange = (event) => {
+        this.setState({ companyName: event.target.value })
+    }
 
     render() {
-
-
 
         return(
        <React.Fragment>
@@ -48,12 +72,29 @@ export class CreateSurvey extends React.Component{
                    <Box width="70%">
                        <Card>
                            <CardContent>
+                               <Grid container spacing={0}>
+                                   <Grid item xs={4}>
+                                       <img src={"./assets/logo_without_text.svg"} style={{maxWidth: "150px", maxHeight: "40px", display: "inline", marginLeft: "0px"}} />
+                                   </Grid>
+                                   <Grid item xs={4}>
+
+                                   </Grid>
+                                   <Grid item xs={4}>
+                                       <TextField label="Company name"
+                                                  fullWidth
+                                                  id="outlined-size-small"
+                                                  variant="outlined"
+                                                  size="small"
+                                                  onChange={this.companyNameOnChange}/>
+                                   </Grid>
+                               </Grid>
                                <Input
                                    placeholder="Insert Title..."
                                    fullWidth
                                    disableUnderline={true}
                                    inputProps={{style: {fontSize: 30, color: '#254563'}}} // font size of input text
                                    InputLabelProps={{style: {fontSize: 30, color: '#254563'}}} // font size of input label
+                                   onChange={this.surveyTitleOnChange}
                                />
                                <form noValidate autoComplete="off">
                                    <div>
@@ -66,6 +107,7 @@ export class CreateSurvey extends React.Component{
                                            multiline
                                            fullWidth
                                            variant="filled"
+                                           onChange={this.descriptionOnChange}
                                        />
                                    </div>
                                </form>
@@ -75,6 +117,7 @@ export class CreateSurvey extends React.Component{
                                            id="standard-basic"
                                            label="Question"
                                            fullWidth
+                                           onChange={this.questionOnChange}
                                        />
                                    </div>
                                </form>
@@ -120,7 +163,7 @@ export class CreateSurvey extends React.Component{
                                                        <Grid item>
                                                            <Tooltip title="Add additional answer">
                                                                <Button component={Link} to="/createsurvey">
-                                                                   <AddBoxIcon/>
+                                                                   <AddBoxIcon style={{fill: '#254563'}}/>
                                                                </Button>
                                                            </Tooltip>
 
@@ -147,7 +190,7 @@ export class CreateSurvey extends React.Component{
                                />
                            </CardContent>
                            <CardActions>
-                               <Button variant="contained" color="primary" component={Link} to="/">
+                               <Button variant="contained" color="primary"  style={{fontWeight: "bold", textTransform: "none"}} onClick={this.handleSubmit}>
                                    CREATE
                                </Button>
                            </CardActions>
