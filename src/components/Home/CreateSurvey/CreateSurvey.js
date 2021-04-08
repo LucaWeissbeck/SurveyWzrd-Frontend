@@ -147,7 +147,7 @@ export class CreateSurvey extends React.Component{
                                />
                            </CardContent>
                            <CardActions>
-                               <Button variant="contained" component={Link} to="/">
+                               <Button variant="contained" color="primary" component={Link} to="/">
                                    CREATE
                                </Button>
                            </CardActions>
