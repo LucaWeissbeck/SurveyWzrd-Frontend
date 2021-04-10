@@ -1,8 +1,16 @@
 import React from 'react';
+import 'date-fns';
 import {Container, Card, CardActions, CardContent, Grid, Box, Button, Paper, Tooltip, Input, FormControlLabel, Switch, TextField} from "@material-ui/core";
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import Header from "../Header/Header";
 import {Helmet} from "react-helmet";
+import DateFnsUtils from '@date-io/date-fns';
+import {
+    MuiPickersUtilsProvider,
+    KeyboardTimePicker,
+    KeyboardDatePicker,
+} from '@material-ui/pickers';
+
 import {Link} from "react-router-dom";
 import * as surveyService from '../../../services/survey/createSurvey-service'
 
@@ -22,6 +30,10 @@ export class CreateSurvey extends React.Component{
         };
     }
 
+    handleExpiryDateChange = (date) => {
+        console.log(date);
+        this.setState({ selectedDate: date});
+    };
 
     handleChange = (event) => {
         this.setState({ checkedA: event.target.checked });
@@ -32,8 +44,9 @@ export class CreateSurvey extends React.Component{
                 "companyName": this.state.companyName,
                 "description": this.state.description,
                 "multiSelect": this.state.checkedA,
-                "name": this.state.name ,
-                "question": this.state.question
+                "name": this.state.name,
+                "question": this.state.question,
+                "expiryDate": this.state.selectedDate
         }
         surveyService.postSurveyQuestionSingle(payload)
             .then((res)=>console.log(res))
@@ -188,6 +201,19 @@ export class CreateSurvey extends React.Component{
                                    control={<Switch checked={this.state.checkedA} onChange={this.handleChange} name="checkedA" color="primary" />}
                                    label="Allow Several Answers"
                                />
+                               <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                   <KeyboardDatePicker
+                                       margin="normal"
+                                       id="date-picker-dialog"
+                                       label="Date picker dialog"
+                                       format="MM/dd/yyyy"
+                                       value={this.state.selectedDate}
+                                       onChange={this.handleExpiryDateChange}
+                                       KeyboardButtonProps={{
+                                           'aria-label': 'change date',
+                                       }}
+                                   />
+                               </MuiPickersUtilsProvider>
                            </CardContent>
                            <CardActions>
                                <Button variant="contained" color="primary"  style={{fontWeight: "bold", textTransform: "none"}} onClick={this.handleSubmit}>
