@@ -162,7 +162,7 @@ export class CreateSurvey extends React.Component{
                                                    <Grid container spacing={1} alignItems="flex-end">
                                                        <Grid item>
                                                            <Tooltip title="Add additional answer">
-                                                               <Button component={Link} to="/createsurvey">
+                                                               <Button onClick={this.addAnswer}>
                                                                    <AddBoxIcon style={{fill: '#254563'}}/>
                                                                </Button>
                                                            </Tooltip>

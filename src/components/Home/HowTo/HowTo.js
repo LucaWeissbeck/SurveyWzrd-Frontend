@@ -7,7 +7,9 @@ export class HowTo extends React.Component{
             <React.Fragment>
                 <Header header={3}/>
                 <h1>HowTo Page</h1>
+                <img src={"./assets/onlyTheTruth.png"} />
             </React.Fragment>
+
         )
     }
 }
