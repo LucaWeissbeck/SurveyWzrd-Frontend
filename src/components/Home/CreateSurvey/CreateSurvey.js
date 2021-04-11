@@ -26,7 +26,9 @@ export class CreateSurvey extends React.Component{
             description: "",
             multiSelect: true,
             name: "",
-            question: ""
+            question: "",
+            answerOptions: ["", "", ""],
+            selectedDate: new Date()
         };
     }
 
@@ -40,6 +42,12 @@ export class CreateSurvey extends React.Component{
     };
 
     handleSubmit = (event) => {
+        /*let answerOptionsPayLoad = {};
+        this.state.answerOptions.map((answerOption, index) => (
+            answerOptionsPayLoad{ "value" : answerOption}
+
+        ))*/
+
         let payload = {
                 "companyName": this.state.companyName,
                 "description": this.state.description,
@@ -49,9 +57,24 @@ export class CreateSurvey extends React.Component{
                 "expiryDate": this.state.selectedDate
         }
         surveyService.postSurveyQuestionSingle(payload)
-            .then((res)=>console.log(res))
+            .then((res)=> {
+                console.log(res)
+                this.state.answerOptions.map((answerOption, index) => {
+                    let payloadAnswerOption = {
+                        "value": answerOption
+                    }
+
+                    surveyService.postSurveyAnswerOptionSingle(payloadAnswerOption, res.data.id)
+                        .then((res) => console.log(res))
+                        .catch((err) => console.log(err))
+                })
+            })
             .catch((err)=>console.log(err))
-    };
+
+
+
+
+        };
 
     surveyTitleOnChange = (event) => {
         this.setState({ name: event.target.value })
@@ -67,6 +90,20 @@ export class CreateSurvey extends React.Component{
 
     companyNameOnChange = (event) => {
         this.setState({ companyName: event.target.value })
+    }
+
+    handleAnswerOptionListChange= (index, event) => {
+        //let answerOptions = this.state.answerOptions.slice(); // Make a copy of the answers first.
+        this.state.answerOptions[index] = event.target.value; // Update it with the modified answers.
+        //this.setState({answerOptions: answerOptions}); // Update the state.
+        console.log(this.state.answerOptions)
+
+    }
+
+    addAnswer = (event) => {
+        this.setState({
+            answerOptions: [...this.state.answerOptions, ""]
+        });
     }
 
     render() {
@@ -135,36 +172,27 @@ export class CreateSurvey extends React.Component{
                                    </div>
                                </form>
                                <Box p={1}/>
-                               <form noValidate autoComplete="off">
-                                   <div>
-                                       <Grid container spacing={0}>
-                                           <Grid item sm={1}/>
+                               {this.state.answerOptions.map((answerOption, index) => (
+                                   <form noValidate autoComplete="off">
+                                       <div key={index}>
+                                           <Grid container spacing={0}>
+                                               <Grid item sm={1}/>
 
-                                           <Grid item sm={11}>
-                                               <TextField
-                                                   id="standard-basic"
-                                                   label="Answer 1"
-                                                   fullWidth
-                                               />
+                                               <Grid item sm={11}>
+                                                   <TextField
+                                                       id="standard-basic"
+                                                       label={"Answer " + (index + 1)}
+                                                       fullWidth
+                                                       onChange={(evt) => this.handleAnswerOptionListChange(index, evt)}
+                                                       />
+                                               </Grid>
                                            </Grid>
-                                       </Grid>
-                                   </div>
-                               </form>
-                               <form noValidate autoComplete="off">
-                                   <div>
-                                       <Grid container spacing={0}>
-                                           <Grid item sm={1}/>
+                                       </div>
+                                   </form>
+                                   ))
 
-                                           <Grid item sm={11}>
-                                               <TextField
-                                                   id="standard-basic"
-                                                   label="Answer 2"
-                                                   fullWidth
-                                               />
-                                           </Grid>
-                                       </Grid>
-                                   </div>
-                               </form>
+                               }
+
                                <form noValidate autoComplete="off">
                                    <div>
                                        <Grid container spacing={0}>
