@@ -197,23 +197,28 @@ export class CreateSurvey extends React.Component{
                                        </Grid>
                                    </div>
                                </form>
-                               <FormControlLabel
-                                   control={<Switch checked={this.state.checkedA} onChange={this.handleChange} name="checkedA" color="primary" />}
-                                   label="Allow Several Answers"
-                               />
-                               <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                   <KeyboardDatePicker
-                                       margin="normal"
-                                       id="date-picker-dialog"
-                                       label="Date picker dialog"
-                                       format="MM/dd/yyyy"
-                                       value={this.state.selectedDate}
-                                       onChange={this.handleExpiryDateChange}
-                                       KeyboardButtonProps={{
-                                           'aria-label': 'change date',
-                                       }}
+                               <form>
+                                   <FormControlLabel
+                                       control={<Switch checked={this.state.checkedA} onChange={this.handleChange} name="checkedA" color="primary" />}
+                                       label="Allow Several Answers"
                                    />
-                               </MuiPickersUtilsProvider>
+                               </form>
+                               <form>
+                                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                       <KeyboardDatePicker
+                                           margin="normal"
+                                           id="date-picker-dialog"
+                                           label="Survey expiry date"
+                                           format="MM/dd/yyyy"
+                                           value={this.state.selectedDate}
+                                           onChange={this.handleExpiryDateChange}
+                                           KeyboardButtonProps={{
+                                               'aria-label': 'change date',
+                                           }}
+                                       />
+                                   </MuiPickersUtilsProvider>
+                               </form>
+
                            </CardContent>
                            <CardActions>
                                <Button variant="contained" color="primary"  style={{fontWeight: "bold", textTransform: "none"}} onClick={this.handleSubmit}>
