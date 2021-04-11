@@ -5,6 +5,7 @@ import { Analytics } from "./components/Home/Analytics/Analytics";
 import { HowTo } from "./components/Home/HowTo/HowTo";
 import { Overview } from "./components/Home/Overview/Overview";
 import { Login } from "./components/Login/Login";
+import { Register } from "./components/Login/Register";
 import { CreateSurvey } from "./components/Home/CreateSurvey/CreateSurvey";
 import { Home } from "./components/Home/Home";
 
@@ -29,6 +30,7 @@ class App extends React.Component {
                             <Route path="/" exact component={Home} />
                             <Route path="/survey" component={Embedded} />
                             <Route path="/login" component={Login} />
+                            <Route path="/register" component={Register} />
                             <Route path="/createsurvey" component={CreateSurvey} />
                             <Route path="/overview" component={Overview} />
                             <Route path="/analytics" component={Analytics} />

@@ -102,7 +102,7 @@ export class Login extends React.Component{
                                             </Grid>
                                         </Grid>
                                         <Grid container justify="center" style={{ marginTop: '10px' }}>
-                                            <Button  color="primary" onClick={this.loginActionSubmit} style={{fontWeight: "bold", textTransform: "none", backgroundColor: "#B4A0B9", color: "white" }}>Login</Button>
+                                            <Button  color="primary" onClick={this.loginActionSubmit} style={{fontWeight: "bold", textTransform: "none", backgroundColor: "#B4A0B9", color: "white" }}>LOGIN</Button>
                                             <br/>
                                         </Grid>
                                     </div>

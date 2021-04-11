@@ -65,7 +65,7 @@ export class Home extends React.Component{
                                         </Typography>
                                     </CardContent>
                                     <CardActions>
-                                        <Button variant="contained" style={{fontWeight: "bold", textTransform: "none", backgroundColor: "#B4A0B9", color: "white" }} component={Link} to="/login">
+                                        <Button variant="contained" style={{fontWeight: "bold", textTransform: "none", backgroundColor: "#B4A0B9", color: "white" }} component={Link} to="/register">
                                             START NOW
                                         </Button>
                                     </CardActions>
