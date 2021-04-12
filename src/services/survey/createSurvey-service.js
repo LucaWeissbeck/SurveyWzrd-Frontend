@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 
 export const postSurveyQuestionSingle = (payload) => {
-    const url = `http://api.tutorialfactory.org:8088/api/survey/`;
+    const url = `http://localhost:8080/api/survey/`;
     let axiosConfig = {
         headers: {
             'x-api-key' : 'Test',
@@ -13,7 +13,7 @@ export const postSurveyQuestionSingle = (payload) => {
 }
 
 export const postSurveyAnswerOptionSingle = (payload, surveyID) => {
-    const url = `http://api.tutorialfactory.org:8088/api/survey/answeroptions/` + surveyID
+    const url = `http://localhost:8080/api/survey/answeroptions/` + surveyID
     let axiosConfig = {
         headers: {
             'x-api-key' : 'Test',
