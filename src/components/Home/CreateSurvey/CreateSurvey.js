@@ -28,14 +28,14 @@ export class CreateSurvey extends React.Component{
             name: "",
             question: "",
             answerOptions: ["", "", ""],
-            selectedDate: new Date()
+            //selectedDate: new Date()
         };
     }
 
-    handleExpiryDateChange = (date) => {
-        console.log(date);
+    /*handleExpiryDateChange = (date) => {
+        console.log(date.getMonth());
         this.setState({ selectedDate: date});
-    };
+    };*/
 
     handleChange = (event) => {
         this.setState({ checkedA: event.target.checked });
@@ -54,7 +54,7 @@ export class CreateSurvey extends React.Component{
                 "multiSelect": this.state.checkedA,
                 "name": this.state.name,
                 "question": this.state.question,
-                "expiryDate": this.state.selectedDate
+                //"expiryDate": this.state.selectedDate
         }
         surveyService.postSurveyQuestionSingle(payload)
             .then((res)=> {
@@ -130,7 +130,7 @@ export class CreateSurvey extends React.Component{
 
                                    </Grid>
                                    <Grid item xs={4}>
-                                       <TextField label="Company name"
+                                       <TextField label="Your company"
                                                   fullWidth
                                                   id="outlined-size-small"
                                                   variant="outlined"
@@ -231,7 +231,7 @@ export class CreateSurvey extends React.Component{
                                        label="Allow Several Answers"
                                    />
                                </form>
-                               <form>
+                               {/*<form>
                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                        <KeyboardDatePicker
                                            margin="normal"
@@ -245,7 +245,7 @@ export class CreateSurvey extends React.Component{
                                            }}
                                        />
                                    </MuiPickersUtilsProvider>
-                               </form>
+                               </form>*/}
 
                            </CardContent>
                            <CardActions>

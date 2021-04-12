@@ -7,7 +7,7 @@ export class HowTo extends React.Component{
             <React.Fragment>
                 <Header header={3}/>
                 <h1>HowTo Page</h1>
-                <img src={"./assets/onlyTheTruth.png"} />
+                <iframe src="http://localhost:3000/survey/263" width="1280px" height="720px"/>
             </React.Fragment>
 
         )
