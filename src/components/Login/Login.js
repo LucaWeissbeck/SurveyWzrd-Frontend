@@ -11,16 +11,24 @@ import {
     TextField,
 } from "@material-ui/core";
 import {Face, Fingerprint} from "@material-ui/icons";
+import { instanceOf } from "prop-types";
+import Cookies from 'universal-cookie';
 import {postLogin} from "../../services/user/login-service";
 
 export class Login extends React.Component{
     constructor(props) {
         super(props);
-
         this.state = {
+            cookies: new Cookies(),
             email: "",
+            isChecked : false,
             password: "",
         };
+        if (this.state.cookies.get('authKey') !=undefined){
+            console.log("User Authenticated")
+            this.props.history.push('/overview/')
+        }
+
     }
 
     setEmail = event => {
@@ -40,19 +48,24 @@ export class Login extends React.Component{
     }
 
     loginActionSubmit = () =>{
-
-        console.log("Test");
         console.log(this.state.email)
         console.log(this.state.password)
         postLogin(this.state.email, this.state.password)
             .then((res) =>{
-                console.log(res.data.authKey)
+
                 localStorage.setItem("authKey", res.data.authKey)
+                if (this.state.isChecked) this.state.cookies.set('authKey', res.data.authKey , { path: '/', expires: new Date(Date.now()+ new Date().now().setMonth(new Date().getMonth()+1))});
+                else this.state.cookies.set('authKey', res.data.authKey , { path: '/' });
+
+
                 this.props.history.push('/overview/')
             })
             .catch(err => console.log(err));
 
 
+    }
+    handleRememberMeChange(e) {
+        this.state.isChecked = e.target.checked;
     }
 
     render(){
@@ -96,7 +109,7 @@ export class Login extends React.Component{
                                             <Grid item>
                                                 <FormControlLabel control={
                                                     <Checkbox
-                                                        color="primary"
+                                                        color="primary" onChange={e => this.handleRememberMeChange(e)}
                                                     />
                                                 } label="Remember me" />
                                             </Grid>
