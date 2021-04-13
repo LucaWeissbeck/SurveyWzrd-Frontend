@@ -11,7 +11,6 @@ import {
     TextField,
 } from "@material-ui/core";
 import {Face, Fingerprint} from "@material-ui/icons";
-import { instanceOf } from "prop-types";
 import Cookies from 'universal-cookie';
 import {postLogin} from "../../services/user/login-service";
 
@@ -53,7 +52,7 @@ export class Login extends React.Component{
         postLogin(this.state.email, this.state.password)
             .then((res) =>{
 
-                localStorage.setItem("authKey", res.data.authKey)
+                //localStorage.setItem("authKey", res.data.authKey)
                 if (this.state.isChecked) this.state.cookies.set('authKey', res.data.authKey , { path: '/', expires: new Date(Date.now()+ new Date().now().setMonth(new Date().getMonth()+1))});
                 else this.state.cookies.set('authKey', res.data.authKey , { path: '/' });
 
