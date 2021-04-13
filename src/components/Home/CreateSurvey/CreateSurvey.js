@@ -8,7 +8,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import {
     MuiPickersUtilsProvider,
     KeyboardTimePicker,
-    KeyboardDatePicker,
+    KeyboardDatePicker, DateTimePicker,
 } from '@material-ui/pickers';
 
 import {Link} from "react-router-dom";
@@ -233,11 +233,11 @@ export class CreateSurvey extends React.Component{
                                </form>
                                {<form>
                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                       <KeyboardDatePicker
+                                       <DateTimePicker
                                            margin="normal"
                                            id="date-picker-dialog"
                                            label="Survey expiry date"
-                                           format="MM/dd/yyyy"
+                                           format="dd.MM.yyyy HH:mm:ss"
                                            value={this.state.selectedDate}
                                            onChange={this.handleExpiryDateChange}
                                            KeyboardButtonProps={{
