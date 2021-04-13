@@ -2,6 +2,7 @@ import React from 'react';
 import 'date-fns';
 import {Container, Card, CardActions, CardContent, Grid, Box, Button, Paper, Tooltip, Input, FormControlLabel, Switch, TextField} from "@material-ui/core";
 import AddBoxIcon from '@material-ui/icons/AddBox';
+import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox';
 import Header from "../Header/Header";
 import {Helmet} from "react-helmet";
 import DateFnsUtils from '@date-io/date-fns';
@@ -27,7 +28,7 @@ export class CreateSurvey extends React.Component{
             multiSelect: true,
             name: "",
             question: "",
-            answerOptions: ["", "", ""],
+            answerOptions: ["", ""],
             selectedDate: new Date()
         };
     }
@@ -103,6 +104,14 @@ export class CreateSurvey extends React.Component{
     addAnswer = (event) => {
         this.setState({
             answerOptions: [...this.state.answerOptions, ""]
+        });
+    }
+
+    deleteAnswer = (event) => {
+        let array = [...this.state.answerOptions];
+        array.pop();
+        this.setState({
+            answerOptions: array
         });
     }
 
@@ -202,7 +211,7 @@ export class CreateSurvey extends React.Component{
                                                <div>
                                                    <Grid container spacing={1} alignItems="flex-end">
                                                        <Grid item>
-                                                           <Tooltip title="Add additional answer">
+                                                           <Tooltip title="add answer">
                                                                <Button onClick={this.addAnswer}>
                                                                    <AddBoxIcon style={{fill: '#254563'}}/>
                                                                </Button>
@@ -210,14 +219,14 @@ export class CreateSurvey extends React.Component{
 
                                                        </Grid>
                                                        <Grid item>
-                                                           <TextField
-                                                               disabled
-                                                               id="input-with-icon-grid"
-                                                               label="Additional Answer"
-                                                               fullWidth
-                                                               InputProps={{ disableUnderline: true }}
-                                                           />
+                                                           <Tooltip title="delete answer">
+                                                               <Button disabled={(this.state.answerOptions.length <= 1)} onClick={this.deleteAnswer}>
+                                                                   <IndeterminateCheckBoxIcon style={{fill: '#254563'}}/>
+                                                               </Button>
+                                                           </Tooltip>
+
                                                        </Grid>
+
                                                    </Grid>
                                                </div>
 
@@ -237,7 +246,7 @@ export class CreateSurvey extends React.Component{
                                            margin="normal"
                                            id="date-picker-dialog"
                                            label="Survey expiry date"
-                                           format="dd.MM.yyyy HH:mm:ss"
+                                           format="dd.MM.yyyy HH:mm"
                                            value={this.state.selectedDate}
                                            onChange={this.handleExpiryDateChange}
                                            KeyboardButtonProps={{
