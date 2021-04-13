@@ -26,6 +26,7 @@ export class CreateSurvey extends React.Component{
             companyName: "",
             description: "",
             multiSelect: true,
+            returncount : 0,
             name: "",
             question: "",
             answerOptions: ["", ""],
@@ -59,14 +60,21 @@ export class CreateSurvey extends React.Component{
         }
         surveyService.postSurveyQuestionSingle(payload)
             .then((res)=> {
-                console.log(res)
+                console.log(res);
                 this.state.answerOptions.map((answerOption, index) => {
                     let payloadAnswerOption = {
                         "value": answerOption
                     }
 
                     surveyService.postSurveyAnswerOptionSingle(payloadAnswerOption, res.data.id)
-                        .then((res) => console.log(res))
+                        .then((res) => {
+                            console.log(res)
+                            this.state.returncount = this.state.returncount + 1;
+                            if (this.state.returncount == this.state.answerOptions.length){
+                                console.log('Success! Now forwarding to overview');
+                                this.props.history.push('/overview/');
+                            }
+                        })
                         .catch((err) => console.log(err))
                 })
             })
