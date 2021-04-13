@@ -27,13 +27,20 @@ import ClearIcon from "@material-ui/icons/Clear";
 import DescriptionIcon from "@material-ui/icons/Description";
 import SubjectIcon from "@material-ui/icons/Subject";
 import BusinessIcon from '@material-ui/icons/Business';
+import { withRouter } from "react-router";
+import PropTypes from "prop-types";
 
+export class SurveyEmbeddedBare extends React.Component {
+    static propTypes = {
+        match: PropTypes.object.isRequired,
+        location: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired
+    };
 
-
-export class SurveyEmbedded extends React.Component {
     constructor(props) {
         super(props);
-        let urlSurveyID = this.props.surveyPath.slice(8);
+        let urlSurveyID = new URLSearchParams(this.props.location.search).get("id")
+       // const { match, location, history } = this.props;
         this.state = {
             urlSurveyID: urlSurveyID,
             //Survey API data
@@ -312,3 +319,4 @@ export class SurveyEmbedded extends React.Component {
     }
 
 }
+export const SurveyEmbedded = withRouter(SurveyEmbeddedBare);

@@ -28,7 +28,9 @@ import {Stack, Animation, EventTracker, HoverState} from '@devexpress/dx-react-c
 import * as surveyService from "../../../services/survey/embeddedSurvey-service";
 import moment from 'moment';
 import * as url from "url";
-var _ = require('lodash');
+import { withRouter } from "react-router";
+import PropTypes from "prop-types";
+let _ = require('lodash');
 
 
 //from DevExpress Demo
@@ -71,11 +73,18 @@ const tooltipContentBodyStyle = {
 
 
 // MAIN
-export class AnalyticsEmbedded extends React.Component {
+export class AnalyticsEmbeddedBare extends React.Component {
+
+    static propTypes = {
+        match: PropTypes.object.isRequired,
+        location: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired
+    };
+
     constructor(props) {
         moment().format();
         super(props);
-        let urlSurveyID = this.props.surveyPath.slice(8);
+        let urlSurveyID = new URLSearchParams(this.props.location.search).get("id")
 
         this.state = {
             reload: false,
@@ -353,4 +362,5 @@ export class AnalyticsEmbedded extends React.Component {
         )
     }
 }
+export const AnalyticsEmbedded = withRouter(AnalyticsEmbeddedBare);
 

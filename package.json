@@ -58,6 +58,7 @@
     ]
   },
   "devDependencies": {
-    "devextreme-themebuilder": "^20.2.4"
+    "devextreme-themebuilder": "^20.2.4",
+    "prop-types": "^15.7.2"
   }
 }
