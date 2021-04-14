@@ -169,7 +169,13 @@ export class ModalComponent extends React.Component{
             console.log("MAIN",this.getImagePath(country));
             return (
                 <svg>
-                    <image href={this.getImagePath(country)} x="25" y="35" width="30%" height="10%"/>
+                    <image href={this.getImagePath(country)} x="25" y="60" width="30%" height="10%"/>
+                    <text textAnchor="middle" x="100" y="120" style={{ fontSize: 18, fill:'#494949' }}>
+                        <tspan x="70">{country}</tspan>
+                        <tspan x="70" dy="20px" style={{ fontWeight: 600 }}>{
+                            this.state.countryInfo[0].count
+                        }</tspan>
+                    </text>
                 </svg>
             );
         }
@@ -207,7 +213,7 @@ export class ModalComponent extends React.Component{
                 <Dialog
                     style={{backgroundColor: "transparent", boxShadow:"none"}}
                     fullWidth={true}
-                    maxWidth="xl"
+                    maxWidth="lg"
                     open={this.props.open}
                     onClose={this.props.onClose}
                 >
@@ -297,7 +303,7 @@ export class ModalComponent extends React.Component{
                             {/*Ergebnis im Lauf der Zeit*/}
                             <Grid item xs={8}>
                                 <Paper>
-                                    <img src={this.getImagePath("Germany")}/>
+                                    <p>Detailed Graph goes here</p>
                                 </Paper>
                             </Grid>
                             {/*Herkunftsländer*/}
