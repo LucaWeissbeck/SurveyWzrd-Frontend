@@ -6,19 +6,15 @@ import {
     DialogContent,
     DialogTitle,
     Divider,
-    FormControlLabel,
     Grid,
-    Paper, Step, StepButton, StepContent, StepLabel, Stepper, Switch,
+    Paper, Step, StepButton, StepContent, Stepper,
     Typography
 } from "@material-ui/core";
 import PieChart, {
     Legend,
     Series,
-    Tooltip,
-    Format,
     Label,
-    Connector,
-    Export, Size
+    Connector, Size
 } from 'devextreme-react/pie-chart';
 import CheckIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';

@@ -1,9 +1,12 @@
 import React from 'react';
 import axios from 'axios';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 //We need a requ
 const apiKeyHeader = {
-    'x-api-key': 'Test'
+    'x-api-key': cookies.get('authKey')
 }
 
 export const getAllSurveys = () => {
@@ -11,7 +14,7 @@ export const getAllSurveys = () => {
         method: 'get',
         url: 'http://localhost:8080/api/survey/getForAdmin',
         headers: {
-            'x-api-key': 'Test'
+            'x-api-key': cookies.get('authKey')
         }
     };
 

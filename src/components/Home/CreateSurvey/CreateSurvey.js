@@ -8,11 +8,9 @@ import {Helmet} from "react-helmet";
 import DateFnsUtils from '@date-io/date-fns';
 import {
     MuiPickersUtilsProvider,
-    KeyboardTimePicker,
-    KeyboardDatePicker, DateTimePicker,
+    DateTimePicker,
 } from '@material-ui/pickers';
 
-import {Link} from "react-router-dom";
 import * as surveyService from '../../../services/survey/createSurvey-service'
 
 

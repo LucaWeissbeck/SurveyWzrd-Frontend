@@ -6,8 +6,10 @@ import HomeIcon from '@material-ui/icons/Home';
 import NoteAddIcon from '@material-ui/icons/NoteAdd';
 import AssessmentIcon from '@material-ui/icons/Assessment';
 import HelpIcon from '@material-ui/icons/Help';
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
-import App from "../../../App";
+import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
+import {postLogout} from "../../../services/user/logout-service";
+import Cookies from 'universal-cookie';
+import  { useHistory } from 'react-router-dom'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -35,6 +37,18 @@ const useStyles = makeStyles((theme) => ({
 export default function Header(props) {
         const classes = useStyles();
         const [tabValue, setValue] = React.useState(props.header);
+        const history = useHistory();
+        const cookies = new Cookies();
+        const logoutActionSubmit = () =>{
+        postLogout()
+            .then((res) =>{
+                cookies.remove('authKey')
+                return history.push('/')
+            })
+            .catch(err => console.log(err));
+
+
+    }
         return(
 /*
         <React.Fragment>
@@ -70,6 +84,8 @@ export default function Header(props) {
                     <Tab label="Create Survey" classes={{ root: classes.tab }} icon={<NoteAddIcon fontSize="large"/>} component={Link} to="/createsurvey"/>
                     <Tab label="Analytics" classes={{ root: classes.tab }} icon={<AssessmentIcon fontSize="large"/>} component={Link} to="/analytics"/>
                     <Tab label="How To" classes={{ root: classes.tab }} icon={<HelpIcon fontSize="large"/>} component={Link} to="/how"/>
+                    <Tab label="Logout" classes={{ root: classes.tab }} icon={<MeetingRoomIcon fontSize="large"/>} onClick={logoutActionSubmit}/>
+                    {/*<Button variant="contained" style={{fontWeight: "bold", textTransform: "none", backgroundColor: "#B4A0B9", color: "white"}} onClick={logoutActionSubmit}>LOGOUT</Button>*/}
                 </Tabs>
             </AppBar>
         </React.Fragment>
