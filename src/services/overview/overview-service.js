@@ -29,7 +29,11 @@ export const getAnswerOptionsByID = (id) => {
 }
 
 export const getSurveysByID = (id) => {
-    console.log(id)
     const url = `http://localhost:8080/survey/public/${id}`;
+    return axios.get(url);
+}
+
+export const getLocationInfo = (id) => {
+    const url = `http://localhost:8080/api/analysis/public/rawdata/${id}`;
     return axios.get(url);
 }
