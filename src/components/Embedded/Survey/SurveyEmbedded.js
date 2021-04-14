@@ -18,14 +18,13 @@ import {
     Box,
     Paper,
     Grid,
-    Step, StepButton, StepContent, Stepper, IconButton
+    IconButton
 } from "@material-ui/core";
 import { Alert }from '@material-ui/lab';
 import * as surveyService from "../../../services/survey/embeddedSurvey-service";
 import CheckIcon from "@material-ui/icons/Check";
 import ClearIcon from "@material-ui/icons/Clear";
 import DescriptionIcon from "@material-ui/icons/Description";
-import SubjectIcon from "@material-ui/icons/Subject";
 import BusinessIcon from '@material-ui/icons/Business';
 import { withRouter } from "react-router";
 import PropTypes from "prop-types";

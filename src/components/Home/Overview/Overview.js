@@ -10,16 +10,14 @@ import {
     CardMedia,
     CardActions,
     Button,
-    ButtonGroup,
     CardContent,
-    Typography, FormControl, Modal, Fade, Backdrop, Dialog, DialogTitle, DialogContent, Paper
+    Typography, FormControl
 } from "@material-ui/core";
 import ShareIcon from '@material-ui/icons/Share';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import {Helmet} from "react-helmet";
 import { ModalComponent } from "./ModalComponent"
 
-import { Animation } from '@devexpress/dx-react-chart';
 import PieChart, {
     Series,
     Label,
@@ -28,7 +26,6 @@ import PieChart, {
     SmallValuesGrouping,
     Legend
 } from 'devextreme-react/pie-chart';
-import {getAllSurveys} from "../../../services/overview/overview-service";
 
 export class Overview extends React.Component{
     constructor(props) {
