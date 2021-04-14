@@ -53,7 +53,8 @@ export class Login extends React.Component{
             .then((res) =>{
 
                 //localStorage.setItem("authKey", res.data.authKey)
-                if (this.state.isChecked) this.state.cookies.set('authKey', res.data.authKey , { path: '/', expires: new Date(Date.now()+ new Date().now().setMonth(new Date().getMonth()+1))});
+                let dateactual = Date.now();
+                if (this.state.isChecked) this.state.cookies.set('authKey', res.data.authKey , { path: '/', maxAge: 5259600 }); // 5259600 equals 2 Months in seconds
                 else this.state.cookies.set('authKey', res.data.authKey , { path: '/' });
 
 
