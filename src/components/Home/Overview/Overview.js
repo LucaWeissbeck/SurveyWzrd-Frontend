@@ -121,7 +121,6 @@ export class Overview extends React.Component{
                                                 </IconButton>
                                             }
                                         />
-
                                         <CardMedia>
                                             <PieChart
                                                 dataSource={this.displayData(survey.id)}

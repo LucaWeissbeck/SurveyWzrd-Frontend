@@ -155,7 +155,7 @@ export class ModalComponent extends React.Component{
         let countryCode = Object.keys(countryMapping).find(key => countryMapping[key] === country);
         console.log("coutnryCode in Method get Image", countryCode);
         countryCode = countryCode.toLowerCase();
-        let imagePath = `./assets/countryFlags/${countryCode}.png`;
+        let imagePath = `/assets/countryFlags/${countryCode}.png`;
         return imagePath;
     }
 
@@ -205,6 +205,7 @@ export class ModalComponent extends React.Component{
 
         return(
             <React.Fragment>
+                {console.log(this.state.surveyID)}
                 {console.log(this.getImagePath("Germany"))}
                 <Dialog
                     style={{backgroundColor: "transparent", boxShadow:"none"}}
