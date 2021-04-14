@@ -22,6 +22,7 @@ import * as surveyService from "../../../services/overview/overview-service"
 import LiveHelpIcon from '@material-ui/icons/LiveHelp';
 import DescriptionIcon from '@material-ui/icons/Description';
 import SubjectIcon from '@material-ui/icons/Subject';
+import {countryMapping} from "./countries";
 
 
 export class ModalComponent extends React.Component{
@@ -35,7 +36,8 @@ export class ModalComponent extends React.Component{
             surveyMultiSelect: null,
             surveyName: "",
             surveyQuestion: "",
-            complete: []
+            complete: [],
+            countryInfo: null
 
 
         };
@@ -60,6 +62,30 @@ export class ModalComponent extends React.Component{
                 })
             })
             .catch(err => console.log(err))
+
+        surveyService.getLocationInfo((parseInt((this.props.surveyID))))
+            .then((res) => {
+                let raw_array = res.data;
+                console.log("rawarray: ", raw_array)
+                let grouped_object_countries = {};
+                let grouped_object_cities = {};
+                raw_array.forEach((item, index) => {
+                    //Check if Country already in object
+                    if(typeof grouped_object_countries[item.locationCountry] === "undefined"){
+                        //Country is NOT in object yet
+                        grouped_object_countries[item.locationCountry] = 0;
+                    }
+                    else{
+                        grouped_object_countries[item.locationCountry] = grouped_object_countries[item.locationCountry] + 1;
+                    }
+                })
+                let countriesGraphData = []
+                for (let country in grouped_object_countries){
+                    countriesGraphData.push({country: country, count: grouped_object_countries[country]})
+                }
+                this.setState({countryInfo: countriesGraphData})
+            })
+            .catch((err)  => console.log(err));
     }
 
 
@@ -124,6 +150,28 @@ export class ModalComponent extends React.Component{
         })
     }
 
+    //Helper Functions Country Graph
+    getImagePath = (country) => {
+        let countryCode = Object.keys(countryMapping).find(key => countryMapping[key] === country);
+        console.log("coutnryCode in Method get Image", countryCode);
+        countryCode = countryCode.toLowerCase();
+        let imagePath = `./assets/countryFlags/${countryCode}.png`;
+        return imagePath;
+    }
+
+    getCountryImage = (pieChart) => {
+        if(this.state.countryInfo != null && typeof this.state.countryInfo !== "undefined") {
+            const country = this.state.countryInfo[0].country;
+            console.log("MAIN",this.getImagePath(country));
+            return (
+                <svg>
+                    <image href={this.getImagePath(country)} x="25" y="35" width="30%" height="10%"/>
+                </svg>
+            );
+        }
+    }
+
+
 
     render(){
         const steps = this.getSteps();
@@ -151,7 +199,7 @@ export class ModalComponent extends React.Component{
 
         return(
             <React.Fragment>
-                {console.log("complete", this.state.complete)}
+                {console.log(this.getImagePath("Germany"))}
                 <Dialog
                     style={{backgroundColor: "transparent", boxShadow:"none"}}
                     fullWidth={true}
@@ -177,6 +225,7 @@ export class ModalComponent extends React.Component{
                                                     palette="Bright"
                                                     dataSource={this.displayData()}
                                                     innerRadius={0.7}
+
                                                 >
                                                     <Legend
                                                         position="outside"
@@ -243,11 +292,46 @@ export class ModalComponent extends React.Component{
                             </Grid>
                             {/*Ergebnis im Lauf der Zeit*/}
                             <Grid item xs={8}>
-                                <Paper>Testing</Paper>
+                                <Paper>
+                                    <img src={this.getImagePath("Germany")}/>
+                                </Paper>
                             </Grid>
                             {/*Herkunftsländer*/}
                             <Grid item xs={4}>
-                                <Paper>Testing</Paper>
+                                <Paper style={{height: "100%", backgroundColor: "#f3f3f3"}} elevation={3}>
+                                    <Box display="flex" justifyContent="center" m={1} p={1} overflow="hidden">
+                                        <Box pt={2}>
+                                            <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Herkunft</Typography>
+                                                <Box p={1}>
+                                                    <PieChart
+                                                        id="country-chart"
+                                                        key="country-chart"
+                                                        palette="Bright"
+                                                        dataSource={this.state.countryInfo}
+                                                        resolveLabelOverlapping="shift"
+                                                        sizeGroup="piesGroup"
+                                                        innerRadius={0.7}
+                                                        type="doughnut"
+                                                        centerRender={this.getCountryImage}
+                                                        >
+                                                        <Series
+                                                        argumentField="country"
+                                                        valueField="count">
+                                                            <Label visible={true} position="columns">
+                                                                <Connector visible={true} width={3}/>
+                                                            </Label>
+                                                        </Series>
+                                                        <Legend
+                                                            position="outside"
+                                                            horizontalAlignment="center"
+                                                            verticalAlignment="bottom"
+                                                        />
+                                                        <Size width={300}/>
+                                                    </PieChart>
+                                                </Box>
+                                        </Box>
+                                    </Box>
+                                </Paper>
                             </Grid>
 
                         </Grid>
