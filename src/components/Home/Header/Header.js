@@ -82,7 +82,6 @@ export default function Header(props) {
                 <Tabs value={tabValue} centered={true}>
                     <Tab label="Overview" classes={{ root: classes.tab }} icon={<HomeIcon fontSize="large"/>} component={Link} to="/overview"/>
                     <Tab label="Create Survey" classes={{ root: classes.tab }} icon={<NoteAddIcon fontSize="large"/>} component={Link} to="/createsurvey"/>
-                    <Tab label="Analytics" classes={{ root: classes.tab }} icon={<AssessmentIcon fontSize="large"/>} component={Link} to="/analytics"/>
                     <Tab label="How To" classes={{ root: classes.tab }} icon={<HelpIcon fontSize="large"/>} component={Link} to="/how"/>
                     <Tab label="Logout" classes={{ root: classes.tab }} icon={<MeetingRoomIcon fontSize="large"/>} onClick={logoutActionSubmit}/>
                     {/*<Button variant="contained" style={{fontWeight: "bold", textTransform: "none", backgroundColor: "#B4A0B9", color: "white"}} onClick={logoutActionSubmit}>LOGOUT</Button>*/}
