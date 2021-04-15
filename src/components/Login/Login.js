@@ -58,7 +58,7 @@ export class Login extends React.Component{
                 else this.state.cookies.set('authKey', res.data.authKey , { path: '/' });
 
 
-                this.props.history.push('/overview/')
+                this.props.history.push('/overview')
             })
             .catch(err => console.log(err));
 

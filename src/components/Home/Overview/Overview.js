@@ -26,6 +26,7 @@ import PieChart, {
     SmallValuesGrouping,
     Legend
 } from 'devextreme-react/pie-chart';
+import {postDeleteSurvey} from "../../../services/survey/deleteSurvey-service";
 
 export class Overview extends React.Component{
     constructor(props) {
@@ -36,6 +37,7 @@ export class Overview extends React.Component{
             modalOpen: false,
             modalButtonID: null,
             surveyName: ""
+            //deleteEvent: false
         }
     }
 
@@ -98,6 +100,12 @@ export class Overview extends React.Component{
         this.setState({modalOpen: false})
      }
 
+     deleteSurvey = (surveyID, event) => {
+     postDeleteSurvey(surveyID);
+     window.location.reload();
+     //this.setState({deleteEvent: true});
+     }
+
 
     render(){
         return(
@@ -147,7 +155,7 @@ export class Overview extends React.Component{
                                             <Button color="primary" onClick={this.handleModalOpen} id={survey.id}>Auswerten</Button>
                                             <Button color="primary">Bearbeiten</Button>
                                             <Button color="primary">Vorschau</Button>
-                                            <IconButton>
+                                            <IconButton onClick={(evt) => this.deleteSurvey(survey.id, evt)}>
                                                 <DeleteOutlineIcon/>
                                             </IconButton>
                                         </CardActions>
