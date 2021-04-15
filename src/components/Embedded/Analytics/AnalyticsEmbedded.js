@@ -153,7 +153,7 @@ export class AnalyticsEmbeddedBare extends React.Component {
             })
             .catch(err => console.log(err));
 
-        surveyService.getAnswerOptionsByID(16)
+        surveyService.getAnswerOptionsByID(this.state.urlSurveyID)
             .then((res) => {
                 for (let i = 0; i < res.data.length; i++) {
                     this.setState(prevState => ({
