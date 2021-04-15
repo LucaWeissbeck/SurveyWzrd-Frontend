@@ -32,7 +32,7 @@ export const getAnswerOptionsByID = (id) => {
 }
 
 export const getSurveysByID = (id) => {
-    const url = `http://localhost:8080/survey/public/${id}`;
+    const url = `http://localhost:8080/api/survey/public/${id}`;
     return axios.get(url);
 }
 

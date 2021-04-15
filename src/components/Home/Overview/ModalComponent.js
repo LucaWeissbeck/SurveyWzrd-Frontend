@@ -37,7 +37,7 @@ export class ModalComponent extends React.Component{
             surveyName: "",
             surveyQuestion: "",
             complete: [],
-            countryInfo: null
+            countryInfo: []
 
 
         };
@@ -73,7 +73,7 @@ export class ModalComponent extends React.Component{
                     //Check if Country already in object
                     if(typeof grouped_object_countries[item.locationCountry] === "undefined"){
                         //Country is NOT in object yet
-                        grouped_object_countries[item.locationCountry] = 0;
+                        grouped_object_countries[item.locationCountry] = 1;
                     }
                     else{
                         grouped_object_countries[item.locationCountry] = grouped_object_countries[item.locationCountry] + 1;
@@ -159,10 +159,12 @@ export class ModalComponent extends React.Component{
         return imagePath;
     }
 
-    getCountryImage = (pieChart) => {
-        if(this.state.countryInfo != null && typeof this.state.countryInfo !== "undefined") {
-            const country = this.state.countryInfo[0].country;
-            console.log("MAIN",this.getImagePath(country));
+    getCountryImage = () => {
+        if(this.state.countryInfo.length != 0 && typeof this.state.countryInfo[0] !== "undefined") {
+            let array = this.state.countryInfo
+            let maxCount = Math.max(...array.map(e => e.count));
+            let country = array.find(game => game.count === maxCount);
+            country = country.country;
             return (
                 <svg>
                     <image href={this.getImagePath(country)} x="25" y="60" width="30%" height="10%"/>
@@ -309,32 +311,38 @@ export class ModalComponent extends React.Component{
                                     <Box display="flex" justifyContent="center" m={1} p={1} overflow="hidden">
                                         <Box pt={2}>
                                             <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Herkunft</Typography>
+                                            {console.log("DATA SOURCE", this.state.countryInfo)}
                                                 <Box p={1}>
-                                                    <PieChart
-                                                        id="country-chart"
-                                                        key="country-chart"
-                                                        palette="Bright"
-                                                        dataSource={this.state.countryInfo}
-                                                        resolveLabelOverlapping="shift"
-                                                        sizeGroup="piesGroup"
-                                                        innerRadius={0.7}
-                                                        type="doughnut"
-                                                        centerRender={this.getCountryImage}
+                                                    {this.state.countryInfo.length !== 0 &&
+                                                        <PieChart
+                                                            id="country-chart"
+                                                            key="country-chart"
+                                                            palette="Bright"
+                                                            dataSource={this.state.countryInfo}
+                                                            resolveLabelOverlapping="shift"
+                                                            sizeGroup="piesGroup"
+                                                            innerRadius={0.7}
+                                                            type="doughnut"
+                                                            centerRender={this.getCountryImage}
                                                         >
-                                                        <Series
-                                                        argumentField="country"
-                                                        valueField="count">
-                                                            <Label visible={true} position="columns">
-                                                                <Connector visible={true} width={3}/>
-                                                            </Label>
-                                                        </Series>
-                                                        <Legend
-                                                            position="outside"
-                                                            horizontalAlignment="center"
-                                                            verticalAlignment="bottom"
-                                                        />
-                                                        <Size width={300}/>
-                                                    </PieChart>
+                                                            <Series
+                                                                argumentField="country"
+                                                                valueField="count">
+                                                                <Label visible={true} position="columns">
+                                                                    <Connector visible={true} width={3}/>
+                                                                </Label>
+                                                            </Series>
+                                                            <Legend
+                                                                position="outside"
+                                                                horizontalAlignment="center"
+                                                                verticalAlignment="bottom"
+                                                            />
+                                                            <Size width={300}/>
+                                                        </PieChart>
+                                                    }
+                                                    {this.state.countryInfo.length === 0 &&
+                                                        <h4>Check back later!</h4>
+                                                    }
                                                 </Box>
                                         </Box>
                                     </Box>
