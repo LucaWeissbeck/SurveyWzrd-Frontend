@@ -1,7 +1,6 @@
 
 import React from 'react';
 import {Embedded} from "./components/Embedded/Embedded";
-import { Analytics } from "./components/Home/Analytics/Analytics";
 import { HowTo } from "./components/Home/HowTo/HowTo";
 import { Overview } from "./components/Home/Overview/Overview";
 import { Login } from "./components/Login/Login";
@@ -33,7 +32,6 @@ class App extends React.Component {
                             <Route path="/register" component={Register} />
                             <Route path="/createsurvey" component={CreateSurvey} />
                             <Route path="/overview" component={Overview} />
-                            <Route path="/analytics" component={Analytics} />
                             <Route path="/how" component={HowTo} />
                         </Switch>
                     </div>
