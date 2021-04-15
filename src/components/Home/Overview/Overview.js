@@ -102,11 +102,16 @@ export class Overview extends React.Component{
         this.setState({modalOpen: false})
      }
 
+
+
      deleteSurvey = (surveyID, event) => {
      postDeleteSurvey(surveyID);
      window.location.reload();
      }
 
+    handleEmbedShareClick = (surveyID, event) => {
+        alert("<iframe src=\"http://api.tutorialfactory.org:8088/survey?id="+ surveyID +  "\"></iframe>");
+    }
 
     render(){
         if (this.state.cookies.get("authKey") ==undefined ) this.props.history.push('/login');
@@ -130,6 +135,7 @@ export class Overview extends React.Component{
                                                     <ShareIcon />
                                                 </IconButton>
                                             }
+                                            onClick={(evt) => this.handleEmbedShareClick(survey.id, evt)}
                                         />
                                         <CardMedia>
                                             <PieChart
