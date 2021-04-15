@@ -44,7 +44,7 @@ export class Register extends React.Component{
             .then((res) =>{
                 //console.log(res.data.authKey)
                 //localStorage.setItem("authKey", res.data.authKey)
-                this.props.history.push('/login/')
+                this.props.history.push('/login')
             })
             .catch(err => console.log(err));
 
