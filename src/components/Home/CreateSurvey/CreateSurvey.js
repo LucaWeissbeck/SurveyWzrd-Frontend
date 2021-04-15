@@ -10,6 +10,8 @@ import {
     MuiPickersUtilsProvider,
     DateTimePicker,
 } from '@material-ui/pickers';
+import Cookies from "universal-cookie/es6";
+
 
 import * as surveyService from '../../../services/survey/createSurvey-service'
 
@@ -27,6 +29,7 @@ export class CreateSurvey extends React.Component{
             returncount : 0,
             name: "",
             question: "",
+            cookies: new Cookies(),
             answerOptions: ["", ""],
             selectedDate: new Date()
         };
@@ -124,7 +127,7 @@ export class CreateSurvey extends React.Component{
     }
 
     render() {
-
+        if (this.state.cookies.get("authKey") ==undefined ) this.props.history.push('/login');
         return(
        <React.Fragment>
            <Header header={1}/>

@@ -229,7 +229,7 @@ export class SurveyEmbeddedBare extends React.Component {
                                 avatar={
                                     <Box p={1}>
                                         <Typography variant="h4" style={{fontWeight: "bold"}}>
-                                            {this.state.surveyQuestion}
+                                            {this.state.surveyName}
                                         </Typography>
                                     </Box>
                                 }
@@ -249,7 +249,7 @@ export class SurveyEmbeddedBare extends React.Component {
                                             <Box p={2} m={1}>
                                                 <FormControl component="fieldset">
                                                     <Typography variant="h6" component="h2" style={{fontWeight: "bold"}}>
-                                                        {this.state.surveyName}
+                                                        {this.state.surveyQuestion}
                                                     </Typography>
                                                     {!this.state.surveyMultiSelect &&
                                                         <RadioGroup aria-label="gender" name="gender1" value={this.state.rbValue}

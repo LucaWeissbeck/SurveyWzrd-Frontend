@@ -27,6 +27,7 @@ import PieChart, {
     Legend
 } from 'devextreme-react/pie-chart';
 import {postDeleteSurvey} from "../../../services/survey/deleteSurvey-service";
+import Cookies from "universal-cookie/es6";
 
 export class Overview extends React.Component{
     constructor(props) {
@@ -36,7 +37,8 @@ export class Overview extends React.Component{
             data: [],
             modalOpen: false,
             modalButtonID: null,
-            surveyName: ""
+            surveyName: "",
+            cookies: new Cookies(),
             //deleteEvent: false
         }
     }
@@ -103,11 +105,11 @@ export class Overview extends React.Component{
      deleteSurvey = (surveyID, event) => {
      postDeleteSurvey(surveyID);
      window.location.reload();
-     //this.setState({deleteEvent: true});
      }
 
 
     render(){
+        if (this.state.cookies.get("authKey") ==undefined ) this.props.history.push('/login');
         return(
 
             <React.Fragment>
