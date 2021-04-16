@@ -42,8 +42,8 @@ export default function Header(props) {
         const logoutActionSubmit = () =>{
         postLogout()
             .then((res) =>{
-                cookies.remove('authKey')
-                return history.push('/')
+                cookies.remove('authKey');
+                return history.push('/');
             })
             .catch(err => console.log(err));
 
