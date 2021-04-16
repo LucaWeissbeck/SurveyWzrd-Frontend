@@ -128,6 +128,9 @@ export class Overview extends React.Component{
     }
 
     render(){
+
+        let CodeBlockStyle = {"background":"#f4f4f4","border":"1px solid #ddd","borderLeft":"3px solid #f36d33","color":"#666","pageBreakInside":"avoid","fontFamily":"monospace","fontSize":"15px","lineHeight":"1.6","marginBottom":"1.6em","maxWidth":"100%","overflow":"auto","padding":"1em 1.5em","display":"block","wordWrap":"break-word"};
+
         if (this.state.cookies.get("authKey") ==undefined ) this.props.history.push('/login');
         return(
 
@@ -184,8 +187,12 @@ export class Overview extends React.Component{
                     </Grid>
                 </Container>
 
-                <Dialog open={this.state.shareOpen} onClose={this.handleClose}>
-                    <DialogContent>{(this.iFrame)}</DialogContent>
+                <Dialog fullWidth maxWidth="md" open={this.state.shareOpen} onClose={this.handleClose}>
+                    <DialogContent>
+                        <pre style={CodeBlockStyle}>
+                             {(this.iFrame)}
+                        </pre>
+                    </DialogContent>
                     <DialogActions>
                         <CopyToClipboard text={this.iFrame}
                                          onCopy={this.handleClose} >
