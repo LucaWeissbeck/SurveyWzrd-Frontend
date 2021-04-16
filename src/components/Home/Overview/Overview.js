@@ -11,12 +11,13 @@ import {
     CardActions,
     Button,
     CardContent,
-    Typography, FormControl
+    Typography, FormControl, Dialog, DialogContent, DialogContentText, DialogActions, Paper
 } from "@material-ui/core";
 import ShareIcon from '@material-ui/icons/Share';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import {Helmet} from "react-helmet";
 import { ModalComponent } from "./ModalComponent"
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 import PieChart, {
     Series,
@@ -39,6 +40,8 @@ export class Overview extends React.Component{
             modalButtonID: null,
             surveyName: "",
             cookies: new Cookies(),
+            shareOpen: false,
+            iFrame:""
             //deleteEvent: false
         }
     }
@@ -103,6 +106,14 @@ export class Overview extends React.Component{
      }
 
 
+    handleEmbeddedShareClick = (surveyID, event) => {
+        this.createIFrame(surveyID)
+        this.setState({shareOpen: true})
+    }
+
+    handleClose = () => {
+        this.setState({shareOpen: false})
+    }
 
      deleteSurvey = (surveyID, event) => {
          postDeleteSurvey(surveyID)
@@ -112,8 +123,8 @@ export class Overview extends React.Component{
              .catch(err => console.log(err));
      }
 
-    handleEmbedShareClick = (surveyID, event) => {
-        alert("<iframe src=\"http://api.tutorialfactory.org:8088/survey?id="+ surveyID +  "\"></iframe>");
+    createIFrame = (surveyID) => {
+        return (this.iFrame = "<iframe src=\"http://api.tutorialfactory.org:8088/survey?id="+ surveyID +  "\"></iframe>")
     }
 
     render(){
@@ -131,15 +142,11 @@ export class Overview extends React.Component{
                             <Grid item xs = {4}>
                                 <FormControl fullWidth={true}>
                                     <Card raised={true} style={{height: "100%", display: "flex", flexDirection:"column", flexShrink: 0}} id={survey.id}>
-                                        <CardHeader
-                                            title={survey.name}
-                                            action={
-                                                <IconButton>
-                                                    <ShareIcon />
-                                                </IconButton>
-                                            }
-                                            onClick={(evt) => this.handleEmbedShareClick(survey.id, evt)}
-                                        />
+                                        <CardHeader title={survey.name}
+                                                    action={<IconButton>
+                                                                <ShareIcon />
+                                                            </IconButton>}
+                                                    onClick={(evt) => this.handleEmbeddedShareClick(survey.id, evt)}/>
                                         <CardMedia>
                                             <PieChart
                                                 dataSource={this.displayData(survey.id)}
@@ -177,6 +184,16 @@ export class Overview extends React.Component{
                     </Grid>
                 </Container>
 
+                <Dialog open={this.state.shareOpen} onClose={this.handleClose}>
+                    <DialogContent>{(this.iFrame)}</DialogContent>
+                    <DialogActions>
+                        <CopyToClipboard text={this.iFrame}
+                                         onCopy={this.handleClose} >
+                            <Button color="primary">Copy</Button>
+                        </CopyToClipboard>
+                        <Button onClick={this.handleClose} color="primary">Close</Button>
+                    </DialogActions>
+                </Dialog>
 
                 {/*Full Windows with Detailed analysis*/}
                 {this.state.modalOpen === true &&
