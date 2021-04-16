@@ -105,8 +105,11 @@ export class Overview extends React.Component{
 
 
      deleteSurvey = (surveyID, event) => {
-     postDeleteSurvey(surveyID);
-     window.location.reload();
+         postDeleteSurvey(surveyID)
+             .then((res) => {
+                 window.location.reload();
+             })
+             .catch(err => console.log(err));
      }
 
     handleEmbedShareClick = (surveyID, event) => {
