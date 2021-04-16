@@ -14,9 +14,40 @@ import {
 } from "@material-ui/core";
 import {Helmet} from "react-helmet";
 import { Link } from 'react-router-dom';
+import Cookies from "universal-cookie/es6";
+import {ModalComponent} from "./Overview/ModalComponent";
+import {Login} from "../Login/Login";
+import {Register} from "../Login/Register";
 
 
 export class Home extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            loginOpen: false,
+            registerOpen: false
+        }
+    }
+
+    handleLoginOpen = (event) => {
+        this.setState({
+            loginOpen: true
+        });
+    }
+
+    handleLoginClose =() => {
+        this.setState({loginOpen: false})
+    }
+
+    handleRegisterOpen = (event) => {
+        this.setState({
+            registerOpen: true
+        });
+    }
+
+    handleRegisterClose =() => {
+        this.setState({registerOpen: false})
+    }
 
     render() {
     return(
@@ -61,8 +92,11 @@ export class Home extends React.Component{
                                         </Typography>
                                     </CardContent>
                                     <CardActions>
-                                        <Button variant="contained" style={{fontWeight: "bold", textTransform: "none", backgroundColor: "#B4A0B9", color: "white" }} component={Link} to="/register">
-                                            START NOW
+                                        <Button variant="contained" style={{fontWeight: "bold", textTransform: "none", backgroundColor: "#B4A0B9", color: "white" }} onClick={this.handleRegisterOpen}>
+                                            REGISTER
+                                        </Button>
+                                        <Button variant="contained" style={{fontWeight: "bold", textTransform: "none", backgroundColor: "#B4A0B9", color: "white" }} onClick={this.handleLoginOpen}>
+                                            LOGIN
                                         </Button>
                                     </CardActions>
                                 </Card>
@@ -70,6 +104,12 @@ export class Home extends React.Component{
                         </Grid>
                     </div>
                 </Container>
+
+                {this.state.loginOpen === true &&
+                <Login open={this.state.loginOpen} onClose={this.handleLoginClose}/>}
+
+                {this.state.registerOpen === true &&
+                <Register open={this.state.registerOpen} onClose={this.handleRegisterClose}/>}
 
             </React.Fragment>
         )

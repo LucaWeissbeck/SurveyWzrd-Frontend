@@ -127,7 +127,7 @@ export class CreateSurvey extends React.Component{
     }
 
     render() {
-        if (this.state.cookies.get("authKey") ==undefined ) this.props.history.push('/login');
+        if (this.state.cookies.get("authKey") ==undefined ) this.props.history.push('/');
         return(
        <React.Fragment>
            <Header header={1}/>

@@ -5,8 +5,8 @@ import {
     Card,
     CardContent,
     CardHeader,
-     Checkbox,
-    Container, FormControlLabel,
+    Checkbox,
+    Container, Dialog, DialogContent, FormControlLabel,
     Grid,
     TextField,
 } from "@material-ui/core";
@@ -23,9 +23,10 @@ export class Login extends React.Component{
             isChecked : false,
             password: "",
         };
-        if (this.state.cookies.get('authKey') !=undefined){
-            console.log("User Authenticated")
-            this.props.history.push('/overview/')
+        if (this.state.cookies.get('authKey') !== undefined){
+           console.log("User Authenticated")
+            //this.props.history.push('/overview')
+            window.location.replace("/overview");
         }
 
     }
@@ -58,7 +59,8 @@ export class Login extends React.Component{
                 else this.state.cookies.set('authKey', res.data.authKey , { path: '/' });
 
 
-                this.props.history.push('/overview')
+                //this.props.history.push('/overview')
+                window.location.replace("/overview");
             })
             .catch(err => console.log(err));
 
@@ -71,11 +73,11 @@ export class Login extends React.Component{
     render(){
         return (
             <React.Fragment >
-                <Helmet>
-                    <style>{'body { background-color: #D9DCE1; }'}</style>
-                </Helmet>
-                <Container>
-                    <Container style={{marginTop: '15px'}}>
+                    <Dialog open={this.props.open}
+                            onClose={this.props.onClose}
+                            style={{marginTop: '15px'}}
+                            fullWidth maxWidth="md">
+                        <DialogContent>
                         <Card>
                             <CardHeader
                                 titleTypographyProps={{variant:'h5' }}
@@ -121,9 +123,8 @@ export class Login extends React.Component{
                                     </div>
                             </CardContent>
                         </Card>
-
-                </Container>
-                </Container>
+                        </DialogContent>
+                </Dialog>
 
             </React.Fragment>
         )

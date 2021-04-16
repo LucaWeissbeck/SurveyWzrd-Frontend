@@ -28,8 +28,6 @@ class App extends React.Component {
                         <Switch>
                             <Route path="/" exact component={Home} />
                             <Route path="/survey" component={Embedded} />
-                            <Route path="/login" component={Login} />
-                            <Route path="/register" component={Register} />
                             <Route path="/createsurvey" component={CreateSurvey} />
                             <Route path="/overview" component={Overview} />
                             <Route path="/how" component={HowTo} />

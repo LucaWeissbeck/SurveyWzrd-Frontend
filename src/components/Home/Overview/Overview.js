@@ -106,7 +106,7 @@ export class Overview extends React.Component{
      }
 
 
-    handleEmbeddedShareClick = (surveyID, event) => {
+    handleOpen = (surveyID, event) => {
         this.createIFrame(surveyID)
         this.setState({shareOpen: true})
     }
@@ -131,7 +131,7 @@ export class Overview extends React.Component{
 
         let CodeBlockStyle = {"background":"#f4f4f4","border":"1px solid #ddd","borderLeft":"3px solid #f36d33","color":"#666","pageBreakInside":"avoid","fontFamily":"monospace","fontSize":"15px","lineHeight":"1.6","marginBottom":"1.6em","maxWidth":"100%","overflow":"auto","padding":"1em 1.5em","display":"block","wordWrap":"break-word"};
 
-        if (this.state.cookies.get("authKey") ==undefined ) this.props.history.push('/login');
+        if (this.state.cookies.get("authKey") ==undefined ) this.props.history.push('/');
         return(
 
             <React.Fragment>
@@ -149,7 +149,7 @@ export class Overview extends React.Component{
                                                     action={<IconButton>
                                                                 <ShareIcon />
                                                             </IconButton>}
-                                                    onClick={(evt) => this.handleEmbeddedShareClick(survey.id, evt)}/>
+                                                    onClick={(evt) => this.handleOpen(survey.id, evt)}/>
                                         <CardMedia>
                                             <PieChart
                                                 dataSource={this.displayData(survey.id)}
