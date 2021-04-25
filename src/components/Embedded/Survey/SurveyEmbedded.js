@@ -275,9 +275,8 @@ export class SurveyEmbeddedBare extends React.Component {
                                                     <Button size="large" variant="contained" style={{backgroundColor: "#c4b1c9", color: "white", position: "absolute", bottom: "10px", right: "10px"}} onClick={this.submitButtonOnClick} disabled={this.state.surveyMultiSelect ? this.state.checkboxAnswers.length === 0 : this.state.rbValue === null}>
                                                                     SEND
                                                     </Button>
+                                                    {this.state.loading && <CircularProgress size={26} style={{position: "absolute", bottom: "20px", right: "42px"}}/>}
                                                 </div>
-                                                {this.state.loading && <CircularProgress size={26} style={{marginLeft: "-49px"}}/>}
-
                                         </Paper>
                                     </Grid>
                                     <Grid item xs={4}>
