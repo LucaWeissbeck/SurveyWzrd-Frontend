@@ -209,10 +209,12 @@ export class SurveyEmbeddedBare extends React.Component {
     getAnswerOptionsMultipleChoiceHTML = () => {
         return(
             this.state.answerOptions.map(answerOption => (
-                <FormControlLabel
-                    control={<Checkbox checked={this.state.checkboxesStatus[answerOption.value]} onChange={this.handleCheckboxChange} name={answerOption.value}/>}
-                    label={answerOption.value}
-                />
+                    <FormControlLabel
+                        control={<Checkbox checked={this.state.checkboxesStatus[answerOption.value]} onChange={this.handleCheckboxChange} name={answerOption.value}/>}
+                        label={answerOption.value}
+                        style={{marginBottom: "10px"}}
+                    />
+                
             ))
         )
     }
@@ -242,37 +244,40 @@ export class SurveyEmbeddedBare extends React.Component {
                                 }
                                 style={{backgroundColor: "#254563", color: 'white', height: "35px", textAlign: "right"}}>
                             </CardHeader>
-                            <CardContent style={{backgroundColor: "#f3f3f3"}}>
+                            <CardContent style={{backgroundColor: "#f3f3f3", zIndex:5}}>
                                 <Grid container item spacing={7} direction="row" alignItems="stretch">
                                     <Grid item xs={8}>
                                         <Paper square={true} style={{height: "260px"}}>
-                                            <Box p={2} m={1}>
-                                                <FormControl component="fieldset">
-                                                    <Typography variant="h6" component="h2" style={{fontWeight: "bold"}}>
+                                            <div style={{height: "100%", width: "100%", position: "relative"}}>
+                                                    <Typography variant="h6" component="h2" style={{fontWeight: "bold", padding: "15px 0px 0px 15px"}}>
                                                         {this.state.surveyQuestion}
                                                     </Typography>
                                                     {!this.state.surveyMultiSelect &&
-                                                        <RadioGroup aria-label="gender" name="gender1" value={this.state.rbValue}
-                                                                    onChange={this.handleRadioButtonChange}>
-                                                            {this.getAnswerOptionsSingleChoiceHTML()}
-                                                        </RadioGroup>
+                                                        <div>
+                                                            <RadioGroup aria-label="gender" name="gender1" value={this.state.rbValue}
+                                                                        onChange={this.handleRadioButtonChange}>
+                                                                <div style={{width: "70%", height: "150px", overflow: "scroll", padding: "15px", display: "flex", flexDirection: "column"}}>
+                                                                    {this.getAnswerOptionsSingleChoiceHTML()}
+                                                                </div>
+                                                            </RadioGroup>
+                                                        </div>
                                                     }
                                                     {this.state.surveyMultiSelect &&
-                                                        <FormControl component="fieldset">
-                                                            <FormLabel component="legend" style={{marginBottom: "10px"}}>Please choose one or more answers.</FormLabel>
-                                                            <FormGroup>
-                                                                {this.getAnswerOptionsMultipleChoiceHTML()}
-                                                            </FormGroup>
-                                                        </FormControl>
+                                                        <div>
+                                                            <FormControl component="fieldset">
+                                                                <FormLabel component="legend" style={{padding: "0 0 0 15px"}}>Answers may be scrollable</FormLabel>
+                                                                <div style={{width: "70%", height: "150px", overflow: "scroll", padding: "15px", display: "flex", flexDirection: "column"}}>
+                                                                    {this.getAnswerOptionsMultipleChoiceHTML()}
+                                                                </div>
+                                                            </FormControl>
+                                                        </div>
                                                     }
-                                                </FormControl>
-                                                <div style={{float: "bottom", position: "absolute"}}>
-                                                    <Button size="large" variant="contained" style={{backgroundColor: "#c4b1c9", color: "white"}} onClick={this.submitButtonOnClick} disabled={this.state.surveyMultiSelect ? this.state.checkboxAnswers.length === 0 : this.state.rbValue === null}>
-                                                        SEND
+                                                    <Button size="large" variant="contained" style={{backgroundColor: "#c4b1c9", color: "white", position: "absolute", bottom: "10px", right: "10px"}} onClick={this.submitButtonOnClick} disabled={this.state.surveyMultiSelect ? this.state.checkboxAnswers.length === 0 : this.state.rbValue === null}>
+                                                                    SEND
                                                     </Button>
                                                 </div>
                                                 {this.state.loading && <CircularProgress size={26} style={{marginLeft: "-49px"}}/>}
-                                            </Box>
+
                                         </Paper>
                                     </Grid>
                                     <Grid item xs={4}>
@@ -287,17 +292,17 @@ export class SurveyEmbeddedBare extends React.Component {
                                             </Paper>
                                             <Box pt={1}>
                                                 <Paper square={true} style={{height: "120px"}}>
-                                                    <Box p={2} m={1}>
-                                                        <Typography variant="h5" style={{fontWeight: "bold", textAlign: "center", marginTop: "5px"}}>Information</Typography>
-                                                        <Box pt={2}>
-                                                           <IconButton style={{marginLeft: "60px"}}  onClick={this.handleSurveyDescriptionButton}>
-                                                                <DescriptionIcon color="secondary" style={{fontSize: "35px", marginTop: "-20px"}}/>
-                                                           </IconButton>
-                                                            <IconButton style={{float: "right", marginRight: "60px",  marginTop: "-20px"}} onClick={this.handleSurveyCompanyButton}>
-                                                                <BusinessIcon color="secondary" style={{fontSize: "35px"}}/>
-                                                            </IconButton>
-                                                        </Box>
-                                                    </Box>
+                                                    
+                                                            <div style={{height: "100%", width: "100%", display: 'flex', justifyContent: "center", alignItems: "center", flexWrap: "wrap"}}>
+                                                                <Typography variant="h5" style={{fontWeight: "bold", width: "100%", textAlign: "center", marginTop: "10px"}}>Information</Typography>
+                                                                <IconButton onClick={this.handleSurveyDescriptionButton} style={{marginTop: "-15px"}}>
+                                                                        <DescriptionIcon color="secondary" style={{fontSize: "35px"}}/>
+                                                                </IconButton>
+                                                                <IconButton onClick={this.handleSurveyCompanyButton}>
+                                                                    <BusinessIcon color="secondary" style={{fontSize: "35px", marginTop: "-15px"}}/>
+                                                                </IconButton>
+                                                            </div>
+                                                    
                                                 </Paper>
                                             </Box>
                                         </Box>
