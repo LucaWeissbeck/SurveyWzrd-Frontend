@@ -187,6 +187,7 @@ export class CreateSurvey extends React.Component{
                                            id="standard-basic"
                                            label="Question"
                                            fullWidth
+                                           inputProps={{ maxLength: 38 }}
                                            onChange={this.questionOnChange}
                                        />
                                    </div>
@@ -203,6 +204,7 @@ export class CreateSurvey extends React.Component{
                                                        id="standard-basic"
                                                        label={"Answer " + (index + 1)}
                                                        fullWidth
+                                                       inputProps={{ maxLength: 45 }}
                                                        onChange={(evt) => this.handleAnswerOptionListChange(index, evt)}
                                                        />
                                                </Grid>
@@ -223,7 +225,7 @@ export class CreateSurvey extends React.Component{
                                                    <Grid container spacing={1} alignItems="flex-end">
                                                        <Grid item>
                                                            <Tooltip title="add answer">
-                                                               <Button onClick={this.addAnswer}>
+                                                               <Button disabled={(this.state.answerOptions.length >= 8)} onClick={this.addAnswer}>
                                                                    <AddBoxIcon style={{fill: '#254563'}}/>
                                                                </Button>
                                                            </Tooltip>
