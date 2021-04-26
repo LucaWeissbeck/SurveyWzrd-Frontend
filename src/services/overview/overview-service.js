@@ -4,39 +4,36 @@ import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
 
-//We need a requ
-const apiKeyHeader = {
-    'x-api-key': cookies.get('authKey')
-}
+const base_url= "http://127.0.0.1:8080";
 
 export const getAllSurveys = () => {
-    let config = {
-        method: 'get',
-        url: 'http://localhost:8080/api/survey/getForAdmin',
-        headers: {
-            'x-api-key': cookies.get('authKey')
-        }
-    };
-
-    return axios(config);
+    const url = base_url + '/api/survey/getForAdmin';
+    return axios.get(url, {headers:{
+        "x-api-key": cookies.get("authKey")
+    }})
 }
 
 export const getSurveyAnswerCount = (id) => {
-    const url = `http://localhost:8080/api/analysis/public/${id}`;
+    const url = base_url + `/api/analysis/public/${id}`;
     return axios.get(url);
 }
 
 export const getAnswerOptionsByID = (id) => {
-    const url = `http://localhost:8080/api/survey/answeroptions/public/${id}`;
+    const url = base_url + `/api/survey/answeroptions/public/${id}`;
     return axios.get(url);
 }
 
 export const getSurveysByID = (id) => {
-    const url = `http://localhost:8080/api/survey/public/${id}`;
+    const url = base_url + `/api/survey/public/${id}`;
     return axios.get(url);
 }
 
 export const getLocationInfo = (id) => {
-    const url = `http://localhost:8080/api/analysis/public/rawdata/${id}`;
+    const url = base_url + `/api/analysis/public/rawdata/${id}`;
     return axios.get(url);
+}
+
+export const getSurveyResults = (id) => {
+    const url = base_url + `/api/analysis/public/minimizedrawdata/${id}`;
+    return axios.get(url)
 }

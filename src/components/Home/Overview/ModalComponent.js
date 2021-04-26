@@ -23,7 +23,8 @@ import LiveHelpIcon from '@material-ui/icons/LiveHelp';
 import DescriptionIcon from '@material-ui/icons/Description';
 import SubjectIcon from '@material-ui/icons/Subject';
 import {countryMapping} from "./countries";
-
+import moment from 'moment';
+let _ = require('lodash');
 
 export class ModalComponent extends React.Component{
     constructor(props) {
@@ -37,9 +38,12 @@ export class ModalComponent extends React.Component{
             surveyName: "",
             surveyQuestion: "",
             complete: [],
-            countryInfo: []
-
-
+            countryInfo: [],
+            isFirstLevelGraph: true,
+            monthData: [],
+            weekData: [],
+            dayData: [],
+            answerOptionsByName: []
         };
     }
     componentDidMount() {
@@ -86,8 +90,56 @@ export class ModalComponent extends React.Component{
                 this.setState({countryInfo: countriesGraphData})
             })
             .catch((err)  => console.log(err));
+
+        surveyService.getSurveyResults((parseInt((this.props.surveyID))))
+        .then((res) => {
+            console.log("This is Data", res.data);
+            return res.data;
+        })
+        .then((data) => {
+            //Data is now grouped into months, weeks and days
+            data = this.replaceAnswerID(data);
+            let weeks = this.groupByTime(data, "week");
+            let months = this.groupByTime(data, "month");
+            this.setState({
+                monthData: months,
+                weekData: weeks,
+                dayData: data
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+
+        surveyService.getAnswerOptionsByID((parseInt((this.props.surveyID))))
+        .then((res) => {
+            this.setState({
+                answerOptionsByName: res.data
+            });
+        })
+        .catch((err) =>{
+            console.log(err);
+        })
     }
 
+
+    replaceAnswerID = (data) =>{
+        let new_array = data.map((entry) => {
+            let foundObject = this.state.answerOptionsByName.find((element) => {
+                if(element.id === entry.id){
+                    return true;
+                }
+            })
+            try{
+                entry["answerOptionID"] = foundObject.value;
+            }catch(err){
+                entry["answerOptionID"] = "undefined";
+            }
+            
+        })
+
+        return new_array;
+    }
 
 
     calculateParticipantCount = () => {
@@ -153,7 +205,6 @@ export class ModalComponent extends React.Component{
     //Helper Functions Country Graph
     getImagePath = (country) => {
         let countryCode = Object.keys(countryMapping).find(key => countryMapping[key] === country);
-        console.log("coutnryCode in Method get Image", countryCode);
         countryCode = countryCode.toLowerCase();
         let imagePath = `/assets/countryFlags/${countryCode}.png`;
         return imagePath;
@@ -179,6 +230,19 @@ export class ModalComponent extends React.Component{
         }
     }
 
+
+    //Helper Function Detailed Graph
+    groupByTime = (results, format) => {
+        if (format === "week") {
+            return _.groupBy(results, (result) => moment(result['timestamp'], 'DD-MM-YYYY').startOf('isoWeek'));
+        }
+        else if(format === "month"){
+            return _.groupBy(results, (result) => moment(result['timestamp'], 'DD-MM-YYYY').startOf('month'));
+        }
+        else{
+            return "Missing or false dateformat"
+        }
+    }
 
 
     render(){
@@ -207,8 +271,7 @@ export class ModalComponent extends React.Component{
 
         return(
             <React.Fragment>
-                {console.log(this.state.surveyID)}
-                {console.log(this.getImagePath("Germany"))}
+                {console.log("MONTHDATA", this.state.monthData)}
                 <Dialog
                     style={{backgroundColor: "transparent", boxShadow:"none"}}
                     fullWidth={true}
@@ -311,7 +374,6 @@ export class ModalComponent extends React.Component{
                                     <Box display="flex" justifyContent="center" m={1} p={1} overflow="hidden">
                                         <Box pt={2}>
                                             <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Herkunft</Typography>
-                                            {console.log("DATA SOURCE", this.state.countryInfo)}
                                                 <Box p={1}>
                                                     {this.state.countryInfo.length !== 0 &&
                                                         <PieChart
@@ -348,7 +410,6 @@ export class ModalComponent extends React.Component{
                                     </Box>
                                 </Paper>
                             </Grid>
-
                         </Grid>
                     </DialogContent>
                 </Dialog>
