@@ -43,7 +43,9 @@ export class ModalComponent extends React.Component{
             monthData: [],
             weekData: [],
             dayData: [],
-            answerOptionsByName: []
+            answerOptionsByName: [],
+            viewOption: "week",
+            graphData: []
         };
     }
     componentDidMount() {
@@ -98,14 +100,22 @@ export class ModalComponent extends React.Component{
         })
         .then((data) => {
             //Data is now grouped into months, weeks and days
-            data = this.replaceAnswerID(data);
+            console.log("Raw API Data", data);
             let weeks = this.groupByTime(data, "week");
+            console.log("Grouped by Week Data", weeks);
             let months = this.groupByTime(data, "month");
+            console.log("Grouped by Month Data", months);
+            let days = this.groupByTime(data, "day");
+            console.log("Grouped by Day", days);
+
             this.setState({
                 monthData: months,
                 weekData: weeks,
                 dayData: data
             });
+        })
+        .then(() => {
+            console.log("Count for Days", this.createGraphData(this.state.dayData))
         })
         .catch((err) => {
             console.log(err);
@@ -120,6 +130,7 @@ export class ModalComponent extends React.Component{
         .catch((err) =>{
             console.log(err);
         })
+
     }
 
 
@@ -239,11 +250,61 @@ export class ModalComponent extends React.Component{
         else if(format === "month"){
             return _.groupBy(results, (result) => moment(result['timestamp'], 'DD-MM-YYYY').startOf('month'));
         }
+        else if(format === "day"){
+            return _.groupBy(results, (result) => moment(result['timestamp'], 'DD-MM-YYYY').startOf('day'));
+        }
         else{
             return "Missing or false dateformat"
         }
     }
 
+    getGraphData = () =>{
+        let answerOptions = this.state.answerOptionsByName;
+        let arrayOfObjects = [];
+        switch(this.state.viewOption){
+            case "month":
+                let timespanArray = this.state.monthData;
+                arrayOfObjects = this.convertGraphData(answerOptions, timespanArray);
+                this.setState({
+                    graphData: arrayOfObjects
+                })
+            case "week":
+                let timespanArray2 = this.state.weekData;
+                arrayOfObjects = this.convertGraphData(answerOptions, timespanArray2);
+                this.setState({
+                    graphData: arrayOfObjects
+                })
+            case "day":
+                let timespanArray3 = this.state.dayData;
+                arrayOfObjects = this.convertGraphData(answerOptions, timespanArray3);
+                this.setState({
+                    graphData: arrayOfObjects
+                })
+            default:
+                return arrayOfObjects;
+    
+        }
+    }
+
+    createGraphData = (unpreparedData) => {
+        let countArray = []
+        let countObject = {};
+        for (let i = 0; i < unpreparedData.length; i++){
+            console.log("unprepared Data Items", unpreparedData[i]);
+            if(!unpreparedData[i].timestamp in countObject){
+                console.log("Datapoint.timestamp not in object", unpreparedData[i].timestamp)
+                let timestamp = unpreparedData[i].timestamp;
+                countObject["date"] = timestamp;
+                countObject["count"] = 1;
+            }
+            else{
+                countObject["count"] = countObject["count"] + 1;
+            }
+            countArray.push(countObject);
+        }
+        return countArray;
+    }
+    
 
     render(){
         const steps = this.getSteps();
@@ -271,7 +332,6 @@ export class ModalComponent extends React.Component{
 
         return(
             <React.Fragment>
-                {console.log("MONTHDATA", this.state.monthData)}
                 <Dialog
                     style={{backgroundColor: "transparent", boxShadow:"none"}}
                     fullWidth={true}
