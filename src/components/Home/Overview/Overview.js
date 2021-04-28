@@ -52,17 +52,33 @@ export class Overview extends React.Component{
     }
 
     fillState = () =>{
-        surveyService.getAllSurveys()
-            .then((res) => {
-                this.setState({allSurveys: res.data})
-            })
-            .then(() =>{
-                for (let i=0; i < this.state.allSurveys.length; i++){
-                    this.getData(this.state.allSurveys[i].id)
-                }
-                this.forceUpdate()
-            })
-            .catch(err => console.log(err));
+        if (localStorage.getItem("isOwner") == "true"){
+            surveyService.getAllSurveysOwner()
+                .then((res) => {
+                    this.setState({allSurveys: res.data})
+                })
+                .then(() =>{
+                    for (let i=0; i < this.state.allSurveys.length; i++){
+                        this.getData(this.state.allSurveys[i].id)
+                    }
+                    this.forceUpdate()
+                })
+                .catch(err => console.log(err));
+        }
+        else {
+            surveyService.getAllSurveys()
+                .then((res) => {
+                    this.setState({allSurveys: res.data})
+                })
+                .then(() =>{
+                    for (let i=0; i < this.state.allSurveys.length; i++){
+                        this.getData(this.state.allSurveys[i].id)
+                    }
+                    this.forceUpdate()
+                })
+                .catch(err => console.log(err));
+        }
+
     }
 
     getData = (id) => {
