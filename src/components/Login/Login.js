@@ -7,7 +7,7 @@ import {
     CardHeader,
     Checkbox,
     Container, Dialog, DialogContent, FormControlLabel,
-    Grid,
+    Grid, Slide, Snackbar,
     TextField,
 } from "@material-ui/core";
 import {Face, Fingerprint} from "@material-ui/icons";
@@ -22,6 +22,8 @@ export class Login extends React.Component{
             email: "",
             isChecked : false,
             password: "",
+            /*SnackBarOpen : false,
+            setSnackBarOpen: false,*/
         };
         if (this.state.cookies.get('authKey') !== undefined){
            console.log("User Authenticated")
@@ -52,8 +54,8 @@ export class Login extends React.Component{
         console.log(this.state.password)
         postLogin(this.state.email, this.state.password)
             .then((res) =>{
-
-                //localStorage.setItem("authKey", res.data.authKey)
+                console.log(res);
+                localStorage.setItem("isOwner", res.data.owner);
                 let dateactual = Date.now();
                 if (this.state.isChecked) this.state.cookies.set('authKey', res.data.authKey , { path: '/', maxAge: 5259600 }); // 5259600 equals 2 Months in seconds
                 else this.state.cookies.set('authKey', res.data.authKey , { path: '/' });
@@ -62,13 +64,29 @@ export class Login extends React.Component{
                 //this.props.history.push('/overview')
                 window.location.replace("/overview");
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                //TODO Display Error
+                console.log(err);
+            });
 
 
     }
     handleRememberMeChange(e) {
         this.state.isChecked = e.target.checked;
     }
+
+    /*TransitionUp(props) {
+        return <Slide {...props} direction="up" />;
+    }
+    handleClick = (Transition) => () => {
+        setTransition(() => Transition);
+        setOpen(true);
+    };
+    handleClose = () => {
+        this.setState({
+            SnackBarOpen: false,
+        });
+    };*/
 
     render(){
         return (
@@ -125,7 +143,6 @@ export class Login extends React.Component{
                         </Card>
                         </DialogContent>
                 </Dialog>
-
             </React.Fragment>
         )
     }
