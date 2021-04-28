@@ -22,8 +22,6 @@ export class Login extends React.Component{
             email: "",
             isChecked : false,
             password: "",
-            /*SnackBarOpen : false,
-            setSnackBarOpen: false,*/
         };
         if (this.state.cookies.get('authKey') !== undefined){
            console.log("User Authenticated")
@@ -74,19 +72,6 @@ export class Login extends React.Component{
     handleRememberMeChange(e) {
         this.state.isChecked = e.target.checked;
     }
-
-    /*TransitionUp(props) {
-        return <Slide {...props} direction="up" />;
-    }
-    handleClick = (Transition) => () => {
-        setTransition(() => Transition);
-        setOpen(true);
-    };
-    handleClose = () => {
-        this.setState({
-            SnackBarOpen: false,
-        });
-    };*/
 
     render(){
         return (
