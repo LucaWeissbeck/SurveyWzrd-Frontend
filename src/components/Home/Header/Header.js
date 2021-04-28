@@ -70,8 +70,6 @@ export default function Header(props) {
             </AppBar>
 
 
-            {this.state.errorOpen === true &&
-            <ErrorModal open={this.state.errorOpen} onClose={this.handleErrorClose} errorMessage={this.state.errorMessage}/>}
         </React.Fragment>
 
         )
