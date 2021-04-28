@@ -28,6 +28,7 @@ import DescriptionIcon from "@material-ui/icons/Description";
 import BusinessIcon from '@material-ui/icons/Business';
 import { withRouter } from "react-router";
 import PropTypes from "prop-types";
+import {ErrorModal} from "../../Home/ErrorHandling/ErrorModal";
 
 export class SurveyEmbeddedBare extends React.Component {
     static propTypes = {
@@ -78,7 +79,11 @@ export class SurveyEmbeddedBare extends React.Component {
 
                 })
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
 
         //Get specific answeroptions
         surveyService.getAnswerOptionsByID(this.state.urlSurveyID)
@@ -94,7 +99,11 @@ export class SurveyEmbeddedBare extends React.Component {
                 }
                 this.setState({checkboxesStatus: insertObject})
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
 
     }
 
@@ -138,7 +147,11 @@ export class SurveyEmbeddedBare extends React.Component {
                         }
                     })
                     .then(this.props.switch)
-                    .catch(err => console.log(err));
+                    .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
             }
             else if (!this.state.surveyMultiSelect) {
                 console.log("printed")
@@ -164,7 +177,11 @@ export class SurveyEmbeddedBare extends React.Component {
                         }
                     })
                     .then(this.props.switch)
-                    .catch(err => console.log(err));
+                    .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
             }
 
         }
@@ -219,7 +236,16 @@ export class SurveyEmbeddedBare extends React.Component {
         )
     }
 
+    handleErrorOpen = (errorMessage) => {
+        this.setState({
+            errorMessage: errorMessage,
+            errorOpen: true
+        });
+    }
 
+    handleErrorClose =() => {
+        this.setState({errorOpen: false})
+    }
     render() {
         return (
             <React.Fragment>
@@ -315,6 +341,10 @@ export class SurveyEmbeddedBare extends React.Component {
                         </Card>
                     </Container>
                 </Container>
+
+
+                {this.state.errorOpen === true &&
+                <ErrorModal open={this.state.errorOpen} onClose={this.handleErrorClose} errorMessage={this.state.errorMessage}/>}
             </React.Fragment>
 
 

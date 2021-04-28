@@ -14,6 +14,8 @@ import {
 import {Face, Fingerprint} from "@material-ui/icons";
 import Cookies from 'universal-cookie';
 import {postLogin} from "../../services/user/login-service";
+import {ModalComponent} from "../Home/Overview/ModalComponent";
+import {ErrorModal} from "../Home/ErrorHandling/ErrorModal";
 
 export class Login extends React.Component{
     constructor(props) {
@@ -23,7 +25,7 @@ export class Login extends React.Component{
             email: "",
             isChecked : false,
             password: "",
-            //errorOpen: false,
+            errorOpen: false,
         };
         if (this.state.cookies.get('authKey') !== undefined){
            console.log("User Authenticated")
@@ -44,17 +46,7 @@ export class Login extends React.Component{
             password: event.target.value
         });
     };
-/*
-    handleErrorOpen = (event) => {
-        this.setState({
-            errorOpen: true
-        });
-    }
 
-    handleErrorClose =() => {
-        this.setState({errorOpen: false})
-    }
-*/
     componentDidMount() {
 
     }
@@ -75,7 +67,7 @@ export class Login extends React.Component{
                 window.location.replace("/overview");
             })
             .catch(err => {
-                //this.handleErrorOpen();
+                this.handleErrorOpen(err.response.data.error);
                 console.log(err.response.data.error);
                 console.log(err);
             });
@@ -84,6 +76,17 @@ export class Login extends React.Component{
     }
     handleRememberMeChange(e) {
         this.state.isChecked = e.target.checked;
+    }
+
+    handleErrorOpen = (errorMessage) => {
+        this.setState({
+            errorMessage: errorMessage,
+            errorOpen: true
+        });
+    }
+
+    handleErrorClose =() => {
+        this.setState({errorOpen: false})
     }
 
     render(){
@@ -132,6 +135,9 @@ export class Login extends React.Component{
                                         </Grid>
                         </DialogContent>
                 </Dialog>
+
+                {this.state.errorOpen === true &&
+                <ErrorModal open={this.state.errorOpen} onClose={this.handleErrorClose} errorMessage={this.state.errorMessage}/>}
             </React.Fragment>
         )
     }

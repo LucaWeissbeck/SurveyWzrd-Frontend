@@ -14,6 +14,7 @@ import {postRegister} from "../../services/user/register-service";
 import {Login} from "./Login";
 import {postLogin} from "../../services/user/login-service";
 import Cookies from "universal-cookie";
+import {ErrorModal} from "../Home/ErrorHandling/ErrorModal";
 
 export class Register extends React.Component {
     constructor(props) {
@@ -22,7 +23,8 @@ export class Register extends React.Component {
         this.state = {
             email: "",
             password: "",
-            cookies: new Cookies()
+            cookies: new Cookies(),
+            errorOpen: false,
         };
     }
 
@@ -53,9 +55,28 @@ export class Register extends React.Component {
                         this.state.cookies.set('authKey', res.data.authKey, {path: '/'});
                         window.location.replace("/overview");
                     })
-                    .catch(err => console.log(err));
+                    .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
+    }
+
+    handleErrorOpen = (errorMessage) => {
+        this.setState({
+            errorMessage: errorMessage,
+            errorOpen: true
+        });
+    }
+
+    handleErrorClose =() => {
+        this.setState({errorOpen: false})
     }
 
     render() {
@@ -105,6 +126,9 @@ export class Register extends React.Component {
                                     </Grid>
                     </DialogContent>
                 </Dialog>
+
+                {this.state.errorOpen === true &&
+                <ErrorModal open={this.state.errorOpen} onClose={this.handleErrorClose} errorMessage={this.state.errorMessage}/>}
             </React.Fragment>
         )
     }

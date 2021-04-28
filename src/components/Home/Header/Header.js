@@ -9,6 +9,7 @@ import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import {postLogout} from "../../../services/user/logout-service";
 import Cookies from 'universal-cookie';
 import  { useHistory } from 'react-router-dom'
+import {ErrorModal} from "../ErrorHandling/ErrorModal";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -44,10 +45,17 @@ export default function Header(props) {
                 cookies.remove('authKey');
                 return history.push('/');
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
 
 
     }
+
+//TODO: ErrorHandling!!!
+    
         return(
 
         <React.Fragment>
@@ -60,6 +68,10 @@ export default function Header(props) {
                     <Tab label="Logout" classes={{ root: classes.tab }} icon={<MeetingRoomIcon fontSize="large"/>} onClick={logoutActionSubmit}/>
                 </Tabs>
             </AppBar>
+
+
+            {this.state.errorOpen === true &&
+            <ErrorModal open={this.state.errorOpen} onClose={this.handleErrorClose} errorMessage={this.state.errorMessage}/>}
         </React.Fragment>
 
         )

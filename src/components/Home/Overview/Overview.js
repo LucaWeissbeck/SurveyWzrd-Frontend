@@ -29,6 +29,7 @@ import PieChart, {
 } from 'devextreme-react/pie-chart';
 import {postDeleteSurvey} from "../../../services/survey/deleteSurvey-service";
 import Cookies from "universal-cookie/es6";
+import {ErrorModal} from "../ErrorHandling/ErrorModal";
 
 export class Overview extends React.Component{
     constructor(props) {
@@ -63,7 +64,11 @@ export class Overview extends React.Component{
                     }
                     this.forceUpdate()
                 })
-                .catch(err => console.log(err));
+                .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
         }
         else {
             surveyService.getAllSurveys()
@@ -76,7 +81,11 @@ export class Overview extends React.Component{
                     }
                     this.forceUpdate()
                 })
-                .catch(err => console.log(err));
+                .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
         }
 
     }
@@ -101,7 +110,11 @@ export class Overview extends React.Component{
                      data: [...prevState.data, dataArray]
                  }));
              })
-             .catch(err => console.log(err));
+             .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
 
      }
 
@@ -136,11 +149,26 @@ export class Overview extends React.Component{
              .then((res) => {
                  window.location.reload();
              })
-             .catch(err => console.log(err));
+             .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
      }
 
     createIFrame = (surveyID) => {
         return (this.iFrame = "<iframe src=\"http://api.tutorialfactory.org:8088/survey?id="+ surveyID +  "\"></iframe>")
+    }
+
+    handleErrorOpen = (errorMessage) => {
+        this.setState({
+            errorMessage: errorMessage,
+            errorOpen: true
+        });
+    }
+
+    handleErrorClose =() => {
+        this.setState({errorOpen: false})
     }
 
     render(){
@@ -221,6 +249,9 @@ export class Overview extends React.Component{
                 {/*Full Windows with Detailed analysis*/}
                 {this.state.modalOpen === true &&
                 <ModalComponent open={this.state.modalOpen} onClose={this.handleModalClose} surveyID={this.state.modalButtonID} data={this.state.data}/>}
+
+                {this.state.errorOpen === true &&
+                <ErrorModal open={this.state.errorOpen} onClose={this.handleErrorClose} errorMessage={this.state.errorMessage}/>}
             </React.Fragment>
         )
     }

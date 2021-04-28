@@ -24,6 +24,7 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import SubjectIcon from '@material-ui/icons/Subject';
 import {countryMapping} from "./countries";
 import moment from 'moment';
+import {ErrorModal} from "../ErrorHandling/ErrorModal";
 let _ = require('lodash');
 
 export class ModalComponent extends React.Component{
@@ -67,7 +68,11 @@ export class ModalComponent extends React.Component{
                     activeStep: 0
                 })
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
 
         surveyService.getLocationInfo((parseInt((this.props.surveyID))))
             .then((res) => {
@@ -304,7 +309,16 @@ export class ModalComponent extends React.Component{
         }
         return countArray;
     }
-    
+    handleErrorOpen = (errorMessage) => {
+        this.setState({
+            errorMessage: errorMessage,
+            errorOpen: true
+        });
+    }
+
+    handleErrorClose =() => {
+        this.setState({errorOpen: false})
+    }
 
     render(){
         const steps = this.getSteps();
@@ -329,6 +343,8 @@ export class ModalComponent extends React.Component{
             color: "white",
             display: "contents"
         }
+        
+        
 
         return(
             <React.Fragment>
@@ -473,6 +489,10 @@ export class ModalComponent extends React.Component{
                         </Grid>
                     </DialogContent>
                 </Dialog>
+
+
+                {this.state.errorOpen === true &&
+                <ErrorModal open={this.state.errorOpen} onClose={this.handleErrorClose} errorMessage={this.state.errorMessage}/>}
             </React.Fragment>
         )
     }

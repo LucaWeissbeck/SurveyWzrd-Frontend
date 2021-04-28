@@ -14,6 +14,7 @@ import Cookies from "universal-cookie/es6";
 
 
 import * as surveyService from '../../../services/survey/createSurvey-service'
+import {ErrorModal} from "../ErrorHandling/ErrorModal";
 
 
 export class CreateSurvey extends React.Component{
@@ -76,7 +77,11 @@ export class CreateSurvey extends React.Component{
                                 this.props.history.push('/overview/');
                             }
                         })
-                        .catch((err) => console.log(err))
+                        .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
                 })
             })
             .catch((err)=>console.log(err))
@@ -124,6 +129,17 @@ export class CreateSurvey extends React.Component{
         this.setState({
             answerOptions: array
         });
+    }
+
+    handleErrorOpen = (errorMessage) => {
+        this.setState({
+            errorMessage: errorMessage,
+            errorOpen: true
+        });
+    }
+
+    handleErrorClose =() => {
+        this.setState({errorOpen: false})
     }
 
     render() {
@@ -279,6 +295,10 @@ export class CreateSurvey extends React.Component{
                    </Box>
                </Grid>
            </Container>
+
+
+           {this.state.errorOpen === true &&
+           <ErrorModal open={this.state.errorOpen} onClose={this.handleErrorClose} errorMessage={this.state.errorMessage}/>}
        </React.Fragment>
     )
 }
