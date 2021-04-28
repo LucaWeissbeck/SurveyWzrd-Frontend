@@ -76,6 +76,7 @@ export class Login extends React.Component{
             })
             .catch(err => {
                 //this.handleErrorOpen();
+                console.log(err.response.data.error);
                 console.log(err);
             });
 
@@ -93,8 +94,8 @@ export class Login extends React.Component{
                             style={{marginTop: '15px'}}
                             fullWidth maxWidth="md">
                         <DialogTitle titleTypographyProps={{variant:'h5' }}
-                                     style={{backgroundColor: "#254563", color: 'white', height: "35px", textAlign: "left", verticalAlign: "top-100px"}}>
-                                <img src="/assets/logo_with_text.png" style={{height:"45px", verticalAlign: "100px"}} alt="Logo"/>
+                                     style={{backgroundColor: "#254563", color: 'white', height: "35px", textAlign: "left"}}>
+                                <img src="/assets/logo_with_text.png" style={{height:"45px", top: "-5px", position:"relative"}} alt="Logo"/>
                         </DialogTitle>
                         <DialogContent>
                                         <Grid container spacing={4} alignItems="flex-end">

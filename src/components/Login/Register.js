@@ -67,7 +67,7 @@ export class Register extends React.Component {
                         fullWidth maxWidth="lg">
                     <DialogTitle titleTypographyProps={{variant:'h5' }}
                                  style={{backgroundColor: "#254563", color: 'white', height: "35px", textAlign: "left"}}>
-                        <img src="/assets/logo_with_text.png" style={{height:"45px"}} alt="Logo"/>
+                        <img src="/assets/logo_with_text.png" style={{height:"45px", top: "-5px", position:"relative"}} alt="Logo"/>
                     </DialogTitle>
                     <DialogContent>
                                     <Grid container spacing={4} alignItems="flex-end">
