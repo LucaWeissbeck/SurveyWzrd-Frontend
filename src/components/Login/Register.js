@@ -5,7 +5,7 @@ import {
     Card,
     CardContent,
     CardHeader,
-    Container, Dialog, DialogContent,
+    Container, Dialog, DialogContent, DialogTitle,
     Grid,
     TextField,
 } from "@material-ui/core";
@@ -65,23 +65,11 @@ export class Register extends React.Component {
                         onClose={this.props.onClose}
                         style={{marginTop: '15px'}}
                         fullWidth maxWidth="lg">
+                    <DialogTitle titleTypographyProps={{variant:'h5' }}
+                                 style={{backgroundColor: "#254563", color: 'white', height: "35px", textAlign: "left"}}>
+                        <img src="/assets/logo_with_text.png" style={{height:"45px"}} alt="Logo"/>
+                    </DialogTitle>
                     <DialogContent>
-                        <Card>
-                            <CardHeader
-                                titleTypographyProps={{variant: 'h5'}}
-                                avatar={
-                                    <img src="/assets/logo_with_text.png"
-                                         style={{width: "180px", height: "160px", marginBottom: "-5px"}} alt="Logo"/>
-                                }
-                                style={{
-                                    backgroundColor: "#254563",
-                                    color: 'white',
-                                    height: "35px",
-                                    textAlign: "right"
-                                }}>
-                            </CardHeader>
-                            <CardContent>
-                                <div>
                                     <Grid container spacing={4} alignItems="flex-end">
                                         <Grid item>
                                             <Face/>
@@ -115,12 +103,8 @@ export class Register extends React.Component {
                                     <Grid container justify="center" style={{marginTop: '10px'}}>
                                         <p>100% free for personal use</p>
                                     </Grid>
-                                </div>
-                            </CardContent>
-                        </Card>
                     </DialogContent>
                 </Dialog>
-
             </React.Fragment>
         )
     }

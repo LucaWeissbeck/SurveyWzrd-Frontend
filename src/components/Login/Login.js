@@ -1,12 +1,13 @@
 import React from 'react';
 import {Helmet} from "react-helmet";
 import {
+    AppBar,
     Button,
     Card,
     CardContent,
     CardHeader,
     Checkbox,
-    Container, Dialog, DialogContent, FormControlLabel,
+    Container, Dialog, DialogContent, DialogTitle, FormControlLabel,
     Grid, Slide, Snackbar,
     TextField,
 } from "@material-ui/core";
@@ -22,6 +23,7 @@ export class Login extends React.Component{
             email: "",
             isChecked : false,
             password: "",
+            //errorOpen: false,
         };
         if (this.state.cookies.get('authKey') !== undefined){
            console.log("User Authenticated")
@@ -42,7 +44,17 @@ export class Login extends React.Component{
             password: event.target.value
         });
     };
+/*
+    handleErrorOpen = (event) => {
+        this.setState({
+            errorOpen: true
+        });
+    }
 
+    handleErrorClose =() => {
+        this.setState({errorOpen: false})
+    }
+*/
     componentDidMount() {
 
     }
@@ -63,7 +75,7 @@ export class Login extends React.Component{
                 window.location.replace("/overview");
             })
             .catch(err => {
-                //TODO Display Error
+                //this.handleErrorOpen();
                 console.log(err);
             });
 
@@ -80,17 +92,11 @@ export class Login extends React.Component{
                             onClose={this.props.onClose}
                             style={{marginTop: '15px'}}
                             fullWidth maxWidth="md">
+                        <DialogTitle titleTypographyProps={{variant:'h5' }}
+                                     style={{backgroundColor: "#254563", color: 'white', height: "35px", textAlign: "left", verticalAlign: "top-100px"}}>
+                                <img src="/assets/logo_with_text.png" style={{height:"45px", verticalAlign: "100px"}} alt="Logo"/>
+                        </DialogTitle>
                         <DialogContent>
-                        <Card>
-                            <CardHeader
-                                titleTypographyProps={{variant:'h5' }}
-                                avatar={
-                                    <img src="/assets/logo_with_text.png" style={{width: "180px", height:"160px", marginBottom: "-5px"}} alt="Logo"/>
-                                }
-                                style={{backgroundColor: "#254563", color: 'white', height: "35px", textAlign: "right"}}>
-                            </CardHeader>
-                            <CardContent>
-                                    <div >
                                         <Grid container spacing={4} alignItems="flex-end">
                                             <Grid item>
                                                 <Face />
@@ -123,9 +129,6 @@ export class Login extends React.Component{
                                             <Button  color="primary" onClick={this.loginActionSubmit} style={{fontWeight: "bold", textTransform: "none", backgroundColor: "#B4A0B9", color: "white" }}>LOGIN</Button>
                                             <br/>
                                         </Grid>
-                                    </div>
-                            </CardContent>
-                        </Card>
                         </DialogContent>
                 </Dialog>
             </React.Fragment>
