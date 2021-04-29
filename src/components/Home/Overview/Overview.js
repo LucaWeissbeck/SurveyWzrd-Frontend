@@ -186,9 +186,8 @@ export class Overview extends React.Component{
                     + "/assets/background.png"})`,
                     backgroundPosition: 'center',
                     backgroundSize: 'cover',
-                    backgroundRepeat: 'repeat',
-                    height: '100vh',
-                    width: '100vw'
+                    backgroundRepeat: 'repeat'
+                    
                 }} >
                 <Header header={0}/>
 
