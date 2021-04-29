@@ -29,6 +29,7 @@ import moment from 'moment';
 import * as url from "url";
 import { withRouter } from "react-router";
 import PropTypes from "prop-types";
+import {ErrorModal} from "../../Home/ErrorHandling/ErrorModal";
 let _ = require('lodash');
 
 
@@ -132,7 +133,11 @@ export class AnalyticsEmbeddedBare extends React.Component {
                     surveyCompanyName: res.data.companyName
                 })
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
 
         surveyService.getSurveyAnswersAnalysis(this.state.urlSurveyID)
             .then((res) => {
@@ -151,7 +156,11 @@ export class AnalyticsEmbeddedBare extends React.Component {
             .then(() => {
                 this.state.monthlyView ? this.fillData("month") : this.fillData("week");
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
 
         surveyService.getAnswerOptionsByID(this.state.urlSurveyID)
             .then((res) => {
@@ -161,7 +170,11 @@ export class AnalyticsEmbeddedBare extends React.Component {
                     }))
                 }
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
     }
 
     //Handling Component Change
@@ -296,7 +309,17 @@ export class AnalyticsEmbeddedBare extends React.Component {
         );
     };
 
+    handleErrorOpen = (errorMessage) => {
+        this.setState({
+            errorMessage: errorMessage,
+            errorOpen: true
+        });
+    }
 
+    handleErrorClose =() => {
+        this.setState({errorOpen: false})
+    }
+    
     render(){
         const {data: chartData} = this.state;
         return(
@@ -357,6 +380,10 @@ export class AnalyticsEmbeddedBare extends React.Component {
                         </Card>
                     </Container>
                 </Container>
+
+
+                {this.state.errorOpen === true &&
+                <ErrorModal open={this.state.errorOpen} onClose={this.handleErrorClose} errorMessage={this.state.errorMessage}/>}
             </React.Fragment>
         )
     }

@@ -1,18 +1,15 @@
 import React from 'react';
-import {Helmet} from "react-helmet";
 import {
-    Button,
-    Card,
-    CardContent,
-    CardHeader,
-    Checkbox,
-    Container, Dialog, DialogContent, FormControlLabel,
+    Button, Checkbox,
+    Dialog, DialogContent, DialogTitle, FormControlLabel,
     Grid,
     TextField,
 } from "@material-ui/core";
 import {Face, Fingerprint} from "@material-ui/icons";
 import Cookies from 'universal-cookie';
 import {postLogin} from "../../services/user/login-service";
+import {ModalComponent} from "../Home/Overview/ModalComponent";
+import {ErrorModal} from "../Home/ErrorHandling/ErrorModal";
 
 export class Login extends React.Component{
     constructor(props) {
@@ -22,6 +19,7 @@ export class Login extends React.Component{
             email: "",
             isChecked : false,
             password: "",
+            errorOpen: false,
         };
         if (this.state.cookies.get('authKey') !== undefined){
            console.log("User Authenticated")
@@ -52,22 +50,37 @@ export class Login extends React.Component{
         console.log(this.state.password)
         postLogin(this.state.email, this.state.password)
             .then((res) =>{
-
-                //localStorage.setItem("authKey", res.data.authKey)
+                console.log(res);
+                localStorage.setItem("isOwner", res.data.owner);
                 let dateactual = Date.now();
-                if (this.state.isChecked) this.state.cookies.set('authKey', res.data.authKey , { path: '/', maxAge: 5259600 }); // 5259600 equals 2 Months in seconds
-                else this.state.cookies.set('authKey', res.data.authKey , { path: '/' });
+                if (this.state.isChecked) this.state.cookies.set('authKey', res.data.authToken.authKey , { path: '/', maxAge: 5259600 }); // 5259600 equals 2 Months in seconds
+                else this.state.cookies.set('authKey', res.data.authToken.authKey , { path: '/' });
 
 
                 //this.props.history.push('/overview')
                 window.location.replace("/overview");
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
 
 
     }
     handleRememberMeChange(e) {
         this.state.isChecked = e.target.checked;
+    }
+
+    handleErrorOpen = (errorMessage) => {
+        this.setState({
+            errorMessage: errorMessage,
+            errorOpen: true
+        });
+    }
+
+    handleErrorClose =() => {
+        this.setState({errorOpen: false})
     }
 
     render(){
@@ -77,17 +90,11 @@ export class Login extends React.Component{
                             onClose={this.props.onClose}
                             style={{marginTop: '15px'}}
                             fullWidth maxWidth="md">
+                        <DialogTitle titleTypographyProps={{variant:'h5' }}
+                                     style={{backgroundColor: "#254563", color: 'white', height: "35px", textAlign: "left"}}>
+                                <img src="/assets/logo_with_text.png" style={{height:"45px", top: "-5px", position:"relative"}} alt="Logo"/>
+                        </DialogTitle>
                         <DialogContent>
-                        <Card>
-                            <CardHeader
-                                titleTypographyProps={{variant:'h5' }}
-                                avatar={
-                                    <img src="/assets/logo_with_text.png" style={{width: "180px", height:"160px", marginBottom: "-5px"}} alt="Logo"/>
-                                }
-                                style={{backgroundColor: "#254563", color: 'white', height: "35px", textAlign: "right"}}>
-                            </CardHeader>
-                            <CardContent>
-                                    <div >
                                         <Grid container spacing={4} alignItems="flex-end">
                                             <Grid item>
                                                 <Face />
@@ -120,12 +127,11 @@ export class Login extends React.Component{
                                             <Button  color="primary" onClick={this.loginActionSubmit} style={{fontWeight: "bold", textTransform: "none", backgroundColor: "#B4A0B9", color: "white" }}>LOGIN</Button>
                                             <br/>
                                         </Grid>
-                                    </div>
-                            </CardContent>
-                        </Card>
                         </DialogContent>
                 </Dialog>
 
+                {this.state.errorOpen === true &&
+                <ErrorModal open={this.state.errorOpen} onClose={this.handleErrorClose} errorMessage={this.state.errorMessage}/>}
             </React.Fragment>
         )
     }

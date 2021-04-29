@@ -27,6 +27,7 @@ import moment from 'moment';
 import { Chart, CommonSeriesSettings, ValueAxis, Title, Export, Tooltip } from 'devextreme-react/chart';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import {ErrorModal} from "../ErrorHandling/ErrorModal";
 let _ = require('lodash');
 
 export class ModalComponent extends React.Component{
@@ -73,7 +74,11 @@ export class ModalComponent extends React.Component{
                     activeStep: 0
                 })
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
 
         surveyService.getLocationInfo((parseInt((this.props.surveyID))))
             .then((res) => {
@@ -97,7 +102,11 @@ export class ModalComponent extends React.Component{
                 }
                 this.setState({countryInfo: countriesGraphData})
             })
-            .catch((err)  => console.log(err));
+            .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
 
         surveyService.getSurveyResults((parseInt((this.props.surveyID))))
         .then((res) => {
@@ -131,9 +140,11 @@ export class ModalComponent extends React.Component{
             })
             console.log("COUNTS", dayGraph, weekGraph, monthGraph)
         })
-        .catch((err) => {
+        .catch(err => {
+            this.handleErrorOpen(err.response.data.error);
+            console.log(err.response.data.error);
             console.log(err);
-        })
+        });
 
         surveyService.getAnswerOptionsByID((parseInt((this.props.surveyID))))
         .then((res) => {
@@ -141,9 +152,11 @@ export class ModalComponent extends React.Component{
                 answerOptionsByName: res.data
             });
         })
-        .catch((err) =>{
+        .catch(err => {
+            this.handleErrorOpen(err.response.data.error);
+            console.log(err.response.data.error);
             console.log(err);
-        })
+        });
 
     }
 
@@ -190,7 +203,7 @@ export class ModalComponent extends React.Component{
 
     // Stepper for general Information about Survey
     getSteps = () => {
-        return["Survey Name", "Survey Frage", "Beschreibung" ]
+        return["Survey Name", "Survey Question", "Description" ]
     }
 
     getStepContent = (step) => {
@@ -202,7 +215,7 @@ export class ModalComponent extends React.Component{
             case 2:
                 return this.state.surveyDescription;
             default:
-                return "Unbekannter Schritt";
+                return "Unknown Step";
         }
 
     }
@@ -341,6 +354,16 @@ export class ModalComponent extends React.Component{
           };
     }
 
+    handleErrorOpen = (errorMessage) => {
+        this.setState({
+            errorMessage: errorMessage,
+            errorOpen: true
+        });
+    }
+
+    handleErrorClose =() => {
+        this.setState({errorOpen: false})
+    }
 
     render(){
         const steps = this.getSteps();
@@ -350,7 +373,7 @@ export class ModalComponent extends React.Component{
             textAlign: "center"
 
         }
-        const teilnehmerZahl = {
+        const participantCount = {
             textAlign: "center",
             fontWeight: "bold"
         }
@@ -365,6 +388,8 @@ export class ModalComponent extends React.Component{
             color: "white",
             display: "contents"
         }
+        
+        
 
         return(
             <React.Fragment>
@@ -387,7 +412,7 @@ export class ModalComponent extends React.Component{
                                 <Paper square={true} style={{height: "100%", backgroundColor: "#f3f3f3"}} elevation={3}>
                                     <Box display="flex" justifyContent="center" m={1} p={1} overflow="hidden">
                                         <Box pt={2}>
-                                            <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Ergebnis</Typography>
+                                            <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Result</Typography>
                                             <Box p={1}>
                                                 <PieChart
                                                     type="doughnut"
@@ -417,9 +442,9 @@ export class ModalComponent extends React.Component{
                                 <Paper square={true} style={{height: "100%", backgroundColor: "#f3f3f3"}} elevation={3}>
                                     <Box display="flex" justifyContent="center" m={1} p={1} overflow="hidden" >
                                         <Box pt={2}>
-                                            <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Teilnehmeranzahl</Typography>
+                                            <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Participant Count</Typography>
                                             <Box pt={16}>
-                                                <Typography color="primary" variant="h1" style={teilnehmerZahl}>{this.calculateParticipantCount()}</Typography>
+                                                <Typography color="primary" variant="h1" style={participantCount}>{this.calculateParticipantCount()}</Typography>
                                             </Box>
                                         </Box>
                                     </Box>
@@ -509,7 +534,7 @@ export class ModalComponent extends React.Component{
                                 <Paper style={{height: "100%", backgroundColor: "#f3f3f3"}} elevation={3}>
                                     <Box display="flex" justifyContent="center" m={1} p={1} overflow="hidden">
                                         <Box pt={2}>
-                                            <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Herkunft</Typography>
+                                            <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Location</Typography>
                                                 <Box p={1}>
                                                     {this.state.countryInfo.length !== 0 &&
                                                         <PieChart
@@ -549,6 +574,10 @@ export class ModalComponent extends React.Component{
                         </Grid>
                     </DialogContent>
                 </Dialog>
+
+
+                {this.state.errorOpen === true &&
+                <ErrorModal open={this.state.errorOpen} onClose={this.handleErrorClose} errorMessage={this.state.errorMessage}/>}
             </React.Fragment>
         )
     }

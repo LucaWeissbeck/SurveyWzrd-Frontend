@@ -1,19 +1,15 @@
 import React from 'react';
-import {Helmet} from "react-helmet";
 import {
     Button,
-    Card,
-    CardContent,
-    CardHeader,
-    Container, Dialog, DialogContent,
+    Dialog, DialogContent, DialogTitle,
     Grid,
     TextField,
 } from "@material-ui/core";
 import {Face, Fingerprint} from "@material-ui/icons";
 import {postRegister} from "../../services/user/register-service";
-import {Login} from "./Login";
 import {postLogin} from "../../services/user/login-service";
 import Cookies from "universal-cookie";
+import {ErrorModal} from "../Home/ErrorHandling/ErrorModal";
 
 export class Register extends React.Component {
     constructor(props) {
@@ -22,7 +18,8 @@ export class Register extends React.Component {
         this.state = {
             email: "",
             password: "",
-            cookies: new Cookies()
+            cookies: new Cookies(),
+            errorOpen: false,
         };
     }
 
@@ -53,9 +50,28 @@ export class Register extends React.Component {
                         this.state.cookies.set('authKey', res.data.authKey, {path: '/'});
                         window.location.replace("/overview");
                     })
-                    .catch(err => console.log(err));
+                    .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
+    }
+
+    handleErrorOpen = (errorMessage) => {
+        this.setState({
+            errorMessage: errorMessage,
+            errorOpen: true
+        });
+    }
+
+    handleErrorClose =() => {
+        this.setState({errorOpen: false})
     }
 
     render() {
@@ -65,23 +81,11 @@ export class Register extends React.Component {
                         onClose={this.props.onClose}
                         style={{marginTop: '15px'}}
                         fullWidth maxWidth="lg">
+                    <DialogTitle titleTypographyProps={{variant:'h5' }}
+                                 style={{backgroundColor: "#254563", color: 'white', height: "35px", textAlign: "left"}}>
+                        <img src="/assets/logo_with_text.png" style={{height:"45px", top: "-5px", position:"relative"}} alt="Logo"/>
+                    </DialogTitle>
                     <DialogContent>
-                        <Card>
-                            <CardHeader
-                                titleTypographyProps={{variant: 'h5'}}
-                                avatar={
-                                    <img src="/assets/logo_with_text.png"
-                                         style={{width: "180px", height: "160px", marginBottom: "-5px"}} alt="Logo"/>
-                                }
-                                style={{
-                                    backgroundColor: "#254563",
-                                    color: 'white',
-                                    height: "35px",
-                                    textAlign: "right"
-                                }}>
-                            </CardHeader>
-                            <CardContent>
-                                <div>
                                     <Grid container spacing={4} alignItems="flex-end">
                                         <Grid item>
                                             <Face/>
@@ -115,12 +119,11 @@ export class Register extends React.Component {
                                     <Grid container justify="center" style={{marginTop: '10px'}}>
                                         <p>100% free for personal use</p>
                                     </Grid>
-                                </div>
-                            </CardContent>
-                        </Card>
                     </DialogContent>
                 </Dialog>
 
+                {this.state.errorOpen === true &&
+                <ErrorModal open={this.state.errorOpen} onClose={this.handleErrorClose} errorMessage={this.state.errorMessage}/>}
             </React.Fragment>
         )
     }

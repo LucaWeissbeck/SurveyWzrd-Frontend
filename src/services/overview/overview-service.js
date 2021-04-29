@@ -13,6 +13,13 @@ export const getAllSurveys = () => {
     }})
 }
 
+export const getAllSurveysOwner = () => {
+    const url = base_url + '/api/survey/getAll';
+    return axios.get(url, {headers:{
+            "x-api-key": cookies.get("authKey")
+        }})
+}
+
 export const getSurveyAnswerCount = (id) => {
     const url = base_url + `/api/analysis/public/${id}`;
     return axios.get(url);

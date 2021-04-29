@@ -11,7 +11,7 @@ import {
     CardActions,
     Button,
     CardContent,
-    Typography, FormControl, Dialog, DialogContent, DialogContentText, DialogActions, Paper
+    Typography, FormControl, Dialog, DialogContent, DialogActions,
 } from "@material-ui/core";
 import ShareIcon from '@material-ui/icons/Share';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
@@ -29,6 +29,7 @@ import PieChart, {
 } from 'devextreme-react/pie-chart';
 import {postDeleteSurvey} from "../../../services/survey/deleteSurvey-service";
 import Cookies from "universal-cookie/es6";
+import {ErrorModal} from "../ErrorHandling/ErrorModal";
 
 export class Overview extends React.Component{
     constructor(props) {
@@ -52,17 +53,43 @@ export class Overview extends React.Component{
     }
 
     fillState = () =>{
-        surveyService.getAllSurveys()
-            .then((res) => {
-                this.setState({allSurveys: res.data})
-            })
-            .then(() =>{
-                for (let i=0; i < this.state.allSurveys.length; i++){
-                    this.getData(this.state.allSurveys[i].id)
-                }
-                this.forceUpdate()
-            })
-            .catch(err => console.log(err));
+        if (localStorage.getItem("isOwner") == "true"){
+            surveyService.getAllSurveysOwner()
+                .then((res) => {
+                    this.setState({allSurveys: res.data})
+                })
+                .then(() =>{
+                    for (let i=0; i < this.state.allSurveys.length; i++){
+                        this.getData(this.state.allSurveys[i].id)
+                    }
+                    this.forceUpdate()
+                })
+                /*
+                .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
+                 */
+        }
+        else {
+            surveyService.getAllSurveys()
+                .then((res) => {
+                    this.setState({allSurveys: res.data})
+                })
+                .then(() =>{
+                    for (let i=0; i < this.state.allSurveys.length; i++){
+                        this.getData(this.state.allSurveys[i].id)
+                    }
+                    this.forceUpdate()
+                })
+                .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
+        }
+
     }
 
     getData = (id) => {
@@ -85,7 +112,11 @@ export class Overview extends React.Component{
                      data: [...prevState.data, dataArray]
                  }));
              })
-             .catch(err => console.log(err));
+             .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
 
      }
 
@@ -120,11 +151,26 @@ export class Overview extends React.Component{
              .then((res) => {
                  window.location.reload();
              })
-             .catch(err => console.log(err));
+             .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
      }
 
     createIFrame = (surveyID) => {
         return (this.iFrame = "<iframe src=\"http://api.tutorialfactory.org:8088/survey?id="+ surveyID +  "\"></iframe>")
+    }
+
+    handleErrorOpen = (errorMessage) => {
+        this.setState({
+            errorMessage: errorMessage,
+            errorOpen: true
+        });
+    }
+
+    handleErrorClose =() => {
+        this.setState({errorOpen: false})
     }
 
     render(){
@@ -135,10 +181,17 @@ export class Overview extends React.Component{
         return(
 
             <React.Fragment>
+                <div style={{
+                    backgroundImage: `url(${process.env.PUBLIC_URL
+                    + "/assets/background.png"})`,
+                    backgroundPosition: 'center',
+                    backgroundSize: 'cover',
+                    backgroundRepeat: 'repeat',
+                    height: '100vh',
+                    width: '100vw'
+                }} >
                 <Header header={0}/>
-                <Helmet>
-                    <style>{'body { background-color: #d4d7dd; }'}</style>
-                </Helmet>
+
                 <Container>
                     <Grid container spacing={6} style={{marginTop: "10px"}}>
                         {this.state.allSurveys.map((survey) => (
@@ -173,9 +226,9 @@ export class Overview extends React.Component{
                                             </Typography>
                                         </CardContent>
                                         <CardActions>
-                                            <Button color="primary" onClick={this.handleModalOpen} id={survey.id}>Auswerten</Button>
-                                            <Button color="primary">Bearbeiten</Button>
-                                            <Button color="primary">Vorschau</Button>
+                                            <Button color="primary" onClick={this.handleModalOpen} id={survey.id}>Evaluate</Button>
+                                            <Button color="primary">Edit</Button>
+                                            <Button color="primary">Preview</Button>
                                             <IconButton onClick={(evt) => this.deleteSurvey(survey.id, evt)}>
                                                 <DeleteOutlineIcon/>
                                             </IconButton>
@@ -196,15 +249,19 @@ export class Overview extends React.Component{
                     <DialogActions>
                         <CopyToClipboard text={this.iFrame}
                                          onCopy={this.handleClose} >
-                            <Button color="primary">Copy</Button>
+                            <Button color="primary" style={{fontWeight: "bold", textTransform: "none", backgroundColor: "#B4A0B9", color: "white" }}>COPY</Button>
                         </CopyToClipboard>
-                        <Button onClick={this.handleClose} color="primary">Close</Button>
+                        <Button onClick={this.handleClose} color="primary" style={{fontWeight: "bold", textTransform: "none", backgroundColor: "#B4A0B9", color: "white" }}>CLOSE</Button>
                     </DialogActions>
                 </Dialog>
 
                 {/*Full Windows with Detailed analysis*/}
                 {this.state.modalOpen === true &&
                 <ModalComponent open={this.state.modalOpen} onClose={this.handleModalClose} surveyID={this.state.modalButtonID} data={this.state.data}/>}
+
+                {this.state.errorOpen === true &&
+                <ErrorModal open={this.state.errorOpen} onClose={this.handleErrorClose} errorMessage={this.state.errorMessage}/>}
+                </div>
             </React.Fragment>
         )
     }
