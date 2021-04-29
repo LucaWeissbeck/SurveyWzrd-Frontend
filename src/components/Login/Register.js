@@ -1,17 +1,12 @@
 import React from 'react';
-import {Helmet} from "react-helmet";
 import {
     Button,
-    Card,
-    CardContent,
-    CardHeader,
-    Container, Dialog, DialogContent, DialogTitle,
+    Dialog, DialogContent, DialogTitle,
     Grid,
     TextField,
 } from "@material-ui/core";
 import {Face, Fingerprint} from "@material-ui/icons";
 import {postRegister} from "../../services/user/register-service";
-import {Login} from "./Login";
 import {postLogin} from "../../services/user/login-service";
 import Cookies from "universal-cookie";
 import {ErrorModal} from "../Home/ErrorHandling/ErrorModal";

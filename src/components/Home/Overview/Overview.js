@@ -11,7 +11,7 @@ import {
     CardActions,
     Button,
     CardContent,
-    Typography, FormControl, Dialog, DialogContent, DialogContentText, DialogActions, Paper
+    Typography, FormControl, Dialog, DialogContent, DialogActions,
 } from "@material-ui/core";
 import ShareIcon from '@material-ui/icons/Share';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
@@ -184,7 +184,7 @@ export class Overview extends React.Component{
                     + "/assets/background.png"})`,
                     backgroundPosition: 'center',
                     backgroundSize: 'cover',
-                    backgroundRepeat: 'no-repeat',
+                    backgroundRepeat: 'repeat',
                     height: '100vh',
                     width: '100vw'
                 }} >

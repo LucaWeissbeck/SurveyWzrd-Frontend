@@ -1,14 +1,8 @@
 import React from 'react';
-import {Helmet} from "react-helmet";
 import {
-    AppBar,
-    Button,
-    Card,
-    CardContent,
-    CardHeader,
-    Checkbox,
-    Container, Dialog, DialogContent, DialogTitle, FormControlLabel,
-    Grid, Slide, Snackbar,
+    Button, Checkbox,
+    Dialog, DialogContent, DialogTitle, FormControlLabel,
+    Grid,
     TextField,
 } from "@material-ui/core";
 import {Face, Fingerprint} from "@material-ui/icons";

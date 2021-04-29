@@ -1,6 +1,6 @@
 import React from 'react';
 import 'date-fns';
-import {Container, Card, CardActions, CardContent, Grid, Box, Button, Paper, Tooltip, Input, FormControlLabel, Switch, TextField} from "@material-ui/core";
+import {Container, Card, CardActions, CardContent, Grid, Box, Button, Tooltip, Input, FormControlLabel, Switch, TextField} from "@material-ui/core";
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox';
 import Header from "../Header/Header";
@@ -190,7 +190,6 @@ export class CreateSurvey extends React.Component{
                                            InputProps={{ disableUnderline: true }}
                                            multiline
                                            rows={3}
-                                           multiline
                                            fullWidth
                                            variant="filled"
                                            onChange={this.descriptionOnChange}
