@@ -46,8 +46,6 @@ export default function Header(props) {
                 return history.push('/');
             })
             .catch(err => {
-                this.handleErrorOpen(err.response.data.error);
-                console.log(err.response.data.error);
                 console.log(err);
             });
 
