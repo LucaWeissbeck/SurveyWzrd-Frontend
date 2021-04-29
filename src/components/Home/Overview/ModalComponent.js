@@ -181,7 +181,7 @@ export class ModalComponent extends React.Component{
 
     // Stepper for general Information about Survey
     getSteps = () => {
-        return["Survey Name", "Survey Frage", "Beschreibung" ]
+        return["Survey Name", "Survey Question", "Description" ]
     }
 
     getStepContent = (step) => {
@@ -193,7 +193,7 @@ export class ModalComponent extends React.Component{
             case 2:
                 return this.state.surveyDescription;
             default:
-                return "Unbekannter Schritt";
+                return "Unknown Step";
         }
 
     }
@@ -328,7 +328,7 @@ export class ModalComponent extends React.Component{
             textAlign: "center"
 
         }
-        const teilnehmerZahl = {
+        const participantCount = {
             textAlign: "center",
             fontWeight: "bold"
         }
@@ -366,7 +366,7 @@ export class ModalComponent extends React.Component{
                                 <Paper square={true} style={{height: "100%", backgroundColor: "#f3f3f3"}} elevation={3}>
                                     <Box display="flex" justifyContent="center" m={1} p={1} overflow="hidden">
                                         <Box pt={2}>
-                                            <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Ergebnis</Typography>
+                                            <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Result</Typography>
                                             <Box p={1}>
                                                 <PieChart
                                                     type="doughnut"
@@ -396,9 +396,9 @@ export class ModalComponent extends React.Component{
                                 <Paper square={true} style={{height: "100%", backgroundColor: "#f3f3f3"}} elevation={3}>
                                     <Box display="flex" justifyContent="center" m={1} p={1} overflow="hidden" >
                                         <Box pt={2}>
-                                            <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Teilnehmeranzahl</Typography>
+                                            <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Participant Count</Typography>
                                             <Box pt={16}>
-                                                <Typography color="primary" variant="h1" style={teilnehmerZahl}>{this.calculateParticipantCount()}</Typography>
+                                                <Typography color="primary" variant="h1" style={participantCount}>{this.calculateParticipantCount()}</Typography>
                                             </Box>
                                         </Box>
                                     </Box>
@@ -449,7 +449,7 @@ export class ModalComponent extends React.Component{
                                 <Paper style={{height: "100%", backgroundColor: "#f3f3f3"}} elevation={3}>
                                     <Box display="flex" justifyContent="center" m={1} p={1} overflow="hidden">
                                         <Box pt={2}>
-                                            <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Herkunft</Typography>
+                                            <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Location</Typography>
                                                 <Box p={1}>
                                                     {this.state.countryInfo.length !== 0 &&
                                                         <PieChart

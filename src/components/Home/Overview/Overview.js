@@ -64,11 +64,13 @@ export class Overview extends React.Component{
                     }
                     this.forceUpdate()
                 })
+                /*
                 .catch(err => {
                 this.handleErrorOpen(err.response.data.error);
                 console.log(err.response.data.error);
                 console.log(err);
             });
+                 */
         }
         else {
             surveyService.getAllSurveys()
