@@ -179,10 +179,17 @@ export class Overview extends React.Component{
         return(
 
             <React.Fragment>
+                <div style={{
+                    backgroundImage: `url(${process.env.PUBLIC_URL
+                    + "/assets/background.png"})`,
+                    backgroundPosition: 'center',
+                    backgroundSize: 'cover',
+                    backgroundRepeat: 'no-repeat',
+                    height: '100vh',
+                    width: '100vw'
+                }} >
                 <Header header={0}/>
-                <Helmet>
-                    <style>{'body { background-color: #d4d7dd; }'}</style>
-                </Helmet>
+
                 <Container>
                     <Grid container spacing={6} style={{marginTop: "10px"}}>
                         {this.state.allSurveys.map((survey) => (
@@ -252,6 +259,7 @@ export class Overview extends React.Component{
 
                 {this.state.errorOpen === true &&
                 <ErrorModal open={this.state.errorOpen} onClose={this.handleErrorClose} errorMessage={this.state.errorMessage}/>}
+                </div>
             </React.Fragment>
         )
     }
