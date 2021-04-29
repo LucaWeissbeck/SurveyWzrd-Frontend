@@ -29,6 +29,7 @@ import { Chart, CommonSeriesSettings, ValueAxis, Title, Export, Tooltip } from '
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import {ErrorModal} from "../ErrorHandling/ErrorModal";
+import {ZoomGraphComponent} from "./ZoomGraph/ZoomGraphComponent"
 let _ = require('lodash');
 
 export class ModalComponent extends React.Component{
@@ -65,6 +66,7 @@ export class ModalComponent extends React.Component{
         //API Calls
         surveyService.getSurveysByID((parseInt(this.props.surveyID)))
             .then((res) => {
+                console.log("Important call", res.data)
                 this.setState({
                     complete: res.data,
                     surveyCompanyName: res.data.companyName,
@@ -124,6 +126,7 @@ export class ModalComponent extends React.Component{
             let days = this.groupByTime(data, "day");
             console.log("Grouped by Day", days);
 
+
             this.setState({
                 monthData: months,
                 weekData: weeks,
@@ -134,6 +137,10 @@ export class ModalComponent extends React.Component{
             let dayGraph = this.createGraphData(this.state.dayData);
             let weekGraph = this.createGraphData(this.state.weekData);
             let monthGraph = this.createGraphData(this.state.monthData);
+            dayGraph = this.clearDate(dayGraph);
+            weekGraph = this.clearDate(weekGraph);
+            monthGraph = this.clearDate(monthGraph);
+            console.log("NEW day graph", dayGraph);
             this.setState({
                 dayGraphData: dayGraph,
                 weekGraphData: weekGraph,
@@ -158,9 +165,14 @@ export class ModalComponent extends React.Component{
             console.log(err.response.data.error);
             console.log(err);
         });
-
     }
 
+    clearDate = (graph) =>{
+        for(let i=0; i<graph.length; i++){
+            graph[i].date = (graph[i].date).substring(0, graph[i].date.length - 17);
+        }
+        return graph; 
+    }
 
     replaceAnswerID = (data) =>{
         let new_array = data.map((entry) => {
@@ -241,10 +253,22 @@ export class ModalComponent extends React.Component{
         })
     }
 
-    menuChange = (event) =>{
+    menuChange = (event) => {
         this.setState({
             viewOption: event.target.value
-        })
+        });
+    }
+
+    handleDetailedGraphClose = () => {
+        this.setState({
+            detailedSurvey: false
+        });
+    }
+
+    handleZoomOpen = () => {
+        this.setState({
+            detailedSurvey: true
+        });
     }
 
     //Helper Functions Country Graph
@@ -491,7 +515,7 @@ export class ModalComponent extends React.Component{
                                 <Box pt={2}>
                                     <div style={{textAlign: "center", position: "relative"}}>
                                         <Typography color="primary" variant="h4" style={{fontWeight: "bold", textAlign: "center", display: "inline"}}>Information</Typography>
-                                        <IconButton style={{position: "absolute", right: "105px", top: "-5px"}}>
+                                        <IconButton style={{position: "absolute", right: "105px", top: "-5px"}} onClick={this.handleZoomOpen}>
                                             <ZoomInIcon color="primary" style={{fontSize: "30px"}}></ZoomInIcon>
                                         </IconButton>
                                         <Select defaultValue="month" onChange={this.menuChange} variant="outlined" style={{position: "absolute", right: "10px", top: "-7px"}}>
@@ -505,6 +529,7 @@ export class ModalComponent extends React.Component{
                                             <Chart
                                                 id="chart"
                                                 dataSource={this.getGraphData()}
+                                                palette="Bright"
                                             >
                                                 {console.log("Dertmined Data Source", this.state.dayGraphData)}
                                                 <CommonSeriesSettings argumentField="date" type="stackedBar"/>
@@ -515,7 +540,7 @@ export class ModalComponent extends React.Component{
                                                 })}
                                                 <ValueAxis position="left"></ValueAxis>
                                                 <Legend
-                                                    visible={this.state.detailedSurvey}
+                                                    visible={false}
                                                     orientation="horizontal"
                                                     horizontalAlignment="center" 
                                                     verticalAlignment="bottom"
@@ -582,6 +607,17 @@ export class ModalComponent extends React.Component{
 
                 {this.state.errorOpen === true &&
                 <ErrorModal open={this.state.errorOpen} onClose={this.handleErrorClose} errorMessage={this.state.errorMessage}/>}
+
+                {this.state.detailedSurvey === true &&
+                <ZoomGraphComponent
+                    monthData={this.state.monthGraphData}
+                    weekData={this.state.weekGraphData}
+                    dayData={this.state.dayGraphData}
+                    open={this.state.detailedSurvey}
+                    onClose={this.handleDetailedGraphClose}
+                    answerOptionsByName={this.state.answerOptionsByName}
+                    ></ZoomGraphComponent>
+                }
             </React.Fragment>
         )
     }
