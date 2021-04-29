@@ -96,7 +96,11 @@ export class ModalComponent extends React.Component{
                 }
                 this.setState({countryInfo: countriesGraphData})
             })
-            .catch((err)  => console.log(err));
+            .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
 
         surveyService.getSurveyResults((parseInt((this.props.surveyID))))
         .then((res) => {
@@ -122,9 +126,11 @@ export class ModalComponent extends React.Component{
         .then(() => {
             console.log("Count for Days", this.createGraphData(this.state.dayData))
         })
-        .catch((err) => {
+        .catch(err => {
+            this.handleErrorOpen(err.response.data.error);
+            console.log(err.response.data.error);
             console.log(err);
-        })
+        });
 
         surveyService.getAnswerOptionsByID((parseInt((this.props.surveyID))))
         .then((res) => {
@@ -132,9 +138,11 @@ export class ModalComponent extends React.Component{
                 answerOptionsByName: res.data
             });
         })
-        .catch((err) =>{
+        .catch(err => {
+            this.handleErrorOpen(err.response.data.error);
+            console.log(err.response.data.error);
             console.log(err);
-        })
+        });
 
     }
 
