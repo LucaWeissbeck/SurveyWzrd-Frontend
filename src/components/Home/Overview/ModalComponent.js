@@ -8,7 +8,7 @@ import {
     Divider,
     Grid,
     Paper, Step, StepButton, StepContent, Stepper,
-    Typography
+    Typography, IconButton
 } from "@material-ui/core";
 import PieChart, {
     Legend,
@@ -17,6 +17,7 @@ import PieChart, {
     Connector, Size
 } from 'devextreme-react/pie-chart';
 import CheckIcon from '@material-ui/icons/Check';
+import ZoomInIcon from '@material-ui/icons/ZoomIn';
 import ClearIcon from '@material-ui/icons/Clear';
 import * as surveyService from "../../../services/overview/overview-service"
 import LiveHelpIcon from '@material-ui/icons/LiveHelp';
@@ -490,6 +491,9 @@ export class ModalComponent extends React.Component{
                                 <Box pt={2}>
                                     <div style={{textAlign: "center", position: "relative"}}>
                                         <Typography color="primary" variant="h4" style={{fontWeight: "bold", textAlign: "center", display: "inline"}}>Information</Typography>
+                                        <IconButton style={{position: "absolute", right: "105px", top: "-5px"}}>
+                                            <ZoomInIcon color="primary" style={{fontSize: "30px"}}></ZoomInIcon>
+                                        </IconButton>
                                         <Select defaultValue="month" onChange={this.menuChange} variant="outlined" style={{position: "absolute", right: "10px", top: "-7px"}}>
                                             <MenuItem value="day">Day</MenuItem>
                                             <MenuItem value="week">Week</MenuItem>
@@ -497,7 +501,7 @@ export class ModalComponent extends React.Component{
                                         </Select>
 
                                     </div>
-                                        <div style={{padding: "10px", display: "flex", flexDirection: "column", justifyContent: "center", alignContent: "center", height: "100%", width: "100%", padding: "10px 0 10px 10px", overflow: "hidden"}}>
+                                        <div style={{padding: "10px", display: "flex", flexDirection: "column", justifyContent: "center", alignContent: "center", height: "100%", width: "100%", padding: "20px 0 20px 20px", overflow: "hidden"}}>
                                             <Chart
                                                 id="chart"
                                                 dataSource={this.getGraphData()}

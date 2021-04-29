@@ -187,7 +187,6 @@ export class Overview extends React.Component{
                     backgroundPosition: 'center',
                     backgroundSize: 'cover',
                     backgroundRepeat: 'repeat'
-                    
                 }} >
                 <Header header={0}/>
 
