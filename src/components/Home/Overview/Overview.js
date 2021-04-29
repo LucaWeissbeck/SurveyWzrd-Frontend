@@ -217,9 +217,9 @@ export class Overview extends React.Component{
                                             </Typography>
                                         </CardContent>
                                         <CardActions>
-                                            <Button color="primary" onClick={this.handleModalOpen} id={survey.id}>Auswerten</Button>
-                                            <Button color="primary">Bearbeiten</Button>
-                                            <Button color="primary">Vorschau</Button>
+                                            <Button color="primary" onClick={this.handleModalOpen} id={survey.id}>Evaluate</Button>
+                                            <Button color="primary">Edit</Button>
+                                            <Button color="primary">Preview</Button>
                                             <IconButton onClick={(evt) => this.deleteSurvey(survey.id, evt)}>
                                                 <DeleteOutlineIcon/>
                                             </IconButton>
@@ -240,9 +240,9 @@ export class Overview extends React.Component{
                     <DialogActions>
                         <CopyToClipboard text={this.iFrame}
                                          onCopy={this.handleClose} >
-                            <Button color="primary">Copy</Button>
+                            <Button color="primary" style={{fontWeight: "bold", textTransform: "none", backgroundColor: "#B4A0B9", color: "white" }}>COPY</Button>
                         </CopyToClipboard>
-                        <Button onClick={this.handleClose} color="primary">Close</Button>
+                        <Button onClick={this.handleClose} color="primary" style={{fontWeight: "bold", textTransform: "none", backgroundColor: "#B4A0B9", color: "white" }}>CLOSE</Button>
                     </DialogActions>
                 </Dialog>
 
