@@ -244,7 +244,7 @@ export class AnalyticsEmbeddedBare extends React.Component {
                 const valueName = answerOptions[i];
                 //Counting occurences of Values in Object
                 const count = timespanArray[date].filter((obj) => obj.valueName === valueName).length;
-                occurrencesInObject.push(count)
+                occurrencesInObject.push(count);
             }
             //Object for final use
             let tempObj = {};

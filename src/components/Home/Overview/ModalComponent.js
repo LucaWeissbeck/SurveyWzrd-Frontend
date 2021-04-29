@@ -24,6 +24,9 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import SubjectIcon from '@material-ui/icons/Subject';
 import {countryMapping} from "./countries";
 import moment from 'moment';
+import { Chart, CommonSeriesSettings, ValueAxis, Title, Export, Tooltip } from 'devextreme-react/chart';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 let _ = require('lodash');
 
 export class ModalComponent extends React.Component{
@@ -44,8 +47,11 @@ export class ModalComponent extends React.Component{
             weekData: [],
             dayData: [],
             answerOptionsByName: [],
-            viewOption: "week",
-            graphData: []
+            viewOption: "month",
+            dayGraphData: [],
+            weekGraphData: [],
+            monthGraphData: [],
+            detailedSurvey: false,
         };
     }
     componentDidMount() {
@@ -111,11 +117,19 @@ export class ModalComponent extends React.Component{
             this.setState({
                 monthData: months,
                 weekData: weeks,
-                dayData: data
+                dayData: days
             });
         })
         .then(() => {
-            console.log("Count for Days", this.createGraphData(this.state.dayData))
+            let dayGraph = this.createGraphData(this.state.dayData);
+            let weekGraph = this.createGraphData(this.state.weekData);
+            let monthGraph = this.createGraphData(this.state.monthData);
+            this.setState({
+                dayGraphData: dayGraph,
+                weekGraphData: weekGraph,
+                monthGraphData: monthGraph
+            })
+            console.log("COUNTS", dayGraph, weekGraph, monthGraph)
         })
         .catch((err) => {
             console.log(err);
@@ -213,6 +227,12 @@ export class ModalComponent extends React.Component{
         })
     }
 
+    menuChange = (event) =>{
+        this.setState({
+            viewOption: event.target.value
+        })
+    }
+
     //Helper Functions Country Graph
     getImagePath = (country) => {
         let countryCode = Object.keys(countryMapping).find(key => countryMapping[key] === country);
@@ -259,52 +279,68 @@ export class ModalComponent extends React.Component{
     }
 
     getGraphData = () =>{
-        let answerOptions = this.state.answerOptionsByName;
-        let arrayOfObjects = [];
         switch(this.state.viewOption){
             case "month":
-                let timespanArray = this.state.monthData;
-                arrayOfObjects = this.convertGraphData(answerOptions, timespanArray);
-                this.setState({
-                    graphData: arrayOfObjects
-                })
+                return this.state.monthGraphData;
             case "week":
-                let timespanArray2 = this.state.weekData;
-                arrayOfObjects = this.convertGraphData(answerOptions, timespanArray2);
-                this.setState({
-                    graphData: arrayOfObjects
-                })
+                return this.state.weekGraphData;
             case "day":
-                let timespanArray3 = this.state.dayData;
-                arrayOfObjects = this.convertGraphData(answerOptions, timespanArray3);
-                this.setState({
-                    graphData: arrayOfObjects
-                })
+                return this.state.dayGraphData;
             default:
-                return arrayOfObjects;
+                return [];
     
         }
     }
 
-    createGraphData = (unpreparedData) => {
-        let countArray = []
-        let countObject = {};
-        for (let i = 0; i < unpreparedData.length; i++){
-            console.log("unprepared Data Items", unpreparedData[i]);
-            if(!unpreparedData[i].timestamp in countObject){
-                console.log("Datapoint.timestamp not in object", unpreparedData[i].timestamp)
-                let timestamp = unpreparedData[i].timestamp;
-                countObject["date"] = timestamp;
-                countObject["count"] = 1;
+    createGraphData = (rawUnpreparedData) => {
+        let graphData = [];
+        console.log("Raw unprepared data", rawUnpreparedData);
+        for (const [key, value] of Object.entries(rawUnpreparedData)){
+            let graphEntry = {}
+            graphEntry["date"] = key;
+            
+
+            let tempResult = {};
+            for (let {valueName} of value){
+                tempResult[valueName] = {
+                    valueName,
+                    count: tempResult[valueName] ? tempResult[valueName].count + 1 : 1
+                }
             }
-            else{
-                countObject["count"] = countObject["count"] + 1;
+            let result = Object.values(tempResult);
+            console.log("result", result);
+
+            for(let i = 0; i < result.length; i++){
+                graphEntry[result[i].valueName] = result[i].count;
             }
-            countArray.push(countObject);
+            graphData.push(graphEntry);
+            console.log(graphData);
+            
         }
-        return countArray;
+        return graphData
     }
     
+    determineGraphDataSource = () => {
+        if(this.state.viewOption === "day"){
+            return this.state.dayGraphData;
+        }
+        else if(this.state.viewOption === "week"){
+            return this.state.weekGraphData;
+        }
+        else if(this.state.viewOption === "month"){
+            return this.state.monthGraphData;
+        }
+        else{
+            return [];
+        }
+    }
+
+    customizeTooltip = (arg) => {
+        return {
+            text: `${arg.seriesName}: ${arg.valueText}`
+          };
+    }
+
 
     render(){
         const steps = this.getSteps();
@@ -332,6 +368,7 @@ export class ModalComponent extends React.Component{
 
         return(
             <React.Fragment>
+                {console.log("current Target", this.state.anchorEl)}
                 <Dialog
                     style={{backgroundColor: "transparent", boxShadow:"none"}}
                     fullWidth={true}
@@ -424,8 +461,47 @@ export class ModalComponent extends React.Component{
                             </Grid>
                             {/*Ergebnis im Lauf der Zeit*/}
                             <Grid item xs={8}>
-                                <Paper>
-                                    <p>Detailed Graph goes here</p>
+                                <Paper square={true} style={{height: "100%", backgroundColor: "#f3f3f3"}} elevation={3}>
+                                <Box pt={2}>
+                                    <div style={{textAlign: "center", position: "relative"}}>
+                                        <Typography color="primary" variant="h4" style={{fontWeight: "bold", textAlign: "center", display: "inline"}}>Information</Typography>
+                                        <Select defaultValue="month" onChange={this.menuChange} variant="outlined" style={{position: "absolute", right: "10px", top: "-7px"}}>
+                                            <MenuItem value="day">Day</MenuItem>
+                                            <MenuItem value="week">Week</MenuItem>
+                                            <MenuItem value="month">Month</MenuItem>
+                                        </Select>
+
+                                    </div>
+                                        <div style={{padding: "10px", display: "flex", flexDirection: "column", justifyContent: "center", alignContent: "center", height: "100%", width: "100%", padding: "10px 0 10px 10px", overflow: "hidden"}}>
+                                            <Chart
+                                                id="chart"
+                                                dataSource={this.getGraphData()}
+                                            >
+                                                {console.log("Dertmined Data Source", this.state.dayGraphData)}
+                                                <CommonSeriesSettings argumentField="date" type="stackedBar"/>
+                                                {this.state.answerOptionsByName.map((answer) => {
+                                                    return(
+                                                        <Series valueField={answer.value} name={answer.value}/>
+                                                    )
+                                                })}
+                                                <ValueAxis position="left"></ValueAxis>
+                                                <Legend
+                                                    visible={this.state.detailedSurvey}
+                                                    orientation="horizontal"
+                                                    horizontalAlignment="center" 
+                                                    verticalAlignment="bottom"
+                                                    posiition="outside">
+                                                </Legend>
+                                                <Tooltip
+                                                    enabled={true}
+                                                    customizeTooltip={this.customizeTooltip}
+                                                    zIndex={10000}
+                                                    />
+                                                <Size width={700}/>
+                                            
+                                            </Chart>
+                                        </div>
+                                    </Box>
                                 </Paper>
                             </Grid>
                             {/*Herkunftsländer*/}
