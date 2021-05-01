@@ -197,10 +197,10 @@ export class Overview extends React.Component{
                                 <FormControl fullWidth={true}>
                                     <Card raised={true} style={{height: "100%", display: "flex", flexDirection:"column", flexShrink: 0}} id={survey.id}>
                                         <CardHeader title={survey.name}
-                                                    action={<IconButton>
+                                                    action={<IconButton  onClick={(evt) => this.handleOpen(survey.id, evt)}>
                                                                 <ShareIcon />
                                                             </IconButton>}
-                                                    onClick={(evt) => this.handleOpen(survey.id, evt)}/>
+                                                   />
                                         <CardMedia>
                                             <PieChart
                                                 dataSource={this.displayData(survey.id)}
