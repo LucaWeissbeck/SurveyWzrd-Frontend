@@ -12,68 +12,20 @@ import {
     FormControlLabel,
     Switch
 } from "@material-ui/core";
-import {
-    Chart,
-    ArgumentAxis,
-    ValueAxis,
-    BarSeries,
-    Title,
+import { Chart, CommonSeriesSettings, ValueAxis, Title, Export, Tooltip } from 'devextreme-react/chart';
+import PieChart, {
     Legend,
-    Tooltip
-} from '@devexpress/dx-react-chart-material-ui';
+    Series,
+    Connector, Size
+} from 'devextreme-react/pie-chart';
 import { withStyles } from '@material-ui/core/styles';
-import { Plugin } from "@devexpress/dx-react-core";
-import {Stack, Animation, EventTracker, HoverState} from '@devexpress/dx-react-chart';
 import * as surveyService from "../../../services/survey/embeddedSurvey-service";
 import moment from 'moment';
-import * as url from "url";
 import { withRouter } from "react-router";
 import PropTypes from "prop-types";
 import {ErrorModal} from "../../Home/ErrorHandling/ErrorModal";
 let _ = require('lodash');
 
-
-//from DevExpress Demo
-const legendStyles = () => ({
-    root: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: "flex-start",
-        flexWrap: "wrap"
-    },
-});
-
-const legendRootBase = ({ classes, ...restProps }) => (
-    <Legend.Root {...restProps} className={classes.root} />
-);
-
-const Root = withStyles(legendStyles, { name: 'LegendRoot' })(legendRootBase);
-
-const legendLabelStyles = () => ({
-    label: {
-        whiteSpace: 'nowrap',
-    },
-});
-
-const legendLabelBase = ({ classes, ...restProps }) => (
-    <Legend.Label className={classes.label} {...restProps} />
-);
-
-const Label = withStyles(legendLabelStyles, { name: 'LegendLabel' })(legendLabelBase);
-
-const tooltipContentTitleStyle = {
-    fontWeight: 'bold',
-    paddingBottom: 0,
-    textAlign: "center",
-};
-
-const tooltipContentBodyStyle = {
-    paddingTop: 0,
-};
-
-
-
-// MAIN
 export class AnalyticsEmbeddedBare extends React.Component {
 
     static propTypes = {
@@ -93,16 +45,6 @@ export class AnalyticsEmbeddedBare extends React.Component {
             //Graph
             currentTooltip: '',
             data: [],
-                /*{month: 'Jan', Strawberry: 10, Chocolate: 20, Vanilla: 15},
-                {month: 'Feb', Strawberry: 20, Chocolate: 10, Vanilla: 5},
-                {month: 'Mar', Strawberry: 4, Chocolate: 18, Vanilla: 46},
-                {month: 'Apr', Strawberry: 10, Chocolate: 20, Vanilla: 15},
-                {month: 'Jun', Strawberry: 10, Chocolate: 62, Vanilla: 15},
-                {month: 'Jul', Strawberry: 51, Chocolate: 20, Vanilla: 15},
-                {month: 'Sep', Strawberry: 5, Chocolate: 53, Vanilla: 35},
-                {month: 'Oct', Strawberry: 67, Chocolate: 20, Vanilla: 15},
-                {month: 'Nov', Strawberry: 42,Chocolate: 34, Vanilla: 1},
-                {month: 'Dec', Strawberry: 91, Chocolate: 87, Vanilla: 34}*/
             urlSurveyID: urlSurveyID,
             //API Survey General
             surveyCompanyName: "",
@@ -119,9 +61,6 @@ export class AnalyticsEmbeddedBare extends React.Component {
         };
     }
 
-    fixGraph = () =>{
-        this.forceUpdate();
-    }
 
     // API Calls in CDM
     async componentDidMount() {
@@ -178,13 +117,8 @@ export class AnalyticsEmbeddedBare extends React.Component {
             });
     }
 
-    //Handling Component Change
-    handleTooltipChange = (target) =>{
-        try{
-            let portionQuantity = ((this.state.data[target.point])[target.series]).toString()
-            this.setState({currentTooltip: (target.series + " " + portionQuantity)})
-        } catch(error){}
-    }
+
+
     onTimeSwitch = () => {
         let toBeMonthlyView = !this.state.monthlyView;
         this.setState({
@@ -197,25 +131,6 @@ export class AnalyticsEmbeddedBare extends React.Component {
     //Get HTML
     getContentComponent = () => {
         return this.state.currentTooltip;
-    }
-
-    getBarsGraph = () => {
-        let colours = [ "#c4b1c9", "#f7e3fc", "#8aaccc","#e6bb56", "#264664", "#839fc2"];
-        return(
-            <Plugin name="Bars">
-                {this.state.answerOptions.map(answer => (
-                    <div>
-                        <BarSeries
-                            name = {answer.value}
-                            valueField = {answer.value}
-                            argumentField = {this.state.monthlyView ? "month" : "week"}
-                            color = {colours.pop()}
-                            barWidth = "0.4"
-                        />
-                    </div>
-                ))}
-            </Plugin>
-        );
     }
 
 
@@ -287,28 +202,11 @@ export class AnalyticsEmbeddedBare extends React.Component {
         this.forceUpdate();
     }
 
-    TooltipContent = (props) => {
-        let timespan = this.state.monthlyView ? "month" : "week";
-        const { targetItem, text, ...restProps } = props;
-        return (
-            <div>
-                <div>
-                    <Tooltip.Content
-                        {...restProps}
-                        style={tooltipContentTitleStyle}
-                        text={(this.state.data[targetItem.point][timespan])}
-                    />
-                </div>
-                <div>
-                    <Tooltip.Content
-                        {...restProps}
-                        style={tooltipContentBodyStyle}
-                        text={targetItem.series + " " + this.state.data[targetItem.point][targetItem.series]}
-                    />
-                </div>
-            </div>
-        );
-    };
+    customizeTooltip = (arg) => {
+        return {
+            text: `${arg.seriesName}: ${arg.valueText}`
+        };
+    }
 
     handleErrorOpen = (errorMessage) => {
         this.setState({
@@ -325,6 +223,7 @@ export class AnalyticsEmbeddedBare extends React.Component {
         const {data: chartData} = this.state;
         return(
             <React.Fragment>
+                {console.log(chartData)}
                 <Container>
                     <Container maxWidth="lg" style={{marginTop: '15px' }}>
                         <Card>
@@ -342,7 +241,7 @@ export class AnalyticsEmbeddedBare extends React.Component {
                                 <CardActions>
                                     <FormControl fullWidth={true}>
                                         <Typography variant="h5" component="h2" style={{fontWeight: "bold"}}>
-                                            Survey Results
+                                            {this.state.surveyQuestion}
                                         </Typography>
                                         <Typography style={{marginBottom: 12}} color="textSecondary">
                                             See what other people voted!
@@ -356,26 +255,37 @@ export class AnalyticsEmbeddedBare extends React.Component {
                                                 labelPlacement="end"
                                             />
                                         </div>
-                                        <Paper elevation={2} square={true}>
-                                            <div style={{overflow: "scroll"}}>
-                                                <Chart data={chartData}>
-                                                    <ArgumentAxis />
-                                                    <ValueAxis max={2700} />
-                                                    {this.getBarsGraph()}
-                                                    <Animation />
-                                                    <Legend position="bottom" rootComponent={Root} labelComponent={Label} rowCount={3}/>
-                                                    <Title text={this.state.surveyQuestion} />
-                                                    <EventTracker />
-                                                    <Tooltip onTargetItemChange={this.handleTooltipChange} contentComponent={this.TooltipContent}/>
-                                                    <Stack
-                                                        stacks={[
-                                                            {series: ['Strawberry', 'Chocolate', 'Vanilla']}
-                                                        ]}
+
+                                            <div style={{ marginTop: "10px", marginLeft: "10px"}}>
+                                                <Chart
+                                                    id="chart"
+                                                    dataSource={chartData}
+                                                    palette="Bright"
+                                                >
+                                                    <CommonSeriesSettings argumentField={this.state.monthlyView ? "month" : "week"} type="stackedBar"/>
+                                                    {this.state.answerOptionsMinimized.map((answer) => {
+                                                        return(
+                                                            <Series valueField={answer} name={answer}/>
+                                                        )
+                                                    })}
+                                                    <ValueAxis position="left"></ValueAxis>
+                                                    <Legend
+                                                        visible={true}
+                                                        orientation="horizontal"
+                                                        horizontalAlignment="center"
+                                                        verticalAlignment="bottom"
+                                                        posiition="outside">
+                                                    </Legend>
+                                                    <Tooltip
+                                                        enabled={true}
+                                                        customizeTooltip={this.customizeTooltip}
+                                                        zIndex={10000}
                                                     />
-                                                    <HoverState />
+                                                    {/*<Size width={700}/>*/}
+
                                                 </Chart>
                                             </div>
-                                        </Paper>
+
                                     </FormControl>
                                 </CardActions>
                             </CardContent>
