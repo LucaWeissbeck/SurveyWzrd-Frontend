@@ -37,8 +37,9 @@ let _ = require('lodash');
 const legendStyles = () => ({
     root: {
         display: 'flex',
-        margin: 'auto',
         flexDirection: 'row',
+        justifyContent: "flex-start",
+        flexWrap: "wrap"
     },
 });
 
@@ -330,7 +331,7 @@ export class AnalyticsEmbeddedBare extends React.Component {
                             <CardHeader
                                 titleTypographyProps={{variant:'h5' }}
                                 avatar={
-                                    <img src="/assets/logo_with_text.png" style={{width: "180px", height:"160px", marginBottom: "-5px"}}/>
+                                    <img src="/assets/logo_with_text.png" style={{width: "180px", height:"80px", marginBottom: "-5px"}}/>
                                 }
                                 action={
                                     <Button variant="contained" color="secondary" style={{pointerEvents: "none"}}>{this.state.surveyCompanyName + "®"}</Button>
@@ -356,22 +357,24 @@ export class AnalyticsEmbeddedBare extends React.Component {
                                             />
                                         </div>
                                         <Paper elevation={2} square={true}>
-                                            <Chart data={chartData}>
-                                                <ArgumentAxis />
-                                                <ValueAxis max={2700} />
-                                                {this.getBarsGraph()}
-                                                <Animation />
-                                                <Legend position="bottom" rootComponent={Root} labelComponent={Label} />
-                                                <Title text={this.state.surveyQuestion} />
-                                                <EventTracker />
-                                                <Tooltip onTargetItemChange={this.handleTooltipChange} contentComponent={this.TooltipContent}/>
-                                                <Stack
-                                                    stacks={[
-                                                        {series: ['Strawberry', 'Chocolate', 'Vanilla']}
-                                                    ]}
-                                                />
-                                                <HoverState />
-                                            </Chart>
+                                            <div style={{overflow: "scroll"}}>
+                                                <Chart data={chartData}>
+                                                    <ArgumentAxis />
+                                                    <ValueAxis max={2700} />
+                                                    {this.getBarsGraph()}
+                                                    <Animation />
+                                                    <Legend position="bottom" rootComponent={Root} labelComponent={Label} rowCount={3}/>
+                                                    <Title text={this.state.surveyQuestion} />
+                                                    <EventTracker />
+                                                    <Tooltip onTargetItemChange={this.handleTooltipChange} contentComponent={this.TooltipContent}/>
+                                                    <Stack
+                                                        stacks={[
+                                                            {series: ['Strawberry', 'Chocolate', 'Vanilla']}
+                                                        ]}
+                                                    />
+                                                    <HoverState />
+                                                </Chart>
+                                            </div>
                                         </Paper>
                                     </FormControl>
                                 </CardActions>

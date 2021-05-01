@@ -55,6 +55,7 @@ export class ModalComponent extends React.Component{
             weekGraphData: [],
             monthGraphData: [],
             detailedSurvey: false,
+            participantCount: 0
         };
     }
     componentDidMount() {
@@ -63,6 +64,7 @@ export class ModalComponent extends React.Component{
             surveyID: this.props.surveyID
         });
 
+        this.props.refreshAnswers();
         //API Calls
         surveyService.getSurveysByID((parseInt(this.props.surveyID)))
             .then((res) => {
@@ -88,17 +90,26 @@ export class ModalComponent extends React.Component{
                 let raw_array = res.data;
                 console.log("rawarray: ", raw_array)
                 let grouped_object_countries = {};
-                let grouped_object_cities = {};
+                let countedParticipantIDs = [];
                 raw_array.forEach((item, index) => {
                     //Check if Country already in object
-                    if(typeof grouped_object_countries[item.locationCountry] === "undefined"){
+                    if(typeof grouped_object_countries[item.locationCountry] === "undefined" && !countedParticipantIDs.includes(item.participantID)){
                         //Country is NOT in object yet
                         grouped_object_countries[item.locationCountry] = 1;
+                        countedParticipantIDs.push(item.participantID);
                     }
-                    else{
+                    else if(!countedParticipantIDs.includes(item.participantID)){
                         grouped_object_countries[item.locationCountry] = grouped_object_countries[item.locationCountry] + 1;
+                        countedParticipantIDs.push(item.participantID);
                     }
+
                 })
+
+                //Set participant count
+                this.setState({
+                    participantCount: countedParticipantIDs.length
+                })
+
                 let countriesGraphData = []
                 for (let country in grouped_object_countries){
                     countriesGraphData.push({country: country, count: grouped_object_countries[country]})
@@ -174,24 +185,6 @@ export class ModalComponent extends React.Component{
         return graph; 
     }
 
-    replaceAnswerID = (data) =>{
-        let new_array = data.map((entry) => {
-            let foundObject = this.state.answerOptionsByName.find((element) => {
-                if(element.id === entry.id){
-                    return true;
-                }
-            })
-            try{
-                entry["answerOptionID"] = foundObject.value;
-            }catch(err){
-                entry["answerOptionID"] = "undefined";
-            }
-            
-        })
-
-        return new_array;
-    }
-
 
     calculateParticipantCount = () => {
         let count = 0;
@@ -211,6 +204,8 @@ export class ModalComponent extends React.Component{
     displayData = () => {
         let id = parseInt(this.state.surveyID);
         const response = this.state.data.find(element => element.includes(id));
+        console.log("Response prior (data)", this.state.data)
+        console.log("RESPONSE?", response);
         return response;
     }
 
@@ -357,21 +352,6 @@ export class ModalComponent extends React.Component{
         }
         return graphData
     }
-    
-    determineGraphDataSource = () => {
-        if(this.state.viewOption === "day"){
-            return this.state.dayGraphData;
-        }
-        else if(this.state.viewOption === "week"){
-            return this.state.weekGraphData;
-        }
-        else if(this.state.viewOption === "month"){
-            return this.state.monthGraphData;
-        }
-        else{
-            return [];
-        }
-    }
 
     customizeTooltip = (arg) => {
         return {
@@ -469,7 +449,7 @@ export class ModalComponent extends React.Component{
                                         <Box pt={2}>
                                             <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Participant Count</Typography>
                                             <Box pt={16}>
-                                                <Typography color="primary" variant="h1" style={participantCount}>{this.calculateParticipantCount()}</Typography>
+                                                <Typography color="primary" variant="h1" style={participantCount}>{this.state.participantCount}</Typography>
                                             </Box>
                                         </Box>
                                     </Box>
@@ -525,7 +505,7 @@ export class ModalComponent extends React.Component{
                                         </Select>
 
                                     </div>
-                                        <div style={{padding: "10px", display: "flex", flexDirection: "column", justifyContent: "center", alignContent: "center", height: "100%", width: "100%", padding: "20px 0 20px 20px", overflow: "hidden"}}>
+                                        <div style={{display: "flex", flexDirection: "column", justifyContent: "center", alignContent: "center", height: "100%", width: "100%", padding: "20px 0 20px 20px", overflow: "hidden"}}>
                                             <Chart
                                                 id="chart"
                                                 dataSource={this.getGraphData()}

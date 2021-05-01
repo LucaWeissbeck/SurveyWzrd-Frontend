@@ -260,9 +260,9 @@ export class SurveyEmbeddedBare extends React.Component {
                                     </Box>
                                 }
                                 action={
-                                    <Box display="flex" justifyContent="center" marginTop="-53px" overflow="hidden" >
+                                    <Box display="flex" justifyContent="center" marginTop="-15px" overflow="hidden" >
                                         <Box>
-                                            <img src="/assets/logo_with_text.png" style={{width: "180px", height:"160px"}}/>
+                                            <img src="/assets/logo_with_text.png" style={{width: "180px", height:"80px"}}/>
                                         </Box>
                                     </Box>
                                 }
@@ -280,7 +280,7 @@ export class SurveyEmbeddedBare extends React.Component {
                                                         <div>
                                                             <RadioGroup aria-label="gender" name="gender1" value={this.state.rbValue}
                                                                         onChange={this.handleRadioButtonChange}>
-                                                                <div style={{width: "70%", height: "150px", overflow: "scroll", padding: "15px", display: "flex", flexDirection: "column"}}>
+                                                                <div style={{width: "100%", height: "150px", overflow: "scroll", padding: "15px", display: "flex", flexDirection: "column", yOverflow: "hidden"}}>
                                                                     {this.getAnswerOptionsSingleChoiceHTML()}
                                                                 </div>
                                                             </RadioGroup>
@@ -290,7 +290,7 @@ export class SurveyEmbeddedBare extends React.Component {
                                                         <div>
                                                             <FormControl component="fieldset">
                                                                 <FormLabel component="legend" style={{padding: "0 0 0 15px"}}>Answers may be scrollable</FormLabel>
-                                                                <div style={{width: "70%", height: "150px", overflow: "scroll", padding: "15px", display: "flex", flexDirection: "column"}}>
+                                                                <div style={{width: "70%", height: "150px", overflow: "scroll", padding: "15px", display: "flex", flexDirection: "column", paddingRight: "85%"}}>
                                                                     {this.getAnswerOptionsMultipleChoiceHTML()}
                                                                 </div>
                                                             </FormControl>

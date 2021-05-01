@@ -255,7 +255,7 @@ export class Overview extends React.Component{
 
                 {/*Full Windows with Detailed analysis*/}
                 {this.state.modalOpen === true &&
-                <ModalComponent open={this.state.modalOpen} onClose={this.handleModalClose} surveyID={this.state.modalButtonID} data={this.state.data}/>}
+                <ModalComponent open={this.state.modalOpen} onClose={this.handleModalClose} surveyID={this.state.modalButtonID} data={this.state.data} refreshAnswers={this.getData}/>}
 
                 {this.state.errorOpen === true &&
                 <ErrorModal open={this.state.errorOpen} onClose={this.handleErrorClose} errorMessage={this.state.errorMessage}/>}
