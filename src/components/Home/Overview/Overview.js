@@ -223,11 +223,9 @@ export class Overview extends React.Component{
                                                 {survey.description}
                                             </Typography>
                                         </CardContent>
-                                        <CardActions>
-                                            <Button color="primary" onClick={this.handleModalOpen} id={survey.id}>Evaluate</Button>
-                                            <Button color="primary">Edit</Button>
-                                            <Button color="primary">Preview</Button>
-                                            <IconButton onClick={(evt) => this.deleteSurvey(survey.id, evt)}>
+                                        <CardActions style={{position: "relative"}}>
+                                            <Button color="primary" variant="contained" onClick={this.handleModalOpen} id={survey.id}>Evaluate</Button>
+                                            <IconButton onClick={(evt) => this.deleteSurvey(survey.id, evt)} style={{position: "absolute", right: "10px"}}>
                                                 <DeleteOutlineIcon/>
                                             </IconButton>
                                         </CardActions>
