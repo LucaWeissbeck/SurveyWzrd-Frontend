@@ -248,25 +248,25 @@ export class SurveyEmbeddedBare extends React.Component {
         return (
             <React.Fragment>
                 <Container>
-                    <Container style={{marginTop: '15px' }}>
+                    <Container style={{marginTop: '15px'}}>
                         <Card>
                             <CardHeader
                                 titleTypographyProps={{variant:'h5' }}
                                 avatar={
-                                    <Box p={1}>
-                                        <Typography variant="h4" style={{fontWeight: "bold"}}>
-                                            {this.state.surveyName}
-                                        </Typography>
-                                    </Box>
+                                    <div style={{width: "100%"}}>
+                                        <div style={{width: "70%", display: "inline"}}>
+                                            <Typography variant="h4" style={{fontWeight: "bold"}}>
+                                                {this.state.surveyName}
+                                            </Typography>
+                                        </div>
+                                    </div>
                                 }
                                 action={
-                                    <Box display="flex" justifyContent="center" marginTop="-15px" overflow="hidden" >
-                                        <Box>
-                                            <img src="/assets/logo_with_text.png" style={{width: "180px", height:"80px"}}/>
-                                        </Box>
-                                    </Box>
+                                    <div style={{display:"flex", justifyContent:"flex-end", marginTop: "-15px", paddingRight: "20px"}} >
+                                        <img src="/assets/logo_with_text.png" style={{width: "180px", height:"80px"}}/>
+                                    </div>
                                 }
-                                style={{backgroundColor: "#254563", color: 'white', height: "35px", textAlign: "right"}}>
+                                style={{backgroundColor: "#254563", color: 'white', height: "35px", width:"100%"}}>
                             </CardHeader>
                             <CardContent style={{backgroundColor: "#f3f3f3", zIndex:5}}>
                                 <div style={{width: "100%", height: "100%", display: "flex", flexDirection: "row", justifyContent: "space-around", flexFlow: "wrap", alignContent: "flex-start"}} id="main">
