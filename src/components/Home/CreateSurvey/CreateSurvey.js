@@ -248,7 +248,7 @@ export class CreateSurvey extends React.Component{
                                                        </Grid>
                                                        <Grid item>
                                                            <Tooltip title="delete answer">
-                                                               <Button disabled={(this.state.answerOptions.length <= 1)} onClick={this.deleteAnswer}>
+                                                               <Button disabled={(this.state.answerOptions.length <= 2)} onClick={this.deleteAnswer}>
                                                                    <IndeterminateCheckBoxIcon style={{fill: '#254563'}}/>
                                                                </Button>
                                                            </Tooltip>
