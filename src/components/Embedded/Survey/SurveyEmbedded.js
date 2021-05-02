@@ -9,14 +9,11 @@ import {
     Card,
     CardContent,
     Typography,
-    Button,
     FormLabel,
     Checkbox,
     CircularProgress,
-    Box,
     Paper,
-    Grid,
-    IconButton
+    IconButton, Button
 } from "@material-ui/core";
 import { Alert }from '@material-ui/lab';
 import * as surveyService from "../../../services/survey/embeddedSurvey-service";
@@ -271,7 +268,7 @@ export class SurveyEmbeddedBare extends React.Component {
                             <CardContent style={{backgroundColor: "#f3f3f3", zIndex:5}}>
                                 <div style={{width: "100%", height: "100%", display: "flex", flexDirection: "row", justifyContent: "space-around", flexFlow: "wrap", alignContent: "flex-start"}} id="main">
                                     <div style={{width: "700px", height: "100%", alignContent: "flex-start"}} id="left">
-                                        <Paper style={{height: "100%", width: "100%"}} square={true}>
+                                        <Paper style={{height: "100%", width: "100%", position: "relative"}} square={true}>
                                             <Typography variant="h6" component="h2" style={{fontWeight: "bold", padding: "15px 0px 0px 15px"}}>
                                                 {this.state.surveyQuestion}
                                             </Typography>
@@ -279,7 +276,7 @@ export class SurveyEmbeddedBare extends React.Component {
                                             <div>
                                                 <RadioGroup aria-label="gender" name="gender1" value={this.state.rbValue}
                                                             onChange={this.handleRadioButtonChange}>
-                                                    <div style={{width: "100%", height: "150px", overflow: "scroll", padding: "15px", display: "flex", flexDirection: "column"}}>
+                                                    <div style={{width: "100%", height: "150px", overflow: "scroll", padding: "15px", display: "flex", flexDirection: "column", paddingRight: "99%"}}>
                                                         {this.getAnswerOptionsSingleChoiceHTML()}
                                                     </div>
                                                 </RadioGroup>
@@ -289,12 +286,19 @@ export class SurveyEmbeddedBare extends React.Component {
                                             <div>
                                                 <FormControl component="fieldset">
                                                     <FormLabel component="legend" style={{padding: "0 0 0 15px"}}>Answers may be scrollable</FormLabel>
-                                                    <div style={{width: "70%", height: "150px", overflow: "scroll", padding: "15px", display: "flex", flexDirection: "column", paddingRight: "85%"}}>
+                                                    <div style={{width: "70%", height: "150px", overflow: "scroll", padding: "15px", display: "flex", flexDirection: "column", paddingRight: "99%"}}>
                                                         {this.getAnswerOptionsMultipleChoiceHTML()}
                                                     </div>
                                                 </FormControl>
                                             </div>
                                             }
+                                            <Button size="large"
+                                                    variant="contained"
+                                                    style={{backgroundColor: "#c4b1c9", color: "white", position: "absolute", top: "10px", right: "10px"}}
+                                                    onClick={this.submitButtonOnClick}
+                                                    disabled={this.state.surveyMultiSelect ? this.state.checkboxAnswers.length === 0 : this.state.rbValue === null}
+                                            >SEND</Button>
+                                            {this.state.loading && <CircularProgress size={26} style={{position: "absolute", top: "20px", right: "42px"}}/>}
                                         </Paper>
                                     </div>
                                     <div style={{width: "300px", display: "flex", flexDirection: "column", justifyContent: "space-between", alignContent: "flex-start"}} id="right">
