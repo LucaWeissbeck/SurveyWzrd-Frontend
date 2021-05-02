@@ -269,68 +269,59 @@ export class SurveyEmbeddedBare extends React.Component {
                                 style={{backgroundColor: "#254563", color: 'white', height: "35px", textAlign: "right"}}>
                             </CardHeader>
                             <CardContent style={{backgroundColor: "#f3f3f3", zIndex:5}}>
-                                <Grid container item spacing={7} direction="row" alignItems="stretch">
-                                    <Grid item xs={8}>
-                                        <Paper square={true} style={{height: "260px"}}>
-                                            <div style={{height: "100%", width: "100%", position: "relative"}}>
-                                                    <Typography variant="h6" component="h2" style={{fontWeight: "bold", padding: "15px 0px 0px 15px"}}>
-                                                        {this.state.surveyQuestion}
-                                                    </Typography>
-                                                    {!this.state.surveyMultiSelect &&
-                                                        <div>
-                                                            <RadioGroup aria-label="gender" name="gender1" value={this.state.rbValue}
-                                                                        onChange={this.handleRadioButtonChange}>
-                                                                <div style={{width: "100%", height: "150px", overflow: "scroll", padding: "15px", display: "flex", flexDirection: "column", yOverflow: "hidden"}}>
-                                                                    {this.getAnswerOptionsSingleChoiceHTML()}
-                                                                </div>
-                                                            </RadioGroup>
-                                                        </div>
-                                                    }
-                                                    {this.state.surveyMultiSelect &&
-                                                        <div>
-                                                            <FormControl component="fieldset">
-                                                                <FormLabel component="legend" style={{padding: "0 0 0 15px"}}>Answers may be scrollable</FormLabel>
-                                                                <div style={{width: "70%", height: "150px", overflow: "scroll", padding: "15px", display: "flex", flexDirection: "column", paddingRight: "85%"}}>
-                                                                    {this.getAnswerOptionsMultipleChoiceHTML()}
-                                                                </div>
-                                                            </FormControl>
-                                                        </div>
-                                                    }
-                                                    <Button size="large" variant="contained" style={{backgroundColor: "#c4b1c9", color: "white", position: "absolute", bottom: "10px", right: "10px"}} onClick={this.submitButtonOnClick} disabled={this.state.surveyMultiSelect ? this.state.checkboxAnswers.length === 0 : this.state.rbValue === null}>
-                                                                    SEND
-                                                    </Button>
-                                                    {this.state.loading && <CircularProgress size={26} style={{position: "absolute", bottom: "20px", right: "42px"}}/>}
-                                                </div>
+                                <div style={{width: "100%", height: "100%", display: "flex", flexDirection: "row", justifyContent: "space-around", flexFlow: "wrap", alignContent: "flex-start"}} id="main">
+                                    <div style={{width: "700px", height: "100%", alignContent: "flex-start"}} id="left">
+                                        <Paper style={{height: "100%", width: "100%"}} square={true}>
+                                            <Typography variant="h6" component="h2" style={{fontWeight: "bold", padding: "15px 0px 0px 15px"}}>
+                                                {this.state.surveyQuestion}
+                                            </Typography>
+                                            {!this.state.surveyMultiSelect &&
+                                            <div>
+                                                <RadioGroup aria-label="gender" name="gender1" value={this.state.rbValue}
+                                                            onChange={this.handleRadioButtonChange}>
+                                                    <div style={{width: "100%", height: "150px", overflow: "scroll", padding: "15px", display: "flex", flexDirection: "column"}}>
+                                                        {this.getAnswerOptionsSingleChoiceHTML()}
+                                                    </div>
+                                                </RadioGroup>
+                                            </div>
+                                            }
+                                            {this.state.surveyMultiSelect &&
+                                            <div>
+                                                <FormControl component="fieldset">
+                                                    <FormLabel component="legend" style={{padding: "0 0 0 15px"}}>Answers may be scrollable</FormLabel>
+                                                    <div style={{width: "70%", height: "150px", overflow: "scroll", padding: "15px", display: "flex", flexDirection: "column", paddingRight: "85%"}}>
+                                                        {this.getAnswerOptionsMultipleChoiceHTML()}
+                                                    </div>
+                                                </FormControl>
+                                            </div>
+                                            }
                                         </Paper>
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <Box pr={2}>
-                                            <Paper square={true} style={{height: "120px"}}>
-                                                <Box p={2} m={1}>
-                                                    <Typography variant="h5" style={{fontWeight: "bold", textAlign: "center", marginTop: "5px"}}>Multiple Choice</Typography>
-                                                    <Box style={{textAlign: "center"}} pt={1}>
-                                                        {this.state.surveyMultiSelect ? <CheckIcon fontSize="large" style={{fill: "green"}}/> : <ClearIcon fontSize="large" style={{fill: "red"}}/>}
-                                                    </Box>
-                                                </Box>
+                                    </div>
+                                    <div style={{width: "300px", display: "flex", flexDirection: "column", justifyContent: "space-between", alignContent: "flex-start"}} id="right">
+                                        <div id="right-top" style={{height: "40%", minHeight: "95px"}}>
+                                            <Paper square={true} style={{height: "100%"}}>
+                                                <Typography variant="h5" style={{fontWeight: "bold", textAlign: "center", paddingTop: "10px"}}>Multiple Choice</Typography>
+                                                <div style={{textAlign: "center"}}>
+                                                    {this.state.surveyMultiSelect ? <CheckIcon fontSize="large" style={{fill: "green"}}/> : <ClearIcon fontSize="large" style={{fill: "red"}}/>}
+                                                </div>
                                             </Paper>
-                                            <Box pt={1}>
-                                                <Paper square={true} style={{height: "120px"}}>
-                                                    
-                                                            <div style={{height: "100%", width: "100%", display: 'flex', justifyContent: "center", alignItems: "center", flexWrap: "wrap"}}>
-                                                                <Typography variant="h5" style={{fontWeight: "bold", width: "100%", textAlign: "center", marginTop: "10px"}}>Information</Typography>
-                                                                <IconButton onClick={this.handleSurveyDescriptionButton} style={{marginTop: "-15px"}}>
-                                                                        <DescriptionIcon color="secondary" style={{fontSize: "35px"}}/>
-                                                                </IconButton>
-                                                                <IconButton onClick={this.handleSurveyCompanyButton}>
-                                                                    <BusinessIcon color="secondary" style={{fontSize: "35px", marginTop: "-15px"}}/>
-                                                                </IconButton>
-                                                            </div>
-                                                    
-                                                </Paper>
-                                            </Box>
-                                        </Box>
-                                    </Grid>
-                                </Grid>
+                                        </div>
+                                        <div id="right bottom" style={{height: "40%", minHeight: "95px"}}>
+                                            <Paper square={true} style={{height: "100%"}}>
+                                                <div style={{height: "100%", width: "100%", display: 'flex', justifyContent: "center", alignItems: "center", flexWrap: "wrap"}}>
+                                                    <Typography variant="h5" style={{fontWeight: "bold", width: "100%", textAlign: "center"}}>Information</Typography>
+                                                    <IconButton onClick={this.handleSurveyDescriptionButton} style={{marginTop: "-15px"}}>
+                                                        <DescriptionIcon color="secondary" style={{fontSize: "35px"}}/>
+                                                    </IconButton>
+                                                    <IconButton onClick={this.handleSurveyCompanyButton}>
+                                                        <BusinessIcon color="secondary" style={{fontSize: "35px", marginTop: "-15px"}}/>
+                                                    </IconButton>
+                                                </div>
+
+                                            </Paper>
+                                        </div>
+                                    </div>
+                                </div>
                             </CardContent>
                             {this.state.voted === true &&
                                 <Alert severity="warning">You cannot vote twice!</Alert>
