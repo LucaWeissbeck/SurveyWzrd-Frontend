@@ -8,8 +8,7 @@ import HelpIcon from '@material-ui/icons/Help';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import {postLogout} from "../../../services/user/logout-service";
 import Cookies from 'universal-cookie';
-import  { useHistory } from 'react-router-dom'
-import {ErrorModal} from "../ErrorHandling/ErrorModal";
+import  { useHistory } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -51,8 +50,6 @@ export default function Header(props) {
 
 
     }
-
-//TODO: ErrorHandling!!!
     
         return(
 
