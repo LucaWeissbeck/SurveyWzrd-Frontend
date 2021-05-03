@@ -2,14 +2,13 @@ import React from 'react';
 import Header from "../Header/Header";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {Accordion, AccordionDetails, AccordionSummary, Typography} from "@material-ui/core";
-import Cookies from "universal-cookie/es6";
 
 
-export class HowTo extends React.Component{
+export class HowTo extends React.Component {
 
-    render(){
+    render() {
 
-        return(
+        return (
             <React.Fragment>
                 <div style={{
                     backgroundImage: `url(${process.env.PUBLIC_URL
@@ -19,13 +18,13 @@ export class HowTo extends React.Component{
                     backgroundRepeat: 'no-repeat',
                     height: '100vh',
                     width: '100vw'
-                }} >
-                <Header header={2}/>
+                }}>
+                    <Header header={2}/>
 
                     <div>
                         <Accordion>
                             <AccordionSummary
-                                expandIcon={<ExpandMoreIcon />}
+                                expandIcon={<ExpandMoreIcon/>}
                                 aria-controls="panel1a-content"
                                 id="panel1a-header"
                             >
@@ -33,14 +32,15 @@ export class HowTo extends React.Component{
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus
+                                    ex,
                                     sit amet blandit leo lobortis eget.
                                 </Typography>
                             </AccordionDetails>
                         </Accordion>
                         <Accordion>
                             <AccordionSummary
-                                expandIcon={<ExpandMoreIcon />}
+                                expandIcon={<ExpandMoreIcon/>}
                                 aria-controls="panel2a-content"
                                 id="panel2a-header"
                             >
@@ -48,7 +48,8 @@ export class HowTo extends React.Component{
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus
+                                    ex,
                                     sit amet blandit leo lobortis eget.
                                 </Typography>
                             </AccordionDetails>

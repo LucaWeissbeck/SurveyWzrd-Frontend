@@ -3,10 +3,10 @@ import './TestPage.css';
 import Header from "../Home/Header/Header";
 import {SurveyEmbedded} from "../Embedded/SurveyEmbedded";
 
-export class TestPage extends React.Component{
+export class TestPage extends React.Component {
 
-    render(){
-        return(
+    render() {
+        return (
             <React.Fragment>
                 <Header></Header>
                 {/*<div className='Test'>

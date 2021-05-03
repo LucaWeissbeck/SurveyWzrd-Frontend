@@ -1,10 +1,5 @@
 import React from "react";
-import {
-    Button,
-    Dialog,
-    DialogContent,
-    DialogTitle, Grid, TextField,
-} from "@material-ui/core";
+import {Button, Dialog, DialogContent, DialogTitle, Grid,} from "@material-ui/core";
 import InfoIcon from '@material-ui/icons/Info';
 
 export class DSEModal extends React.Component {

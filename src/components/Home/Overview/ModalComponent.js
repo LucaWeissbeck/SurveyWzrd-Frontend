@@ -7,15 +7,15 @@ import {
     DialogTitle,
     Divider,
     Grid,
-    Paper, Step, StepButton, StepContent, Stepper,
-    Typography, IconButton
+    IconButton,
+    Paper,
+    Step,
+    StepButton,
+    StepContent,
+    Stepper,
+    Typography
 } from "@material-ui/core";
-import PieChart, {
-    Legend,
-    Series,
-    Label,
-    Connector, Size
-} from 'devextreme-react/pie-chart';
+import PieChart, {Connector, Label, Legend, Series, Size} from 'devextreme-react/pie-chart';
 import CheckIcon from '@material-ui/icons/Check';
 import ZoomInIcon from '@material-ui/icons/ZoomIn';
 import ClearIcon from '@material-ui/icons/Clear';
@@ -25,17 +25,18 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import SubjectIcon from '@material-ui/icons/Subject';
 import {countryMapping} from "./countries";
 import moment from 'moment';
-import { Chart, CommonSeriesSettings, ValueAxis, Title, Export, Tooltip } from 'devextreme-react/chart';
+import {Chart, CommonSeriesSettings, Tooltip, ValueAxis} from 'devextreme-react/chart';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import {ErrorModal} from "../ErrorHandling/ErrorModal";
 import {ZoomGraphComponent} from "./ZoomGraph/ZoomGraphComponent"
+
 let _ = require('lodash');
 
-export class ModalComponent extends React.Component{
+export class ModalComponent extends React.Component {
     constructor(props) {
         super(props);
-        this.state={
+        this.state = {
             data: [],
             surveyID: null,
             surveyCompanyName: "",
@@ -58,6 +59,7 @@ export class ModalComponent extends React.Component{
             participantCount: 0
         };
     }
+
     componentDidMount() {
         this.setState({
             data: this.props.data,
@@ -92,12 +94,11 @@ export class ModalComponent extends React.Component{
                 let countedParticipantIDs = [];
                 raw_array.forEach((item, index) => {
                     //Check if Country already in object
-                    if(typeof grouped_object_countries[item.locationCountry] === "undefined" && !countedParticipantIDs.includes(item.participantID)){
+                    if (typeof grouped_object_countries[item.locationCountry] === "undefined" && !countedParticipantIDs.includes(item.participantID)) {
                         //Country is NOT in object yet
                         grouped_object_countries[item.locationCountry] = 1;
                         countedParticipantIDs.push(item.participantID);
-                    }
-                    else if(!countedParticipantIDs.includes(item.participantID)){
+                    } else if (!countedParticipantIDs.includes(item.participantID)) {
                         grouped_object_countries[item.locationCountry] = grouped_object_countries[item.locationCountry] + 1;
                         countedParticipantIDs.push(item.participantID);
                     }
@@ -110,7 +111,7 @@ export class ModalComponent extends React.Component{
                 })
 
                 let countriesGraphData = []
-                for (let country in grouped_object_countries){
+                for (let country in grouped_object_countries) {
                     countriesGraphData.push({country: country, count: grouped_object_countries[country]})
                 }
                 this.setState({countryInfo: countriesGraphData})
@@ -122,66 +123,66 @@ export class ModalComponent extends React.Component{
             });
 
         surveyService.getSurveyResults((parseInt((this.props.surveyID))))
-        .then((res) => {
-            console.log("This is Data", res.data);
-            return res.data;
-        })
-        .then((data) => {
-            //Data is now grouped into months, weeks and days
-            console.log("Raw API Data", data);
-            let weeks = this.groupByTime(data, "week");
-            console.log("Grouped by Week Data", weeks);
-            let months = this.groupByTime(data, "month");
-            console.log("Grouped by Month Data", months);
-            let days = this.groupByTime(data, "day");
-            console.log("Grouped by Day", days);
-
-
-            this.setState({
-                monthData: months,
-                weekData: weeks,
-                dayData: days
-            });
-        })
-        .then(() => {
-            let dayGraph = this.createGraphData(this.state.dayData);
-            let weekGraph = this.createGraphData(this.state.weekData);
-            let monthGraph = this.createGraphData(this.state.monthData);
-            dayGraph = this.clearDate(dayGraph);
-            weekGraph = this.clearDate(weekGraph);
-            monthGraph = this.clearDate(monthGraph);
-            console.log("NEW day graph", dayGraph);
-            this.setState({
-                dayGraphData: dayGraph,
-                weekGraphData: weekGraph,
-                monthGraphData: monthGraph
+            .then((res) => {
+                console.log("This is Data", res.data);
+                return res.data;
             })
-            console.log("COUNTS", dayGraph, weekGraph, monthGraph)
-        })
-        .catch(err => {
-            this.handleErrorOpen(err.response.data.error);
-            console.log(err.response.data.error);
-            console.log(err);
-        });
+            .then((data) => {
+                //Data is now grouped into months, weeks and days
+                console.log("Raw API Data", data);
+                let weeks = this.groupByTime(data, "week");
+                console.log("Grouped by Week Data", weeks);
+                let months = this.groupByTime(data, "month");
+                console.log("Grouped by Month Data", months);
+                let days = this.groupByTime(data, "day");
+                console.log("Grouped by Day", days);
+
+
+                this.setState({
+                    monthData: months,
+                    weekData: weeks,
+                    dayData: days
+                });
+            })
+            .then(() => {
+                let dayGraph = this.createGraphData(this.state.dayData);
+                let weekGraph = this.createGraphData(this.state.weekData);
+                let monthGraph = this.createGraphData(this.state.monthData);
+                dayGraph = this.clearDate(dayGraph);
+                weekGraph = this.clearDate(weekGraph);
+                monthGraph = this.clearDate(monthGraph);
+                console.log("NEW day graph", dayGraph);
+                this.setState({
+                    dayGraphData: dayGraph,
+                    weekGraphData: weekGraph,
+                    monthGraphData: monthGraph
+                })
+                console.log("COUNTS", dayGraph, weekGraph, monthGraph)
+            })
+            .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
+            });
 
         surveyService.getAnswerOptionsByID((parseInt((this.props.surveyID))))
-        .then((res) => {
-            this.setState({
-                answerOptionsByName: res.data
+            .then((res) => {
+                this.setState({
+                    answerOptionsByName: res.data
+                });
+            })
+            .catch(err => {
+                this.handleErrorOpen(err.response.data.error);
+                console.log(err.response.data.error);
+                console.log(err);
             });
-        })
-        .catch(err => {
-            this.handleErrorOpen(err.response.data.error);
-            console.log(err.response.data.error);
-            console.log(err);
-        });
     }
 
-    clearDate = (graph) =>{
-        for(let i=0; i<graph.length; i++){
+    clearDate = (graph) => {
+        for (let i = 0; i < graph.length; i++) {
             graph[i].date = (graph[i].date).substring(0, graph[i].date.length - 17);
         }
-        return graph; 
+        return graph;
     }
 
 
@@ -189,8 +190,8 @@ export class ModalComponent extends React.Component{
         let count = 0;
         let id = parseInt(this.state.surveyID);
         let relevantData = this.state.data.find(element => element.includes(id));
-        if(typeof relevantData === "undefined"){}
-        else {
+        if (typeof relevantData === "undefined") {
+        } else {
             for (let i = 0; i < relevantData.length; i++) {
                 if (typeof relevantData[i] === "object") {
                     count = count + relevantData[i].y;
@@ -210,11 +211,11 @@ export class ModalComponent extends React.Component{
 
     // Stepper for general Information about Survey
     getSteps = () => {
-        return["Survey Name", "Survey Question", "Description" ]
+        return ["Survey Name", "Survey Question", "Description"]
     }
 
     getStepContent = (step) => {
-        switch (step){
+        switch (step) {
             case 0:
                 return this.state.surveyName;
             case 1:
@@ -228,20 +229,20 @@ export class ModalComponent extends React.Component{
     }
 
     getStepIcon = (step) => {
-        switch (step){
+        switch (step) {
             case 0:
-                return <DescriptionIcon />
+                return <DescriptionIcon/>
             case 1:
-                return <LiveHelpIcon />
+                return <LiveHelpIcon/>
             case 2:
-                return <SubjectIcon />
+                return <SubjectIcon/>
             default:
                 return "Unbekanntes Icon"
         }
     }
 
 
-    handleStep = (step) => () =>{
+    handleStep = (step) => () => {
         this.setState({
             activeStep: step
         })
@@ -259,7 +260,7 @@ export class ModalComponent extends React.Component{
         });
     }
 
-    handleZoomOpen = () => {
+    handleZoomOpen = () => {
         this.setState({
             detailedSurvey: true
         });
@@ -275,7 +276,7 @@ export class ModalComponent extends React.Component{
 
     getCountryImage = () => {
         try {
-            if (this.state.countryInfo.length != 0 && typeof this.state.countryInfo[0] !== "undefined") {
+            if (this.state.countryInfo.length !== 0 && typeof this.state.countryInfo[0] !== "undefined") {
                 let array = this.state.countryInfo
                 let maxCount = Math.max(...array.map(e => e.count));
                 let country = array.find(game => game.count === maxCount);
@@ -292,8 +293,7 @@ export class ModalComponent extends React.Component{
                     </svg>
                 );
             }
-        }
-        catch(err){
+        } catch (err) {
             console.log("Error in getCountryImage. Most likely an error in Mapping", err)
         }
     }
@@ -303,20 +303,17 @@ export class ModalComponent extends React.Component{
     groupByTime = (results, format) => {
         if (format === "week") {
             return _.groupBy(results, (result) => moment(result['timestamp'], 'DD-MM-YYYY').startOf('isoWeek'));
-        }
-        else if(format === "month"){
+        } else if (format === "month") {
             return _.groupBy(results, (result) => moment(result['timestamp'], 'DD-MM-YYYY').startOf('month'));
-        }
-        else if(format === "day"){
+        } else if (format === "day") {
             return _.groupBy(results, (result) => moment(result['timestamp'], 'DD-MM-YYYY').startOf('day'));
-        }
-        else{
+        } else {
             return "Missing or false dateformat"
         }
     }
 
-    getGraphData = () =>{
-        switch(this.state.viewOption){
+    getGraphData = () => {
+        switch (this.state.viewOption) {
             case "month":
                 return this.state.monthGraphData;
             case "week":
@@ -325,20 +322,20 @@ export class ModalComponent extends React.Component{
                 return this.state.dayGraphData;
             default:
                 return [];
-    
+
         }
     }
 
-    createGraphData = (rawUnpreparedData) => {
+    createGraphData = (rawUnpreparedData) => {
         let graphData = [];
         console.log("Raw unprepared data", rawUnpreparedData);
-        for (const [key, value] of Object.entries(rawUnpreparedData)){
+        for (const [key, value] of Object.entries(rawUnpreparedData)) {
             let graphEntry = {}
             graphEntry["date"] = key;
-            
+
 
             let tempResult = {};
-            for (let {valueName} of value){
+            for (let {valueName} of value) {
                 tempResult[valueName] = {
                     valueName,
                     count: tempResult[valueName] ? tempResult[valueName].count + 1 : 1
@@ -347,12 +344,12 @@ export class ModalComponent extends React.Component{
             let result = Object.values(tempResult);
             console.log("result", result);
 
-            for(let i = 0; i < result.length; i++){
+            for (let i = 0; i < result.length; i++) {
                 graphEntry[result[i].valueName] = result[i].count;
             }
             graphData.push(graphEntry);
             console.log(graphData);
-            
+
         }
         return graphData
     }
@@ -360,7 +357,7 @@ export class ModalComponent extends React.Component{
     customizeTooltip = (arg) => {
         return {
             text: `${arg.seriesName}: ${arg.valueText}`
-          };
+        };
     }
 
     handleErrorOpen = (errorMessage) => {
@@ -370,11 +367,11 @@ export class ModalComponent extends React.Component{
         });
     }
 
-    handleErrorClose =() => {
+    handleErrorClose = () => {
         this.setState({errorOpen: false})
     }
 
-    render(){
+    render() {
         const steps = this.getSteps();
         //CSS Styles
         const paperHeadingSurvey = {
@@ -397,14 +394,13 @@ export class ModalComponent extends React.Component{
             color: "white",
             display: "contents"
         }
-        
-        
 
-        return(
+
+        return (
             <React.Fragment>
                 {console.log("current Target", this.state.anchorEl)}
                 <Dialog
-                    style={{backgroundColor: "transparent", boxShadow:"none"}}
+                    style={{backgroundColor: "transparent", boxShadow: "none"}}
                     fullWidth={true}
                     maxWidth="lg"
                     open={this.props.open}
@@ -412,7 +408,8 @@ export class ModalComponent extends React.Component{
                 >
                     <DialogTitle style={{backgroundColor: "#254563"}}>
                         <Typography variant="h4" style={questionHeader}>{this.state.surveyQuestion}</Typography>
-                        <Button variant="contained" color="secondary" style={companyButton}>{this.state.surveyCompanyName + "®"}</Button>
+                        <Button variant="contained" color="secondary"
+                                style={companyButton}>{this.state.surveyCompanyName + "®"}</Button>
                     </DialogTitle>
                     <Divider/>
                     <DialogContent>
@@ -421,7 +418,8 @@ export class ModalComponent extends React.Component{
                                 <Paper square={true} style={{height: "100%", backgroundColor: "#f3f3f3"}} elevation={3}>
                                     <Box display="flex" justifyContent="center" m={1} p={1} overflow="hidden">
                                         <Box pt={2}>
-                                            <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Result</Typography>
+                                            <Typography color="primary" variant="h4"
+                                                        style={paperHeadingSurvey}>Result</Typography>
                                             <Box p={1}>
                                                 <PieChart
                                                     type="doughnut"
@@ -449,11 +447,13 @@ export class ModalComponent extends React.Component{
                             </Grid>
                             <Grid item xs={4}>
                                 <Paper square={true} style={{height: "100%", backgroundColor: "#f3f3f3"}} elevation={3}>
-                                    <Box display="flex" justifyContent="center" m={1} p={1} overflow="hidden" >
+                                    <Box display="flex" justifyContent="center" m={1} p={1} overflow="hidden">
                                         <Box pt={2}>
-                                            <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Participant Count</Typography>
+                                            <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Participant
+                                                Count</Typography>
                                             <Box pt={16}>
-                                                <Typography color="primary" variant="h1" style={participantCount}>{this.state.participantCount}</Typography>
+                                                <Typography color="primary" variant="h1"
+                                                            style={participantCount}>{this.state.participantCount}</Typography>
                                             </Box>
                                         </Box>
                                     </Box>
@@ -462,23 +462,31 @@ export class ModalComponent extends React.Component{
                             {/*SurveyInformation*/}
                             <Grid item xs={4}>
                                 <Paper square={true} style={{height: "100%", backgroundColor: "#f3f3f3"}} elevation={3}>
-                                    <Box m={1} p={1} overflow="hidden" >
+                                    <Box m={1} p={1} overflow="hidden">
                                         <Box pt={2}>
-                                            <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Information</Typography>
+                                            <Typography color="primary" variant="h4"
+                                                        style={paperHeadingSurvey}>Information</Typography>
                                             <Box p={3} pt={5}>
                                                 <Paper style={{backgroundColor: "#839fc2"}}>
                                                     <Box p={1}>
-                                                        <Typography variant="h6" style={{fontWeight: "bold", textAlign: "center"}}>MultiSelect</Typography>
+                                                        <Typography variant="h6" style={{
+                                                            fontWeight: "bold",
+                                                            textAlign: "center"
+                                                        }}>MultiSelect</Typography>
                                                         <Box style={{textAlign: "center"}}>
-                                                            {this.state.surveyMultiSelect ? <CheckIcon fontSize="large" style={{fill: "green"}}/> : <ClearIcon fontSize="large" style={{fill: "red"}}/>}
+                                                            {this.state.surveyMultiSelect ?
+                                                                <CheckIcon fontSize="large" style={{fill: "green"}}/> :
+                                                                <ClearIcon fontSize="large" style={{fill: "red"}}/>}
                                                         </Box>
                                                     </Box>
                                                 </Paper>
                                                 <Box pt={8}>
-                                                    <Stepper activeStep={this.state.activeStep} orientation="vertical" nonLinear style={{backgroundColor: "#f3f3f3"}}>
+                                                    <Stepper activeStep={this.state.activeStep} orientation="vertical"
+                                                             nonLinear style={{backgroundColor: "#f3f3f3"}}>
                                                         {steps.map((label, index) => (
                                                             <Step key={label}>
-                                                                <StepButton onClick={this.handleStep(index)} icon={this.getStepIcon(index)}>
+                                                                <StepButton onClick={this.handleStep(index)}
+                                                                            icon={this.getStepIcon(index)}>
                                                                     {label}
                                                                 </StepButton>
                                                                 <StepContent>
@@ -496,20 +504,35 @@ export class ModalComponent extends React.Component{
                             {/*Ergebnis im Lauf der Zeit*/}
                             <Grid item xs={8}>
                                 <Paper square={true} style={{height: "100%", backgroundColor: "#f3f3f3"}} elevation={3}>
-                                <Box pt={2}>
-                                    <div style={{textAlign: "center", position: "relative"}}>
-                                        <Typography color="primary" variant="h4" style={{fontWeight: "bold", textAlign: "center", display: "inline"}}>Information</Typography>
-                                        <IconButton style={{position: "absolute", right: "105px", top: "-5px"}} onClick={this.handleZoomOpen}>
-                                            <ZoomInIcon color="primary" style={{fontSize: "30px"}}></ZoomInIcon>
-                                        </IconButton>
-                                        <Select defaultValue="month" onChange={this.menuChange} variant="outlined" style={{position: "absolute", right: "10px", top: "-7px"}}>
-                                            <MenuItem value="day">Day</MenuItem>
-                                            <MenuItem value="week">Week</MenuItem>
-                                            <MenuItem value="month">Month</MenuItem>
-                                        </Select>
+                                    <Box pt={2}>
+                                        <div style={{textAlign: "center", position: "relative"}}>
+                                            <Typography color="primary" variant="h4" style={{
+                                                fontWeight: "bold",
+                                                textAlign: "center",
+                                                display: "inline"
+                                            }}>Information</Typography>
+                                            <IconButton style={{position: "absolute", right: "105px", top: "-5px"}}
+                                                        onClick={this.handleZoomOpen}>
+                                                <ZoomInIcon color="primary" style={{fontSize: "30px"}}></ZoomInIcon>
+                                            </IconButton>
+                                            <Select defaultValue="month" onChange={this.menuChange} variant="outlined"
+                                                    style={{position: "absolute", right: "10px", top: "-7px"}}>
+                                                <MenuItem value="day">Day</MenuItem>
+                                                <MenuItem value="week">Week</MenuItem>
+                                                <MenuItem value="month">Month</MenuItem>
+                                            </Select>
 
-                                    </div>
-                                        <div style={{display: "flex", flexDirection: "column", justifyContent: "center", alignContent: "center", height: "100%", width: "100%", padding: "20px 0 20px 20px", overflow: "hidden"}}>
+                                        </div>
+                                        <div style={{
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            justifyContent: "center",
+                                            alignContent: "center",
+                                            height: "100%",
+                                            width: "100%",
+                                            padding: "20px 0 20px 20px",
+                                            overflow: "hidden"
+                                        }}>
                                             <Chart
                                                 id="chart"
                                                 dataSource={this.getGraphData()}
@@ -518,7 +541,7 @@ export class ModalComponent extends React.Component{
                                                 {console.log("Dertmined Data Source", this.state.dayGraphData)}
                                                 <CommonSeriesSettings argumentField="date" type="stackedBar"/>
                                                 {this.state.answerOptionsByName.map((answer) => {
-                                                    return(
+                                                    return (
                                                         <Series valueField={answer.value} name={answer.value}/>
                                                     )
                                                 })}
@@ -526,7 +549,7 @@ export class ModalComponent extends React.Component{
                                                 <Legend
                                                     visible={false}
                                                     orientation="horizontal"
-                                                    horizontalAlignment="center" 
+                                                    horizontalAlignment="center"
                                                     verticalAlignment="bottom"
                                                     posiition="outside">
                                                 </Legend>
@@ -534,9 +557,9 @@ export class ModalComponent extends React.Component{
                                                     enabled={true}
                                                     customizeTooltip={this.customizeTooltip}
                                                     zIndex={10000}
-                                                    />
+                                                />
                                                 <Size width={700}/>
-                                            
+
                                             </Chart>
                                         </div>
                                     </Box>
@@ -547,39 +570,40 @@ export class ModalComponent extends React.Component{
                                 <Paper style={{height: "100%", backgroundColor: "#f3f3f3"}} elevation={3}>
                                     <Box display="flex" justifyContent="center" m={1} p={1} overflow="hidden">
                                         <Box pt={2}>
-                                            <Typography color="primary" variant="h4" style={paperHeadingSurvey}>Location</Typography>
-                                                <Box p={1}>
-                                                    {this.state.countryInfo.length !== 0 &&
-                                                        <PieChart
-                                                            id="country-chart"
-                                                            key="country-chart"
-                                                            palette="Bright"
-                                                            dataSource={this.state.countryInfo}
-                                                            resolveLabelOverlapping="shift"
-                                                            sizeGroup="piesGroup"
-                                                            innerRadius={0.7}
-                                                            type="doughnut"
-                                                            centerRender={this.getCountryImage}
-                                                        >
-                                                            <Series
-                                                                argumentField="country"
-                                                                valueField="count">
-                                                                <Label visible={true} position="columns">
-                                                                    <Connector visible={true} width={3}/>
-                                                                </Label>
-                                                            </Series>
-                                                            <Legend
-                                                                position="outside"
-                                                                horizontalAlignment="center"
-                                                                verticalAlignment="bottom"
-                                                            />
-                                                            <Size width={300}/>
-                                                        </PieChart>
-                                                    }
-                                                    {this.state.countryInfo.length === 0 &&
-                                                        <h4>Check back later!</h4>
-                                                    }
-                                                </Box>
+                                            <Typography color="primary" variant="h4"
+                                                        style={paperHeadingSurvey}>Location</Typography>
+                                            <Box p={1}>
+                                                {this.state.countryInfo.length !== 0 &&
+                                                <PieChart
+                                                    id="country-chart"
+                                                    key="country-chart"
+                                                    palette="Bright"
+                                                    dataSource={this.state.countryInfo}
+                                                    resolveLabelOverlapping="shift"
+                                                    sizeGroup="piesGroup"
+                                                    innerRadius={0.7}
+                                                    type="doughnut"
+                                                    centerRender={this.getCountryImage}
+                                                >
+                                                    <Series
+                                                        argumentField="country"
+                                                        valueField="count">
+                                                        <Label visible={true} position="columns">
+                                                            <Connector visible={true} width={3}/>
+                                                        </Label>
+                                                    </Series>
+                                                    <Legend
+                                                        position="outside"
+                                                        horizontalAlignment="center"
+                                                        verticalAlignment="bottom"
+                                                    />
+                                                    <Size width={300}/>
+                                                </PieChart>
+                                                }
+                                                {this.state.countryInfo.length === 0 &&
+                                                <h4>Check back later!</h4>
+                                                }
+                                            </Box>
                                         </Box>
                                     </Box>
                                 </Paper>
@@ -590,7 +614,8 @@ export class ModalComponent extends React.Component{
 
 
                 {this.state.errorOpen === true &&
-                <ErrorModal open={this.state.errorOpen} onClose={this.handleErrorClose} errorMessage={this.state.errorMessage}/>}
+                <ErrorModal open={this.state.errorOpen} onClose={this.handleErrorClose}
+                            errorMessage={this.state.errorMessage}/>}
 
                 {this.state.detailedSurvey === true &&
                 <ZoomGraphComponent
@@ -600,7 +625,7 @@ export class ModalComponent extends React.Component{
                     open={this.state.detailedSurvey}
                     onClose={this.handleDetailedGraphClose}
                     answerOptionsByName={this.state.answerOptionsByName}
-                    ></ZoomGraphComponent>
+                ></ZoomGraphComponent>
                 }
             </React.Fragment>
         )

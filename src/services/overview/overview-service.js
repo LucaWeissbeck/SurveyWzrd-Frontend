@@ -4,20 +4,24 @@ import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
 
-const base_url= "http://127.0.0.1:8080";
+const base_url = "http://127.0.0.1:8080";
 
 export const getAllSurveys = () => {
     const url = base_url + '/api/survey/getForAdmin';
-    return axios.get(url, {headers:{
-        "x-api-key": cookies.get("authKey")
-    }})
+    return axios.get(url, {
+        headers: {
+            "x-api-key": cookies.get("authKey")
+        }
+    })
 }
 
 export const getAllSurveysOwner = () => {
     const url = base_url + '/api/survey/getAll';
-    return axios.get(url, {headers:{
+    return axios.get(url, {
+        headers: {
             "x-api-key": cookies.get("authKey")
-        }})
+        }
+    })
 }
 
 export const getSurveyAnswerCount = (id) => {
