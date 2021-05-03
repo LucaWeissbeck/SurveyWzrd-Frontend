@@ -47,7 +47,7 @@ export class Register extends React.Component {
                 //localStorage.setItem("authKey", res.data.authKey)
                 postLogin(this.state.email, this.state.password)
                     .then((res) => {
-                        this.state.cookies.set('authKey', res.data.authKey, {path: '/'});
+                        this.state.cookies.set('authKey', res.data.authToken.authKey, {path: '/'});
                         window.location.replace("/overview");
                     })
                     .catch(err => {
