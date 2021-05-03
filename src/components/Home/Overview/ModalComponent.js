@@ -64,7 +64,6 @@ export class ModalComponent extends React.Component{
             surveyID: this.props.surveyID
         });
 
-        this.props.refreshAnswers();
         //API Calls
         surveyService.getSurveysByID((parseInt(this.props.surveyID)))
             .then((res) => {
@@ -275,22 +274,27 @@ export class ModalComponent extends React.Component{
     }
 
     getCountryImage = () => {
-        if(this.state.countryInfo.length != 0 && typeof this.state.countryInfo[0] !== "undefined") {
-            let array = this.state.countryInfo
-            let maxCount = Math.max(...array.map(e => e.count));
-            let country = array.find(game => game.count === maxCount);
-            country = country.country;
-            return (
-                <svg>
-                    <image href={this.getImagePath(country)} x="25" y="60" width="30%" height="10%"/>
-                    <text textAnchor="middle" x="100" y="120" style={{ fontSize: 18, fill:'#494949' }}>
-                        <tspan x="70">{country}</tspan>
-                        <tspan x="70" dy="20px" style={{ fontWeight: 600 }}>{
-                            this.state.countryInfo[0].count
-                        }</tspan>
-                    </text>
-                </svg>
-            );
+        try {
+            if (this.state.countryInfo.length != 0 && typeof this.state.countryInfo[0] !== "undefined") {
+                let array = this.state.countryInfo
+                let maxCount = Math.max(...array.map(e => e.count));
+                let country = array.find(game => game.count === maxCount);
+                country = country.country;
+                return (
+                    <svg>
+                        <image href={this.getImagePath(country)} x="25" y="60" width="30%" height="10%"/>
+                        <text textAnchor="middle" x="100" y="120" style={{fontSize: 18, fill: '#494949'}}>
+                            <tspan x="70">{country}</tspan>
+                            <tspan x="70" dy="20px" style={{fontWeight: 600}}>{
+                                this.state.countryInfo[0].count
+                            }</tspan>
+                        </text>
+                    </svg>
+                );
+            }
+        }
+        catch(err){
+            console.log("Error in getCountryImage. Most likely an error in Mapping", err)
         }
     }
 
