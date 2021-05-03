@@ -3,10 +3,9 @@ import {
     Button,
     Dialog,
     DialogContent,
-    DialogTitle, Grid, TextField,
+    DialogTitle, Grid,
 } from "@material-ui/core";
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
-import {Fingerprint} from "@material-ui/icons";
 
 export class ErrorModal extends React.Component{
     constructor(props) {

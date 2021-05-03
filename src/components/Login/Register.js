@@ -1,7 +1,7 @@
 import React from 'react';
 import {
-    Button,
-    Dialog, DialogContent, DialogTitle,
+    Button, Checkbox,
+    Dialog, DialogContent, DialogTitle, FormControlLabel,
     Grid,
     TextField,
 } from "@material-ui/core";
@@ -10,6 +10,7 @@ import {postRegister} from "../../services/user/register-service";
 import {postLogin} from "../../services/user/login-service";
 import Cookies from "universal-cookie";
 import {ErrorModal} from "../Home/ErrorHandling/ErrorModal";
+import {DSEModal} from "./DSEModal";
 
 export class Register extends React.Component {
     constructor(props) {
@@ -20,6 +21,8 @@ export class Register extends React.Component {
             password: "",
             cookies: new Cookies(),
             errorOpen: false,
+            checkedDSE: false,
+            dseOpen: false,
         };
     }
 
@@ -40,27 +43,31 @@ export class Register extends React.Component {
     }
 
     registerActionSubmit = () => {
+        if(this.state.checkedDSE === true){
+            postRegister(this.state.email, this.state.password)
+                .then((res) => {
+                    //console.log(res.data.authKey)
+                    //localStorage.setItem("authKey", res.data.authKey)
+                    postLogin(this.state.email, this.state.password)
+                        .then((res) => {
+                            this.state.cookies.set('authKey', res.data.authToken.authKey, {path: '/'});
+                            window.location.replace("/overview");
+                        })
+                        .catch(err => {
+                            this.handleErrorOpen(err.response.data.error);
+                            console.log(err.response.data.error);
+                            console.log(err);
+                        });
+                })
+                .catch(err => {
+                    this.handleErrorOpen(err.response.data.error);
+                    console.log(err.response.data.error);
+                    console.log(err);
+                });
+        } else {
+            this.handleErrorOpen("Please confirm the Datenschutzerklärung")
+        }
 
-        postRegister(this.state.email, this.state.password)
-            .then((res) => {
-                //console.log(res.data.authKey)
-                //localStorage.setItem("authKey", res.data.authKey)
-                postLogin(this.state.email, this.state.password)
-                    .then((res) => {
-                        this.state.cookies.set('authKey', res.data.authToken.authKey, {path: '/'});
-                        window.location.replace("/overview");
-                    })
-                    .catch(err => {
-                this.handleErrorOpen(err.response.data.error);
-                console.log(err.response.data.error);
-                console.log(err);
-            });
-            })
-            .catch(err => {
-                this.handleErrorOpen(err.response.data.error);
-                console.log(err.response.data.error);
-                console.log(err);
-            });
     }
 
     handleErrorOpen = (errorMessage) => {
@@ -73,6 +80,20 @@ export class Register extends React.Component {
     handleErrorClose =() => {
         this.setState({errorOpen: false})
     }
+
+    handleDseOpen = () => {
+        this.setState({
+            dseOpen: true
+        });
+    }
+
+    handleDseClose =() => {
+        this.setState({dseOpen: false})
+    }
+
+    handleChange = (event) => {
+        this.setState({checkedDSE: true})
+    };
 
     render() {
         return (
@@ -108,6 +129,12 @@ export class Register extends React.Component {
                                     <br/>
                                     <br/>
                                     <Grid container justify="center" style={{marginTop: '10px'}}>
+                                        <FormControlLabel
+                                            control={<Checkbox checked={this.state.checkedDSE} onChange={this.handleChange} name="checkedDSE" />}
+                                            label="I confirm the "/>
+                                        <Button onClick={this.handleDseOpen} style={{marginLeft: '-10px', padding: '0px', textDecoration: 'underline', textTransform: 'capitalize', fontSize: '1rem'}}>Data Protection Regulation</Button>
+                                    </Grid>
+                                    <Grid container justify="center" style={{marginTop: '10px'}}>
                                         <Button color="primary" onClick={this.registerActionSubmit} style={{
                                             fontWeight: "bold",
                                             textTransform: "none",
@@ -124,6 +151,9 @@ export class Register extends React.Component {
 
                 {this.state.errorOpen === true &&
                 <ErrorModal open={this.state.errorOpen} onClose={this.handleErrorClose} errorMessage={this.state.errorMessage}/>}
+
+                {this.state.dseOpen === true &&
+                <DSEModal open={this.state.dseOpen} onClose={this.handleDseClose}/>}
             </React.Fragment>
         )
     }
