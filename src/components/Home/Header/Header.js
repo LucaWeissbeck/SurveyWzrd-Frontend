@@ -1,15 +1,13 @@
 import React from 'react';
-import {AppBar, Tabs, Tab} from "@material-ui/core";
-import { Link } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
+import {AppBar, Tab, Tabs} from "@material-ui/core";
+import {Link, useHistory} from 'react-router-dom';
+import {makeStyles} from '@material-ui/core/styles';
 import HomeIcon from '@material-ui/icons/Home';
 import NoteAddIcon from '@material-ui/icons/NoteAdd';
 import HelpIcon from '@material-ui/icons/Help';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import {postLogout} from "../../../services/user/logout-service";
 import Cookies from 'universal-cookie';
-import  { useHistory } from 'react-router-dom'
-import {ErrorModal} from "../ErrorHandling/ErrorModal";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -23,25 +21,25 @@ const useStyles = makeStyles((theme) => ({
         fontSize: "1vw",
         font: "Roboto"
     },
-    tab:{
+    tab: {
         width: "200px"
     },
-    navBar:{
+    navBar: {
         height: "90px"
     },
-    menuButton:{
+    menuButton: {
         marginRight: theme.spacing(2)
     }
 }));
 
 export default function Header(props) {
-        const classes = useStyles();
-        const [tabValue, setValue] = React.useState(props.header);
-        const history = useHistory();
-        const cookies = new Cookies();
-        const logoutActionSubmit = () =>{
+    const classes = useStyles();
+    const [tabValue] = React.useState(props.header);
+    const history = useHistory();
+    const cookies = new Cookies();
+    const logoutActionSubmit = () => {
         postLogout()
-            .then((res) =>{
+            .then((res) => {
                 cookies.remove('authKey');
                 return history.push('/');
             })
@@ -53,24 +51,35 @@ export default function Header(props) {
     }
 
 //TODO: ErrorHandling!!!
-    
-        return(
+
+    return (
 
         <React.Fragment>
             <AppBar position="static">
-                <img src={"/assets/icon_small.png"} style={{maxWidth: "50px", maxHeight: "50px", display: "inline", marginBottom: "-60px", marginLeft: "20px", marginTop: "20px"}} />
+                <img src={"/assets/icon_small.png"} alt="Logo" style={{
+                    maxWidth: "50px",
+                    maxHeight: "50px",
+                    display: "inline",
+                    marginBottom: "-60px",
+                    marginLeft: "20px",
+                    marginTop: "20px"
+                }}/>
                 <Tabs value={tabValue} centered={true}>
-                    <Tab label="Overview" classes={{ root: classes.tab }} icon={<HomeIcon fontSize="large"/>} component={Link} to="/overview"/>
-                    <Tab label="Create Survey" classes={{ root: classes.tab }} icon={<NoteAddIcon fontSize="large"/>} component={Link} to="/createsurvey"/>
-                    <Tab label="How To" classes={{ root: classes.tab }} icon={<HelpIcon fontSize="large"/>} component={Link} to="/how"/>
-                    <Tab label="Logout" classes={{ root: classes.tab }} icon={<MeetingRoomIcon fontSize="large"/>} onClick={logoutActionSubmit}/>
+                    <Tab label="Overview" classes={{root: classes.tab}} icon={<HomeIcon fontSize="large"/>}
+                         component={Link} to="/overview"/>
+                    <Tab label="Create Survey" classes={{root: classes.tab}} icon={<NoteAddIcon fontSize="large"/>}
+                         component={Link} to="/createsurvey"/>
+                    <Tab label="How To" classes={{root: classes.tab}} icon={<HelpIcon fontSize="large"/>}
+                         component={Link} to="/how"/>
+                    <Tab label="Logout" classes={{root: classes.tab}} icon={<MeetingRoomIcon fontSize="large"/>}
+                         onClick={logoutActionSubmit}/>
                 </Tabs>
             </AppBar>
 
 
         </React.Fragment>
 
-        )
+    )
 
 }
 

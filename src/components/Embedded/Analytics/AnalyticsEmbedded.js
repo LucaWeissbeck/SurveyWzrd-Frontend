@@ -1,28 +1,24 @@
 import React from "react";
 import {
+    Button,
     Card,
     CardActions,
     CardContent,
     CardHeader,
     Container,
     FormControl,
-    Typography,
-    Button,
     FormControlLabel,
-    Switch
+    Switch,
+    Typography
 } from "@material-ui/core";
-import { Chart, CommonSeriesSettings, ValueAxis, Title, Export, Tooltip } from 'devextreme-react/chart';
-import PieChart, {
-    Legend,
-    Series,
-    Connector, Size
-} from 'devextreme-react/pie-chart';
-import { withStyles } from '@material-ui/core/styles';
+import {Chart, CommonSeriesSettings, Tooltip, ValueAxis} from 'devextreme-react/chart';
+import {Legend, Series} from 'devextreme-react/pie-chart';
 import * as surveyService from "../../../services/survey/embeddedSurvey-service";
 import moment from 'moment';
-import { withRouter } from "react-router";
+import {withRouter} from "react-router";
 import PropTypes from "prop-types";
 import {ErrorModal} from "../../Home/ErrorHandling/ErrorModal";
+
 let _ = require('lodash');
 
 export class AnalyticsEmbeddedBare extends React.Component {
@@ -83,7 +79,7 @@ export class AnalyticsEmbeddedBare extends React.Component {
                 this.setState({
                     surveyFeedbackArrayComplete: res.data
                 })
-                for(let i=0; i < this.state.surveyFeedbackArrayComplete.length; i++) {
+                for (let i = 0; i < this.state.surveyFeedbackArrayComplete.length; i++) {
                     let copyObject = this.state.surveyFeedbackArrayComplete[i];
                     delete copyObject.answerOptionID;
                     delete copyObject.id;
@@ -117,12 +113,11 @@ export class AnalyticsEmbeddedBare extends React.Component {
     }
 
 
-
     onTimeSwitch = () => {
         let toBeMonthlyView = !this.state.monthlyView;
         this.setState({
-            monthlyView: toBeMonthlyView
-        },this.fillData
+                monthlyView: toBeMonthlyView
+            }, this.fillData
         )
 
     }
@@ -137,11 +132,9 @@ export class AnalyticsEmbeddedBare extends React.Component {
     groupByTime = (results, format) => {
         if (format === "week") {
             return _.groupBy(results, (result) => moment(result['timestamp'], 'DD-MM-YYYY').startOf('isoWeek'));
-        }
-        else if(format === "month"){
+        } else if (format === "month") {
             return _.groupBy(results, (result) => moment(result['timestamp'], 'DD-MM-YYYY').startOf('month'));
-        }
-        else{
+        } else {
             return "Missing or false dateformat"
         }
     }
@@ -192,7 +185,7 @@ export class AnalyticsEmbeddedBare extends React.Component {
             arrayOfObjects.push(resultObject);
         }
         //Pushing every item(Object with Timestamp and AnswerOptions with corresponding count)
-        arrayOfObjects.sort(function(a,b){
+        arrayOfObjects.sort(function (a, b) {
             return new Date(a[timespan]) - new Date(b[timespan])
         })
         this.setState({
@@ -214,27 +207,35 @@ export class AnalyticsEmbeddedBare extends React.Component {
         });
     }
 
-    handleErrorClose =() => {
+    handleErrorClose = () => {
         this.setState({errorOpen: false})
     }
-    
-    render(){
+
+    render() {
         const {data: chartData} = this.state;
-        return(
+        return (
             <React.Fragment>
                 {console.log(chartData)}
                 <Container>
-                    <Container maxWidth="lg" style={{marginTop: '15px' }}>
+                    <Container maxWidth="lg" style={{marginTop: '15px'}}>
                         <Card>
                             <CardHeader
-                                titleTypographyProps={{variant:'h5' }}
+                                titleTypographyProps={{variant: 'h5'}}
                                 avatar={
-                                    <img src="/assets/logo_with_text.png" style={{width: "180px", height:"80px", marginBottom: "-5px"}}/>
+                                    <img src="/assets/logo_with_text.png"
+                                         alt="Logo"
+                                         style={{width: "180px", height: "80px", marginBottom: "-5px"}}/>
                                 }
                                 action={
-                                    <Button variant="contained" color="secondary" style={{pointerEvents: "none"}}>{this.state.surveyCompanyName + "®"}</Button>
+                                    <Button variant="contained" color="secondary"
+                                            style={{pointerEvents: "none"}}>{this.state.surveyCompanyName + "®"}</Button>
                                 }
-                                style={{backgroundColor: "#254563", color: 'white', height: "35px", textAlign: "right"}}>
+                                style={{
+                                    backgroundColor: "#254563",
+                                    color: 'white',
+                                    height: "35px",
+                                    textAlign: "right"
+                                }}>
                             </CardHeader>
                             <CardContent>
                                 <CardActions>
@@ -249,56 +250,61 @@ export class AnalyticsEmbeddedBare extends React.Component {
                                             <label style={{marginRight: "12px"}}>Weekly</label>
                                             <FormControlLabel
                                                 value="start"
-                                                control={<Switch checked={this.state.monthlyView} onChange={this.onTimeSwitch} color="primary" />}
+                                                control={<Switch checked={this.state.monthlyView}
+                                                                 onChange={this.onTimeSwitch} color="primary"/>}
                                                 label="Monthly"
                                                 labelPlacement="end"
                                             />
                                         </div>
 
-                                            <div style={{ marginTop: "10px", marginLeft: "10px"}}>
-                                                <Chart
-                                                    id="chart"
-                                                    dataSource={chartData}
-                                                    palette="Bright"
-                                                >
-                                                    <CommonSeriesSettings argumentField={this.state.monthlyView ? "month" : "week"} type="stackedBar"/>
-                                                    {this.state.answerOptionsMinimized.map((answer) => {
-                                                        return(
-                                                            <Series valueField={answer} name={answer}/>
-                                                        )
-                                                    })}
-                                                    <ValueAxis position="left"></ValueAxis>
-                                                    <Legend
-                                                        visible={true}
-                                                        orientation="horizontal"
-                                                        horizontalAlignment="center"
-                                                        verticalAlignment="bottom"
-                                                        posiition="outside">
-                                                    </Legend>
-                                                    <Tooltip
-                                                        enabled={true}
-                                                        customizeTooltip={this.customizeTooltip}
-                                                        zIndex={10000}
-                                                    />
-                                                    {/*<Size width={700}/>*/}
+                                        <div style={{marginTop: "10px", marginLeft: "10px"}}>
+                                            <Chart
+                                                id="chart"
+                                                dataSource={chartData}
+                                                palette="Bright"
+                                            >
+                                                <CommonSeriesSettings
+                                                    argumentField={this.state.monthlyView ? "month" : "week"}
+                                                    type="stackedBar"/>
+                                                {this.state.answerOptionsMinimized.map((answer) => {
+                                                    return (
+                                                        <Series valueField={answer} name={answer}/>
+                                                    )
+                                                })}
+                                                <ValueAxis position="left"></ValueAxis>
+                                                <Legend
+                                                    visible={true}
+                                                    orientation="horizontal"
+                                                    horizontalAlignment="center"
+                                                    verticalAlignment="bottom"
+                                                    posiition="outside">
+                                                </Legend>
+                                                <Tooltip
+                                                    enabled={true}
+                                                    customizeTooltip={this.customizeTooltip}
+                                                    zIndex={10000}
+                                                />
+                                                {/*<Size width={700}/>*/}
 
-                                                </Chart>
-                                            </div>
+                                            </Chart>
+                                        </div>
 
                                     </FormControl>
                                 </CardActions>
                             </CardContent>
-                            <div style={{backgroundColor: "#254563", height: "10px"}} />
+                            <div style={{backgroundColor: "#254563", height: "10px"}}/>
                         </Card>
                     </Container>
                 </Container>
 
 
                 {this.state.errorOpen === true &&
-                <ErrorModal open={this.state.errorOpen} onClose={this.handleErrorClose} errorMessage={this.state.errorMessage}/>}
+                <ErrorModal open={this.state.errorOpen} onClose={this.handleErrorClose}
+                            errorMessage={this.state.errorMessage}/>}
             </React.Fragment>
         )
     }
 }
+
 export const AnalyticsEmbedded = withRouter(AnalyticsEmbeddedBare);
 
