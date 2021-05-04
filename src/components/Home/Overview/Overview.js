@@ -195,8 +195,8 @@ export class Overview extends React.Component {
 
                     <Container>
                         <Grid container spacing={6} style={{marginTop: "10px"}}>
-                            {this.state.allSurveys.map((survey) => (
-                                <Grid item xs={4}>
+                            {this.state.allSurveys.map((survey, index) => (
+                                <Grid item xs={4} id={index}>
                                     <FormControl fullWidth={true}>
                                         <Card raised={true} style={{
                                             height: "100%",

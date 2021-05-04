@@ -69,7 +69,6 @@ export class ModalComponent extends React.Component {
         //API Calls
         surveyService.getSurveysByID((parseInt(this.props.surveyID)))
             .then((res) => {
-                console.log("Important call", res.data)
                 this.setState({
                     complete: res.data,
                     surveyCompanyName: res.data.companyName,
@@ -522,9 +521,9 @@ export class ModalComponent extends React.Component {
                                                 palette="Bright"
                                             >
                                                 <CommonSeriesSettings argumentField="date" type="stackedBar"/>
-                                                {this.state.answerOptionsByName.map((answer) => {
+                                                {this.state.answerOptionsByName.map((answer, index) => {
                                                     return (
-                                                        <Series valueField={answer.value} name={answer.value}/>
+                                                        <Series valueField={answer.value} name={answer.value} key={index}/>
                                                     )
                                                 })}
                                                 <ValueAxis position="left"></ValueAxis>
