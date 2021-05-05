@@ -41,12 +41,12 @@ export default function Header(props) {
         postLogout()
             .then((res) => {
                 cookies.remove('authKey');
+                localStorage.removeItem('isOwner');
                 return history.push('/');
             })
             .catch(err => {
                 console.log(err);
             });
-
 
     }
 
