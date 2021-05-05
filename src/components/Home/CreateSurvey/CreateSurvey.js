@@ -32,6 +32,7 @@ export class CreateSurvey extends React.Component {
     constructor(props) {
         super(props);
 
+        let dateNow = new Date();
         this.state = {
             checkedA: false,
             companyName: "",
@@ -42,7 +43,7 @@ export class CreateSurvey extends React.Component {
             question: "",
             cookies: new Cookies(),
             answerOptions: ["", ""],
-            selectedDate: new Date()
+            selectedDate: new Date( new Date(dateNow.setDate(dateNow.getDate() + 14)))
         };
     }
 
@@ -80,7 +81,7 @@ export class CreateSurvey extends React.Component {
                                 returncount: this.state.returncount + 1
                             })
                             if (this.state.returncount === this.state.answerOptions.length) {
-                                this.props.history.push('/overview/');
+                                this.props.history.push('/overview');
                             }
                         })
                         .catch(err => {
