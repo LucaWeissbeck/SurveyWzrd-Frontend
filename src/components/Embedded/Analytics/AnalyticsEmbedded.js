@@ -223,6 +223,7 @@ export class AnalyticsEmbeddedBare extends React.Component {
                                 titleTypographyProps={{variant: 'h5'}}
                                 avatar={
                                     <img src="/assets/logo_with_text.png"
+                                         alt="Logo"
                                          style={{width: "180px", height: "80px", marginBottom: "-5px"}}/>
                                 }
                                 action={

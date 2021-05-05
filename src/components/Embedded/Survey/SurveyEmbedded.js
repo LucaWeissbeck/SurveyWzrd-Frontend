@@ -264,7 +264,7 @@ export class SurveyEmbeddedBare extends React.Component {
                                         marginTop: "-15px",
                                         paddingRight: "20px"
                                     }}>
-                                        <img src="/assets/logo_with_text.png" style={{width: "180px", height: "80px"}}/>
+                                        <img src="/assets/logo_with_text.png" alt="Logo" style={{width: "180px", height: "80px"}}/>
                                     </div>
                                 }
                                 style={{backgroundColor: "#254563", color: 'white', height: "35px", width: "100%"}}>

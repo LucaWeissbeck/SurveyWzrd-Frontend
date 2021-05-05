@@ -55,12 +55,7 @@ export class CreateSurvey extends React.Component {
         this.setState({checkedA: event.target.checked});
     };
 
-    handleSubmit = (event) => {
-        /*let answerOptionsPayLoad = {};
-        this.state.answerOptions.map((answerOption, index) => (
-            answerOptionsPayLoad{ "value" : answerOption}
-
-        ))*/
+    handleSubmit = () => {
 
         let payload = {
             "companyName": this.state.companyName,
@@ -73,17 +68,18 @@ export class CreateSurvey extends React.Component {
         surveyService.postSurveyQuestionSingle(payload)
             .then((res) => {
                 console.log(res);
-                this.state.answerOptions.map((answerOption, index) => {
+                this.state.answerOptions.forEach((answerOption) => {
                     let payloadAnswerOption = {
                         "value": answerOption
                     }
 
                     surveyService.postSurveyAnswerOptionSingle(payloadAnswerOption, res.data.id)
                         .then((res) => {
-                            console.log(res)
-                            this.state.returncount = this.state.returncount + 1;
+                            console.log(res);
+                            this.setState({
+                                returncount: this.state.returncount + 1
+                            })
                             if (this.state.returncount === this.state.answerOptions.length) {
-                                console.log('Success! Now forwarding to overview');
                                 this.props.history.push('/overview/');
                             }
                         })
@@ -116,21 +112,22 @@ export class CreateSurvey extends React.Component {
     }
 
     handleAnswerOptionListChange = (index, event) => {
-        //let answerOptions = this.state.answerOptions.slice(); // Make a copy of the answers first.
-        this.state.answerOptions[index] = event.target.value; // Update it with the modified answers.
-        //this.setState({answerOptions: answerOptions}); // Update the state.
-        console.log(this.state.answerOptions)
+        let answerOptions = [...this.state.answerOptions];
+        answerOptions[index] = event.target.value;
+        this.setState({
+            answerOptions: answerOptions
+        })
 
     }
 
 
-    addAnswer = (event) => {
+    addAnswer = () => {
         this.setState({
             answerOptions: [...this.state.answerOptions, ""]
         });
     }
 
-    deleteAnswer = (event) => {
+    deleteAnswer = () => {
         let array = [...this.state.answerOptions];
         array.pop();
         this.setState({
@@ -150,7 +147,7 @@ export class CreateSurvey extends React.Component {
     }
 
     render() {
-        if (this.state.cookies.get("authKey") == undefined) this.props.history.push('/');
+        if (this.state.cookies.get("authKey") === undefined) this.props.history.push('/');
         return (
             <React.Fragment>
                 <Header header={1}/>
@@ -167,7 +164,7 @@ export class CreateSurvey extends React.Component {
                                 <CardContent>
                                     <Grid container spacing={0}>
                                         <Grid item xs={4}>
-                                            <img src={"./assets/logo_without_text.svg"} style={{
+                                            <img src={"./assets/logo_without_text.svg"} alt="Logo" style={{
                                                 maxWidth: "150px",
                                                 maxHeight: "40px",
                                                 display: "inline",
@@ -196,7 +193,7 @@ export class CreateSurvey extends React.Component {
                                                 color: '#254563'
                                             }
                                         }} // font size of input text
-                                        InputLabelProps={{
+                                        inputlabelprops={{
                                             style: {
                                                 fontSize: 30,
                                                 color: '#254563'
@@ -231,7 +228,7 @@ export class CreateSurvey extends React.Component {
                                     </form>
                                     <Box p={1}/>
                                     {this.state.answerOptions.map((answerOption, index) => (
-                                        <form noValidate autoComplete="off">
+                                        <form noValidate autoComplete="off" key={index}>
                                             <div key={index}>
                                                 <Grid container spacing={0}>
                                                     <Grid item sm={1}/>
@@ -262,23 +259,28 @@ export class CreateSurvey extends React.Component {
                                                         <Grid container spacing={1} alignItems="flex-end">
                                                             <Grid item>
                                                                 <Tooltip title="add answer">
-                                                                    <Button
-                                                                        disabled={(this.state.answerOptions.length >= 8)}
-                                                                        onClick={this.addAnswer}>
-                                                                        <AddBoxIcon style={{fill: '#254563'}}/>
-                                                                    </Button>
+                                                                    <span>
+                                                                        <Button
+                                                                            disabled={(this.state.answerOptions.length >= 8)}
+                                                                            onClick={this.addAnswer}>
+                                                                            <AddBoxIcon style={{fill: '#254563'}}/>
+                                                                        </Button>
+                                                                    </span>
                                                                 </Tooltip>
-
                                                             </Grid>
                                                             <Grid item>
-                                                                <Tooltip title="delete answer">
-                                                                    <Button
-                                                                        disabled={(this.state.answerOptions.length <= 2)}
-                                                                        onClick={this.deleteAnswer}>
-                                                                        <IndeterminateCheckBoxIcon
-                                                                            style={{fill: '#254563'}}/>
-                                                                    </Button>
-                                                                </Tooltip>
+                                                                <span>
+                                                                    <Tooltip title="delete answer">
+                                                                        <span>
+                                                                            <Button
+                                                                                disabled={(this.state.answerOptions.length <= 2)}
+                                                                                onClick={this.deleteAnswer}>
+                                                                                <IndeterminateCheckBoxIcon
+                                                                                    style={{fill: '#254563'}}/>
+                                                                            </Button>
+                                                                        </span>
+                                                                    </Tooltip>
+                                                                </span>
 
                                                             </Grid>
 
@@ -305,7 +307,7 @@ export class CreateSurvey extends React.Component {
                                                 format="dd.MM.yyyy HH:mm"
                                                 value={this.state.selectedDate}
                                                 onChange={this.handleExpiryDateChange}
-                                                KeyboardButtonProps={{
+                                                keyboardbuttonprops={{
                                                     'aria-label': 'change date',
                                                 }}
                                             />

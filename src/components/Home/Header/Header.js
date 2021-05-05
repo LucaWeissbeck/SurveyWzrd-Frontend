@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Header(props) {
     const classes = useStyles();
-    const [tabValue, setValue] = React.useState(props.header);
+    const [tabValue] = React.useState(props.header);
     const history = useHistory();
     const cookies = new Cookies();
     const logoutActionSubmit = () => {
@@ -51,11 +51,12 @@ export default function Header(props) {
 
     }
 
+
     return (
 
         <React.Fragment>
             <AppBar position="static">
-                <img src={"/assets/icon_small.png"} style={{
+                <img src={"/assets/icon_small.png"} alt="Logo" style={{
                     maxWidth: "50px",
                     maxHeight: "50px",
                     display: "inline",

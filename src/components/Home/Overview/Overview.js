@@ -39,7 +39,6 @@ export class Overview extends React.Component {
             cookies: new Cookies(),
             shareOpen: false,
             iFrame: ""
-            //deleteEvent: false
         }
     }
 
@@ -60,13 +59,7 @@ export class Overview extends React.Component {
                     }
                     this.forceUpdate()
                 })
-            /*
-            .catch(err => {
-            this.handleErrorOpen(err.response.data.error);
-            console.log(err.response.data.error);
-            console.log(err);
-        });
-             */
+
         } else {
             surveyService.getAllSurveys()
                 .then((res) => {
@@ -95,7 +88,7 @@ export class Overview extends React.Component {
             })
             .then((surveyAnswerCounts) => {
                 let dataArray = [];
-                surveyAnswerCounts.map((entry) => {
+                surveyAnswerCounts.forEach((entry) => {
                     let insertObject = {x: null, y: null};
                     insertObject.x = entry.answerOption.value;
                     insertObject.y = entry.count;
@@ -187,7 +180,7 @@ export class Overview extends React.Component {
             "wordWrap": "break-word"
         };
 
-        if (this.state.cookies.get("authKey") == undefined) this.props.history.push('/');
+        if (this.state.cookies.get("authKey") === undefined) this.props.history.push('/');
         return (
 
             <React.Fragment>
@@ -202,8 +195,8 @@ export class Overview extends React.Component {
 
                     <Container>
                         <Grid container spacing={6} style={{marginTop: "10px"}}>
-                            {this.state.allSurveys.map((survey) => (
-                                <Grid item xs={4}>
+                            {this.state.allSurveys.map((survey, index) => (
+                                <Grid item xs={4} id={index}>
                                     <FormControl fullWidth={true}>
                                         <Card raised={true} style={{
                                             height: "100%",

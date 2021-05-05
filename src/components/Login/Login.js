@@ -55,7 +55,6 @@ export class Login extends React.Component {
             .then((res) => {
                 console.log(res);
                 localStorage.setItem("isOwner", res.data.owner);
-                let dateactual = Date.now();
                 if (this.state.isChecked) this.state.cookies.set('authKey', res.data.authToken.authKey, {
                     path: '/',
                     maxAge: 5259600
@@ -76,7 +75,9 @@ export class Login extends React.Component {
     }
 
     handleRememberMeChange(e) {
-        this.state.isChecked = e.target.checked;
+        this.setState({
+            isChecked: e.target.checked
+        });
     }
 
     handleErrorOpen = (errorMessage) => {

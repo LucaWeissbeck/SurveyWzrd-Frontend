@@ -10,10 +10,6 @@ import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 
 
 class App extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <React.Fragment>

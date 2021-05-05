@@ -69,7 +69,6 @@ export class ModalComponent extends React.Component {
         //API Calls
         surveyService.getSurveysByID((parseInt(this.props.surveyID)))
             .then((res) => {
-                console.log("Important call", res.data)
                 this.setState({
                     complete: res.data,
                     surveyCompanyName: res.data.companyName,
@@ -89,7 +88,6 @@ export class ModalComponent extends React.Component {
         surveyService.getLocationInfo((parseInt((this.props.surveyID))))
             .then((res) => {
                 let raw_array = res.data;
-                console.log("rawarray: ", raw_array)
                 let grouped_object_countries = {};
                 let countedParticipantIDs = [];
                 raw_array.forEach((item, index) => {
@@ -118,25 +116,17 @@ export class ModalComponent extends React.Component {
             })
             .catch(err => {
                 this.handleErrorOpen(err.response.data.error);
-                console.log(err.response.data.error);
-                console.log(err);
             });
 
         surveyService.getSurveyResults((parseInt((this.props.surveyID))))
             .then((res) => {
-                console.log("This is Data", res.data);
                 return res.data;
             })
             .then((data) => {
                 //Data is now grouped into months, weeks and days
-                console.log("Raw API Data", data);
                 let weeks = this.groupByTime(data, "week");
-                console.log("Grouped by Week Data", weeks);
                 let months = this.groupByTime(data, "month");
-                console.log("Grouped by Month Data", months);
                 let days = this.groupByTime(data, "day");
-                console.log("Grouped by Day", days);
-
 
                 this.setState({
                     monthData: months,
@@ -151,13 +141,11 @@ export class ModalComponent extends React.Component {
                 dayGraph = this.clearDate(dayGraph);
                 weekGraph = this.clearDate(weekGraph);
                 monthGraph = this.clearDate(monthGraph);
-                console.log("NEW day graph", dayGraph);
                 this.setState({
                     dayGraphData: dayGraph,
                     weekGraphData: weekGraph,
                     monthGraphData: monthGraph
                 })
-                console.log("COUNTS", dayGraph, weekGraph, monthGraph)
             })
             .catch(err => {
                 this.handleErrorOpen(err.response.data.error);
@@ -204,8 +192,6 @@ export class ModalComponent extends React.Component {
     displayData = () => {
         let id = parseInt(this.state.surveyID);
         const response = this.state.data.find(element => element.includes(id));
-        console.log("Response prior (data)", this.state.data)
-        console.log("RESPONSE?", response);
         return response;
     }
 
@@ -328,7 +314,6 @@ export class ModalComponent extends React.Component {
 
     createGraphData = (rawUnpreparedData) => {
         let graphData = [];
-        console.log("Raw unprepared data", rawUnpreparedData);
         for (const [key, value] of Object.entries(rawUnpreparedData)) {
             let graphEntry = {}
             graphEntry["date"] = key;
@@ -342,13 +327,11 @@ export class ModalComponent extends React.Component {
                 }
             }
             let result = Object.values(tempResult);
-            console.log("result", result);
 
             for (let i = 0; i < result.length; i++) {
                 graphEntry[result[i].valueName] = result[i].count;
             }
             graphData.push(graphEntry);
-            console.log(graphData);
 
         }
         return graphData
@@ -398,7 +381,6 @@ export class ModalComponent extends React.Component {
 
         return (
             <React.Fragment>
-                {console.log("current Target", this.state.anchorEl)}
                 <Dialog
                     style={{backgroundColor: "transparent", boxShadow: "none"}}
                     fullWidth={true}
@@ -538,11 +520,10 @@ export class ModalComponent extends React.Component {
                                                 dataSource={this.getGraphData()}
                                                 palette="Bright"
                                             >
-                                                {console.log("Dertmined Data Source", this.state.dayGraphData)}
                                                 <CommonSeriesSettings argumentField="date" type="stackedBar"/>
-                                                {this.state.answerOptionsByName.map((answer) => {
+                                                {this.state.answerOptionsByName.map((answer, index) => {
                                                     return (
-                                                        <Series valueField={answer.value} name={answer.value}/>
+                                                        <Series valueField={answer.value} name={answer.value} key={index}/>
                                                     )
                                                 })}
                                                 <ValueAxis position="left"></ValueAxis>

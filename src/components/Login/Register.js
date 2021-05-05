@@ -27,6 +27,7 @@ export class Register extends React.Component {
             errorOpen: false,
             checkedDSE: false,
             dseOpen: false,
+
         };
     }
 
@@ -99,6 +100,7 @@ export class Register extends React.Component {
         this.setState({checkedDSE: true})
     };
 
+
     render() {
         return (
             <React.Fragment>
@@ -169,10 +171,9 @@ export class Register extends React.Component {
                 {this.state.errorOpen === true &&
                 <ErrorModal open={this.state.errorOpen} onClose={this.handleErrorClose}
                             errorMessage={this.state.errorMessage}/>}
-
                 {this.state.dseOpen === true &&
                 <DSEModal open={this.state.dseOpen} onClose={this.handleDseClose}/>}
-            </React.Fragment>
+    </React.Fragment>
         )
     }
 }

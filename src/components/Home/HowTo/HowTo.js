@@ -28,7 +28,7 @@ export class HowTo extends React.Component {
                                 aria-controls="panel1a-content"
                                 id="panel1a-header"
                             >
-                                <Typography>How to create a survey?</Typography>
+                                <Typography>Create a Survey</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography>
@@ -49,6 +49,7 @@ export class HowTo extends React.Component {
                                     Using a date picker, you can choose an expiry date for your survey. After this date, the survey will be disabled.
                                     <br/>
                                     And lastly, all you need to do is hit the ‘create’ button and you have successfully created a new survey!
+
                                 </Typography>
                             </AccordionDetails>
                         </Accordion>
@@ -58,7 +59,7 @@ export class HowTo extends React.Component {
                                 aria-controls="panel2a-content"
                                 id="panel2a-header"
                             >
-                                <Typography>How to embed a survey in your website</Typography>
+                                <Typography>Embed a survey in your website</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography>
@@ -80,7 +81,7 @@ export class HowTo extends React.Component {
                                 aria-controls="panel2a-content"
                                 id="panel2a-header"
                             >
-                                <Typography>How to access the results of a survey</Typography>
+                                <Typography>Access the Results of a Survey</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography>
@@ -98,7 +99,7 @@ export class HowTo extends React.Component {
                                 aria-controls="panel2a-content"
                                 id="panel2a-header"
                             >
-                                <Typography>How to delete a survey</Typography>
+                                <Typography>Delete a Survey</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography>
@@ -114,7 +115,7 @@ export class HowTo extends React.Component {
                                 aria-controls="panel2a-content"
                                 id="panel2a-header"
                             >
-                                <Typography>How to log out of your account</Typography>
+                                <Typography>Log out of your Account</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography>
@@ -122,6 +123,7 @@ export class HowTo extends React.Component {
                                 </Typography>
                             </AccordionDetails>
                         </Accordion>
+
                     </div>
 
                 </div>
