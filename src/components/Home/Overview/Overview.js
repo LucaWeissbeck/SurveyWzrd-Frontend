@@ -147,7 +147,7 @@ export class Overview extends React.Component {
     }
 
     createIFrame = (surveyID) => {
-        return (this.iFrame = "<iframe src=\"http://api.tutorialfactory.org:8088/survey?id=" + surveyID + "\"></iframe>")
+        return (this.iFrame = "<iframe src=\"http://e45a7e99-a45e-4ecb-8b43-ec17337b634a.ma.bw-cloud-instance.org/survey?id=" + surveyID + "\"></iframe>")
     }
 
     handleErrorOpen = (errorMessage) => {
