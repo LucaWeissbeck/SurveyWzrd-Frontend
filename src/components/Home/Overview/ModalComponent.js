@@ -42,6 +42,7 @@ export class ModalComponent extends React.Component {
             surveyCompanyName: "",
             surveyDescription: "",
             surveyMultiSelect: null,
+            errorOpen: false,
             surveyName: "",
             surveyQuestion: "",
             complete: [],

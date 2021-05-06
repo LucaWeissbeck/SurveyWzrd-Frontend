@@ -68,7 +68,7 @@ export class HowTo extends React.Component {
                                     Click on the share button in the upper right corner of the survey you want to embed and copy the iframe. It should look something like this:
                                     <br/>
                                     <br/>
-                                    &lt;iframe&gt;src="http://api.tutorialfactory.org:8088/survey?id=7"&lt;/iframe&gt;
+                                    &lt;iframe&gt;src="https://e45a7e99-a45e-4ecb-8b43-ec17337b634a.ma.bw-cloud-instance.org/survey?id=7"&lt;/iframe&gt;
                                     <br/>
                                     <br/>
                                     Now, go to your website, and place the iframe element in your html document wherever you desire.
