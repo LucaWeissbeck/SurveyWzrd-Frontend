@@ -132,10 +132,15 @@ export class Overview extends React.Component {
         this.setState({shareOpen: true})
     }
 
-    handleShareClose = () => {
+    handleShareCloseonCopy = () => {
         this.setState({
             shareOpen: false,
             openCopied: true})
+    }
+
+    handleShareCloseonClose = () => {
+        this.setState({
+            shareOpen: false})
     }
 
     handleCopiedClose = () => {
@@ -263,7 +268,7 @@ export class Overview extends React.Component {
                         </DialogContent>
                         <DialogActions>
                             <CopyToClipboard text={this.iFrame}
-                                             onCopy={this.handleShareClose}>
+                                             onCopy={this.handleShareCloseonCopy}>
                                 <Button color="primary" style={{
                                     fontWeight: "bold",
                                     textTransform: "none",
@@ -276,7 +281,7 @@ export class Overview extends React.Component {
                                     Copied!
                                 </Alert>
                             </Snackbar>
-                            <Button onClick={this.handleShareClose} color="primary" style={{
+                            <Button onClick={this.handleShareCloseonClose} color="primary" style={{
                                 fontWeight: "bold",
                                 textTransform: "none",
                                 backgroundColor: "#B4A0B9",
