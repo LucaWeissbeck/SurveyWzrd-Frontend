@@ -70,7 +70,7 @@ export class Register extends React.Component {
                     console.log(err);
                 });
         } else {
-            this.handleErrorOpen("Please confirm the Datenschutzerklärung")
+            this.handleErrorOpen("Please confirm the Data Protection Regulation")
         }
 
     }

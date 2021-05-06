@@ -14,7 +14,7 @@ import {
     DialogContent,
     FormControl,
     Grid,
-    IconButton,
+    IconButton, Snackbar,
     Typography,
 } from "@material-ui/core";
 import ShareIcon from '@material-ui/icons/Share';
@@ -26,6 +26,7 @@ import PieChart, {Connector, Label, Legend, Series, Size, SmallValuesGrouping} f
 import {postDeleteSurvey} from "../../../services/survey/deleteSurvey-service";
 import Cookies from "universal-cookie/es6";
 import {ErrorModal} from "../ErrorHandling/ErrorModal";
+import {Alert} from "@material-ui/lab";
 
 export class Overview extends React.Component {
     constructor(props) {
@@ -38,7 +39,8 @@ export class Overview extends React.Component {
             surveyName: "",
             cookies: new Cookies(),
             shareOpen: false,
-            iFrame: ""
+            iFrame: "",
+            openCopied: false,
         }
     }
 
@@ -130,8 +132,14 @@ export class Overview extends React.Component {
         this.setState({shareOpen: true})
     }
 
-    handleClose = () => {
-        this.setState({shareOpen: false})
+    handleShareClose = () => {
+        this.setState({
+            shareOpen: false,
+            openCopied: true})
+    }
+
+    handleCopiedClose = () => {
+        this.setState({openCopied: false})
     }
 
     deleteSurvey = (surveyID, event) => {
@@ -247,7 +255,7 @@ export class Overview extends React.Component {
                         </Grid>
                     </Container>
 
-                    <Dialog fullWidth maxWidth="md" open={this.state.shareOpen} onClose={this.handleClose}>
+                    <Dialog fullWidth maxWidth="md" open={this.state.shareOpen} onClose={this.handleShareClose}>
                         <DialogContent>
                         <pre style={CodeBlockStyle}>
                              {(this.iFrame)}
@@ -255,7 +263,7 @@ export class Overview extends React.Component {
                         </DialogContent>
                         <DialogActions>
                             <CopyToClipboard text={this.iFrame}
-                                             onCopy={this.handleClose}>
+                                             onCopy={this.handleShareClose}>
                                 <Button color="primary" style={{
                                     fontWeight: "bold",
                                     textTransform: "none",
@@ -263,7 +271,12 @@ export class Overview extends React.Component {
                                     color: "white"
                                 }}>COPY</Button>
                             </CopyToClipboard>
-                            <Button onClick={this.handleClose} color="primary" style={{
+                            <Snackbar open={this.state.openCopied} autoHideDuration={3000} onClose={this.handleCopiedClose}>
+                                <Alert onClose={this.handleCopiedClose} severity="success">
+                                    Copied!
+                                </Alert>
+                            </Snackbar>
+                            <Button onClick={this.handleShareClose} color="primary" style={{
                                 fontWeight: "bold",
                                 textTransform: "none",
                                 backgroundColor: "#B4A0B9",
