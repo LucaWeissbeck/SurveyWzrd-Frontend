@@ -3,7 +3,7 @@
 ## Frontend
 
 ### Build and run instructions:
-###D ependency install with:
+### Dependency install with:
 ````npm install````
 ### Dev Run with
 ```npm start```
