@@ -3,6 +3,8 @@
 ## Frontend
 
 ### Build and run instructions:
+###Dependency install with:
+````npm install````
 ### Dev Run with
 ```npm start```
 ### Prod Build with
@@ -27,7 +29,12 @@ server {
 }
 ```
 
+Use the docker image:  
+```docker build -t frontend .```
 
+```docker run -p8080:80 frontend```
+
+###Remark: IP Location tracking is only working in a hosted, externally visited application
 
 You can find a working example here:  
 https://e45a7e99-a45e-4ecb-8b43-ec17337b634a.ma.bw-cloud-instance.org/
