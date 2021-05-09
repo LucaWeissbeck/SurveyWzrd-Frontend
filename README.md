@@ -10,7 +10,7 @@
 ### Prod Build with
 ````npm run build````
 
-Then, the built files are located at ````./build```
+Then, the prod-build files are located at ```./build```
 You then have to configure a nginx service with the following configuration to point at the build files.
 Sample configuration:
 ```
