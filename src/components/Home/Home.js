@@ -1,26 +1,13 @@
 import React from 'react';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
-import {
-    Grid,
-    AppBar,
-    Toolbar,
-    Card,
-    CardActions,
-    CardContent,
-    Container,
-    Button,
-    Typography,
-    Tab
-} from "@material-ui/core";
+import {AppBar, Button, Card, CardActions, CardContent, Container, Grid, Toolbar, Typography} from "@material-ui/core";
 import {Helmet} from "react-helmet";
-import { Link } from 'react-router-dom';
-import Cookies from "universal-cookie/es6";
-import {ModalComponent} from "./Overview/ModalComponent";
+import {Link} from 'react-router-dom';
 import {Login} from "../Login/Login";
 import {Register} from "../Login/Register";
 
 
-export class Home extends React.Component{
+export class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -35,7 +22,7 @@ export class Home extends React.Component{
         });
     }
 
-    handleLoginClose =() => {
+    handleLoginClose = () => {
         this.setState({loginOpen: false})
     }
 
@@ -45,12 +32,12 @@ export class Home extends React.Component{
         });
     }
 
-    handleRegisterClose =() => {
+    handleRegisterClose = () => {
         this.setState({registerOpen: false})
     }
 
     render() {
-    return(
+        return (
             <React.Fragment>
                 <Helmet>
                     <style>{'body { background-color: #254563; }'}</style>
@@ -65,7 +52,7 @@ export class Home extends React.Component{
                                     </Grid>
                                     <Grid item xs={1}>
                                         <Button color="secondary" component={Link} to="/overview">
-                                            <AccountBoxIcon color="secondary" />
+                                            <AccountBoxIcon color="secondary"/>
                                         </Button>
                                     </Grid>
                                 </Grid>
@@ -77,12 +64,13 @@ export class Home extends React.Component{
 
                 <Container>
                     <div>
-                        <Grid container spacing={1} direction="row" justify="center" alignItems="center" style={{minHeight: "100vh"}}>
+                        <Grid container spacing={1} direction="row" justify="center" alignItems="center"
+                              style={{minHeight: "100vh"}}>
                             <Grid item xs={6}>
-                                <img src={"./assets/logo_without_text.svg"} style={{maxWidth: "500px"}}/>
+                                <img src={"./assets/logo_without_text.svg"} style={{maxWidth: "500px"}} alt="Logo"/>
                             </Grid>
                             <Grid item xs={6}>
-                                <Card style={{backgroundColor: '#254563', border: "none", boxShadow: "none" }}>
+                                <Card style={{backgroundColor: '#254563', border: "none", boxShadow: "none"}}>
                                     <CardContent>
                                         <Typography variant="h3" component="h2" color="secondary">
                                             DISCOVER THE <br/> SURVEY WIZARDS <br/> SURVEY TOOL
@@ -92,10 +80,20 @@ export class Home extends React.Component{
                                         </Typography>
                                     </CardContent>
                                     <CardActions>
-                                        <Button variant="contained" style={{fontWeight: "bold", textTransform: "none", backgroundColor: "#B4A0B9", color: "white" }} onClick={this.handleRegisterOpen}>
+                                        <Button variant="contained" style={{
+                                            fontWeight: "bold",
+                                            textTransform: "none",
+                                            backgroundColor: "#B4A0B9",
+                                            color: "white"
+                                        }} onClick={this.handleRegisterOpen}>
                                             REGISTER
                                         </Button>
-                                        <Button variant="contained" style={{fontWeight: "bold", textTransform: "none", backgroundColor: "#B4A0B9", color: "white" }} onClick={this.handleLoginOpen}>
+                                        <Button variant="contained" style={{
+                                            fontWeight: "bold",
+                                            textTransform: "none",
+                                            backgroundColor: "#B4A0B9",
+                                            color: "white"
+                                        }} onClick={this.handleLoginOpen}>
                                             LOGIN
                                         </Button>
                                     </CardActions>
@@ -113,5 +111,5 @@ export class Home extends React.Component{
 
             </React.Fragment>
         )
-}
+    }
 }

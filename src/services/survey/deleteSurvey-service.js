@@ -8,7 +8,7 @@ export const postDeleteSurvey = (surveyID) => {
         method: 'delete',
         url: 'http://localhost:8080/api/survey/' + surveyID,
         headers: {
-            'x-api-key' : cookies.get('authKey'),
+            'x-api-key': cookies.get('authKey'),
         },
     };
 

@@ -1,25 +1,13 @@
 import React from "react";
-import {
-    Box,
-    Button,
-    Dialog,
-    DialogContent,
-    DialogTitle,
-    Typography, IconButton, Select,
-    MenuItem
-} from "@material-ui/core";
-import PieChart, {
-    Legend,
-    Series,
-    Size
-} from 'devextreme-react/pie-chart';
-import { Chart, CommonSeriesSettings, ValueAxis, Title, Export, Tooltip } from 'devextreme-react/chart';
+import {Dialog, DialogContent, DialogTitle, MenuItem, Select, Typography} from "@material-ui/core";
+import {Legend, Series, Size} from 'devextreme-react/pie-chart';
+import {Chart, CommonSeriesSettings, Tooltip, ValueAxis} from 'devextreme-react/chart';
 
-export class ZoomGraphComponent extends React.Component{
-    
-    constructor(props){
+export class ZoomGraphComponent extends React.Component {
+
+    constructor(props) {
         super(props);
-        this.state={
+        this.state = {
             dayGraphData: this.props.dayData,
             weekGraphData: this.props.weekData,
             monthGraphData: this.props.monthData,
@@ -27,12 +15,13 @@ export class ZoomGraphComponent extends React.Component{
             viewOption: "month"
         }
     }
+
     componentDidMount = () => {
-        
+
     }
 
-    getGraphData = () =>{
-        switch(this.state.viewOption){
+    getGraphData = () => {
+        switch (this.state.viewOption) {
             case "month":
                 return this.state.monthGraphData;
             case "week":
@@ -41,14 +30,14 @@ export class ZoomGraphComponent extends React.Component{
                 return this.state.dayGraphData;
             default:
                 return [];
-    
+
         }
     }
 
     customizeTooltip = (arg) => {
         return {
             text: `${arg.seriesName}: ${arg.valueText}`
-          };
+        };
     }
 
     menuChange = (event) => {
@@ -57,11 +46,11 @@ export class ZoomGraphComponent extends React.Component{
         });
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <React.Fragment>
                 <Dialog
-                    style={{backgroundColor: "transparent", boxShadow:"none"}}
+                    style={{backgroundColor: "transparent", boxShadow: "none"}}
                     fullWidth={true}
                     maxWidth="lg"
                     open={this.props.open}
@@ -71,40 +60,41 @@ export class ZoomGraphComponent extends React.Component{
                         <Typography variant="h3" style={{fontWeight: "bold", textAlign: "center", color: "white"}}>
                             Detailed Analysis
                         </Typography>
-                        <Select defaultValue="month" onChange={this.menuChange} variant="outlined" style={{position: "absolute", right: "20px", top: "15px", color: "white"}}>
+                        <Select defaultValue="month" onChange={this.menuChange} variant="outlined"
+                                style={{position: "absolute", right: "20px", top: "15px", color: "white"}}>
                             <MenuItem value="day">Day</MenuItem>
                             <MenuItem value="week">Week</MenuItem>
                             <MenuItem value="month">Month</MenuItem>
                         </Select>
                     </DialogTitle>
-                     <DialogContent style={{padding: "20px"}}>
-                     <Chart
-                        id="chart"
-                        dataSource={this.getGraphData()}
-                        palette="Bright"
-                    >
-                        <CommonSeriesSettings argumentField="date" type="stackedBar"/>
-                        {this.state.answerOptionsByName.map((answer) => {
-                            return(
-                                <Series valueField={answer.value} name={answer.value}/>
-                            )
-                        })}
-                        <ValueAxis position="left"></ValueAxis>
-                        <Legend
-                            visible={true}
-                            orientation="horizontal"
-                            horizontalAlignment="center" 
-                            verticalAlignment="bottom"
-                            posiition="outside">
-                        </Legend>
-                        <Tooltip
-                            enabled={true}
-                            customizeTooltip={this.customizeTooltip}
-                            zIndex={10001}
+                    <DialogContent style={{padding: "20px"}}>
+                        <Chart
+                            id="chart"
+                            dataSource={this.getGraphData()}
+                            palette="Bright"
+                        >
+                            <CommonSeriesSettings argumentField="date" type="stackedBar"/>
+                            {this.state.answerOptionsByName.map((answer) => {
+                                return (
+                                    <Series valueField={answer.value} name={answer.value}/>
+                                )
+                            })}
+                            <ValueAxis position="left"></ValueAxis>
+                            <Legend
+                                visible={true}
+                                orientation="horizontal"
+                                horizontalAlignment="center"
+                                verticalAlignment="bottom"
+                                posiition="outside">
+                            </Legend>
+                            <Tooltip
+                                enabled={true}
+                                customizeTooltip={this.customizeTooltip}
+                                zIndex={10001}
                             />
-                        <Size width={1200} height={550}/>
-                    </Chart>
-                     </DialogContent>
+                            <Size width={1200} height={550}/>
+                        </Chart>
+                    </DialogContent>
                 </Dialog>
             </React.Fragment>
         )

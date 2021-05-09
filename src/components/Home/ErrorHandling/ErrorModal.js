@@ -1,18 +1,12 @@
 import React from "react";
-import {
-    Button,
-    Dialog,
-    DialogContent,
-    DialogTitle, Grid, TextField,
-} from "@material-ui/core";
+import {Button, Dialog, DialogContent, DialogTitle, Grid,} from "@material-ui/core";
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
-import {Fingerprint} from "@material-ui/icons";
 
-export class ErrorModal extends React.Component{
+export class ErrorModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            errorMessage : "",
+            errorMessage: "",
         };
     }
 
@@ -22,9 +16,9 @@ export class ErrorModal extends React.Component{
         });
     }
 
-    render(){
+    render() {
         return (
-            <React.Fragment >
+            <React.Fragment>
                 <Dialog open={this.props.open}
                         onClose={this.props.onClose}
                         style={{marginTop: '15px'}}
@@ -41,8 +35,13 @@ export class ErrorModal extends React.Component{
                     </DialogTitle>
                     <DialogContent>
                         <Grid>{this.state.errorMessage}</Grid>
-                        <Grid container justify="center" style={{ marginTop: '10px' }}>
-                            <Button  color="primary" onClick={this.props.onClose} style={{fontWeight: "bold", textTransform: "none", backgroundColor: "#B4A0B9", color: "white" }}>CLOSE</Button>
+                        <Grid container justify="center" style={{marginTop: '10px'}}>
+                            <Button color="primary" onClick={this.props.onClose} style={{
+                                fontWeight: "bold",
+                                textTransform: "none",
+                                backgroundColor: "#B4A0B9",
+                                color: "white"
+                            }}>CLOSE</Button>
                             <br/>
                         </Grid>
                     </DialogContent>

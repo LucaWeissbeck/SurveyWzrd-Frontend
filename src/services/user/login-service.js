@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const postLogin = (email,password) => {
+export const postLogin = (email, password) => {
     let data = JSON.stringify({
         "email": email,
         "password": password
@@ -12,7 +12,7 @@ export const postLogin = (email,password) => {
         headers: {
             'Content-Type': 'application/json'
         },
-        data : data
+        data: data
     };
 
     return axios(config);

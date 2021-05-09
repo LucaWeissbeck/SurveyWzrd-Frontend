@@ -8,7 +8,7 @@ export const postLogout = () => {
         method: 'delete',
         url: 'http://localhost:8080/api/administrator/logout',
         headers: {
-        'x-api-key' : cookies.get('authKey'),
+            'x-api-key': cookies.get('authKey'),
         },
     };
 
