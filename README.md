@@ -2,16 +2,24 @@
 
 ## Preview
 <b>Admin Dashboard</b>
+
 <img width="1792" alt="Screenshot 2022-01-10 at 13 08 39" src="https://user-images.githubusercontent.com/62757957/148770727-f91ffa25-8a88-461c-b0a8-77132380e828.png">
 
+
 <b>Admin Dashboard - Indiviudal Survey Preview</b>
+
 <img width="1284" alt="Screenshot 2022-01-10 at 14 04 15" src="https://user-images.githubusercontent.com/62757957/148771355-426ca0aa-e9ed-4201-8920-c0410941b8e5.png">
 
+
 <b>Survey Creation</b>
+
 <img width="878" alt="Screenshot 2022-01-10 at 13 04 36" src="https://user-images.githubusercontent.com/62757957/148770791-0d05e098-b4dc-45a6-b314-564b9a51206c.png">
 
+
 <b>Survey Preview</b> (User is served with IFrame that can be embedded on any website)
+
 <img width="1185" alt=" " src="https://user-images.githubusercontent.com/62757957/148770879-28944de5-d5c1-4bad-b81d-400a2420f517.png">
+
 
 <b>User Results Preview<b>
 
