@@ -1,4 +1,4 @@
-# Survey Wzrds Repo for the Frontend
+# Survey Wzrd (Frontend)
 ## Installation
 ### Dependency Installation:
 ````npm install````
