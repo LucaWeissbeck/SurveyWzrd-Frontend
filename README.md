@@ -1,12 +1,12 @@
 # Survey Wzrd (Frontend)
 ## Installation
-### Dependency Installation:
+### Dependency Installation
 ````npm install````
         
-### Dev Run
+### Development Run
 ```npm start```
         
-### Prod Build with
+### Production Build:
 ````npm run build````
 
 The prod-build files are located at ```./build```
