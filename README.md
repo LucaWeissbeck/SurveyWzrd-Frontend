@@ -30,10 +30,12 @@
 <hr>
 
 ## Build and Run instructions:
-### Dependency install with:
+### Dependency Installation:
 ````npm install````
-### Dev Run with
+        
+### Dev Run
 ```npm start```
+        
 ### Prod Build with
 ````npm run build````
 
