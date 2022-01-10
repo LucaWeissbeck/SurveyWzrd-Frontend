@@ -36,7 +36,7 @@ Use the docker image:
 <b>Note:</b> IP Location tracking is only working in a hosted, externally visited application
 
 ## Architecture & Documentation
-The project was documented thoroughly using a multitude of sequence diagrams and ER-diagrams. The business architecture of the project can be seen in the diagram below. Further diagrams can be found <a href="">in the documentation folder</a>.
+The project was documented thoroughly using a multitude of sequence diagrams and ER-diagrams. The business architecture of the project can be seen in the diagram below. Further diagrams can be found <a href="https://github.com/LucaWeissbeck/SurveyWzrd-Frontend/tree/master/docs">in the documentation folder</a>.
 
 <b>Component Description: </b>[Fallstudie - Component_Diagram_Description_06052021.pdf](https://github.com/LucaWeissbeck/SurveyWzrd-Frontend/files/7839135/Fallstudie.-.Component_Diagram_Description_06052021.pdf)
 
